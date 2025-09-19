@@ -1,4 +1,5 @@
 openapi: 3.1.0
+jsonSchemaDialect: https://spec.openapis.org/oas/3.1/dialect/base
 info:
   title: Oh Dear API
   version: '1.0.0'
@@ -6,6 +7,10 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   summary: Oh Dear API
+  contact:
+    email: support@ohdear.app
+    name: Oh Dear Support
+    url: https://ohdear.app
   description: >
     OpenAPI 3.1 specification for the Oh Dear API, aligned with the public documentation and PHP SDK.
     Base URL is https://ohdear.app/api. Authentication is via Bearer token.
@@ -156,6 +161,7 @@ paths:
               withChecksAndSettings:
                 value:
                   url: https://ohdear.app/docs
+                  type: http
                   team_id: 1
                   checks: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
                   group_name: Internal
@@ -547,7 +553,8 @@ paths:
                     enabled: true
                     latest_run_ended_at: "2019-09-16 07:29:05"
                     latest_run_result: succeeded
-                    settings: []
+                    settings: {}
+                    
                     active_snooze: null
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
