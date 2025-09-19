@@ -1,0 +1,2510 @@
+openapi: 3.1.0
+info:
+  title: Oh Dear API
+  version: '1.0.0'
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  summary: Oh Dear API
+  description: >
+    OpenAPI 3.1 specification for the Oh Dear API, aligned with the public documentation and PHP SDK.
+    Base URL is https://ohdear.app/api. Authentication is via Bearer token.
+servers:
+  - url: https://ohdear.app/api
+    description: Production
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Me
+  - name: Monitors
+  - name: Checks
+  - name: Uptime
+  - name: Uptime Metrics
+  - name: Downtime
+  - name: Broken Links
+  - name: Mixed Content
+  - name: Certificates
+  - name: Detected Certificates
+  - name: Maintenance Periods
+  - name: Status Pages
+  - name: Status Page Updates
+  - name: Cron Checks
+  - name: Application Health Checks
+
+paths:
+  /me:
+    get:
+      tags: [Me]
+      summary: Get user and team info for the API token
+      operationId: getMe
+      responses:
+        '200':
+          description: User info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                success:
+                  value:
+                    id: 1
+                    name: Firstname Lastname
+                    email: user@example.com
+                    photo_url: https://www.gravatar.com/avatar/...
+                    teams:
+                      - id: 1
+                        name: Your Team Name
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /monitors:
+    get:
+      tags: [Monitors]
+      summary: List monitors
+      operationId: listMonitors
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Paginated monitors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMonitors'
+              examples:
+                success:
+                  value:
+                    data:
+                      - id: 99
+                        team_id: 1
+                        type: http
+                        url: https://example.com
+                        uses_https: true
+                        sort_url: example.com
+                        label: example.com
+                        group_name: ""
+                        tags: []
+                        description: null
+                        notes: null
+                        latest_run_date: "2019-09-16 07:29:02"
+                        summarized_check_result: succeeded
+                        checks:
+                          - id: 100
+                            type: uptime
+                            label: Uptime
+                            enabled: true
+                            latest_run_ended_at: "2019-09-16 07:29:02"
+                            latest_run_result: succeeded
+                            summary: Up
+                            settings:
+                              uptime_check_settings:
+                                uptime_check_location: paris
+                            active_snooze: null
+                        uptime_check_settings:
+                          location: paris
+                          look_for_string: ""
+                          absent_string: null
+                          expected_response_headers: []
+                          failed_notification_threshold: 2
+                          http_verb: get
+                          payload: []
+                          timeout: 5
+                          valid_status_codes: ["2*"]
+                          max_redirect_count: 5
+                          expected_final_redirect_url: null
+                          http_client_headers: []
+                        badge_id: badge-123
+                        marked_for_deletion_at: null
+                        created_at: "2019-09-16 07:25:00"
+                        updated_at: "2019-09-16 07:25:00"
+                    links:
+                      first: https://ohdear.app/api/monitors?page%5Bnumber%5D=1
+                      last: https://ohdear.app/api/monitors?page%5Bnumber%5D=1
+                      prev: null
+                      next: null
+                    meta:
+                      current_page: 1
+                      from: 1
+                      last_page: 1
+                      path: https://ohdear.app/api/monitors
+                      per_page: 200
+                      to: 1
+                      total: 1
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Monitors]
+      summary: Create a monitor
+      operationId: createMonitor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMonitorRequest'
+            examples:
+              minimal:
+                value:
+                  url: https://example.com
+                  team_id: 1
+                  type: http
+              withChecksAndSettings:
+                value:
+                  url: https://ohdear.app/docs
+                  team_id: 1
+                  checks: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                  group_name: Internal
+                  friendly_name: Documentation
+                  tags: [internal, production, docs]
+                  notes: Internal notes for our team members
+                  description: Oh Dear documentation
+                  uptime_check_location: paris
+                  uptime_check_expected_final_redirect_url: https://redirect-to-this-url.com
+                  uptime_check_failed_notification_threshold: 2
+                  uptime_check_http_verb: get
+                  uptime_check_timeout: 5
+                  uptime_check_max_redirect_count: 5
+                  uptime_check_payload:
+                    - name: payload-name-1
+                      value: payload-value-1
+                  uptime_check_valid_status_codes: ["2*"]
+                  uptime_check_look_for_string: null
+                  uptime_check_absent_string: null
+                  uptime_check_expected_response_headers:
+                    - name: my-response-header
+                      condition: equals
+                      value: my-response-value
+                  http_client_headers:
+                    - name: my-header
+                      value: my-value
+                  performance_threshold_in_ms: 3500
+                  performance_change_percentage: 50
+                  crawler_headers:
+                    - name: my-broken-links-header
+                      value: my-broken-links-value
+                  broken_links_check_include_external_links: false
+                  broken_link_types: [link, image, script, stylesheet, "og:image"]
+                  broken_links_whitelisted_urls: []
+                  respect_robots: true
+                  sitemap_path: /sitemap.xml
+                  sitemap_speed: slow
+                  application_health_check_result_url: https://mybrandnewsite.tld/health
+                  application_health_headers:
+                    - name: my-header
+                      value: my-value
+                  certificate_health_check_expires_soon_threshold_in_days: 14
+                  dns_check_nameservers_in_sync: true
+                  dns_monitor_main_domain: false
+                  dns_extra_cnames: [cname1, cname2]
+                  dns_ignored_record_types: [A, CNAME]
+                  domain_check_expires_soon_threshold_in_days: 30
+                  lighthouse_check_continent: europe
+                  lighthouse_cpu_slowdown_modifier: 0
+                  send_report_to_emails: ["a@example.com","b@example.com"]
+                  include_check_types_in_report: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+      responses:
+        '201':
+          description: Monitor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+              examples:
+                created:
+                  value:
+                    id: 173
+                    team_id: 1
+                    type: http
+                    url: https://example.com
+                    uses_https: true
+                    sort_url: example.com
+                    label: example.com
+                    group_name: ""
+                    tags: []
+                    description: null
+                    notes: null
+                    latest_run_date: null
+                    summarized_check_result: pending
+                    checks:
+                      - id: 560
+                        type: uptime
+                        label: Uptime
+                        enabled: true
+                        latest_run_ended_at: null
+                        latest_run_result: pending
+                        summary: Pending
+                        settings:
+                          uptime_check_settings:
+                            uptime_check_location: paris
+                        active_snooze: null
+                      - id: 561
+                        type: certificate_health
+                        label: Certificate health
+                        enabled: true
+                        latest_run_ended_at: null
+                        latest_run_result: pending
+                        summary: Pending
+                        settings:
+                          certificate_health_check_settings:
+                            expires_soon_threshold_in_days: null
+                        active_snooze: null
+                    uptime_check_settings:
+                      location: paris
+                      look_for_string: ""
+                      absent_string: null
+                      expected_response_headers: []
+                      failed_notification_threshold: 2
+                      http_verb: get
+                      payload: []
+                      timeout: 5
+                      valid_status_codes: ["2*"]
+                      max_redirect_count: 5
+                      expected_final_redirect_url: null
+                      http_client_headers: []
+                    badge_id: badge-abc123
+                    marked_for_deletion_at: null
+                    created_at: "2019-09-16 08:00:00"
+                    updated_at: "2019-09-16 08:00:00"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Validation' }
+
+  /monitors/{monitorId}:
+    get:
+      tags: [Monitors]
+      summary: Get a monitor
+      operationId: getMonitor
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Monitor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+              examples:
+                success:
+                  value:
+                    id: 99
+                    team_id: 1
+                    type: http
+                    url: https://example.com
+                    uses_https: true
+                    sort_url: example.com
+                    label: example.com
+                    group_name: ""
+                    tags: []
+                    description: null
+                    notes: null
+                    latest_run_date: "2019-09-16 07:29:02"
+                    summarized_check_result: succeeded
+                    checks:
+                      - id: 100
+                        type: uptime
+                        label: Uptime
+                        enabled: true
+                        latest_run_ended_at: "2019-09-16 07:29:02"
+                        latest_run_result: succeeded
+                        summary: Up
+                        settings:
+                          uptime_check_settings:
+                            uptime_check_location: paris
+                        active_snooze: null
+                    uptime_check_settings:
+                      location: paris
+                      look_for_string: ""
+                      absent_string: null
+                      expected_response_headers: []
+                      failed_notification_threshold: 2
+                      http_verb: get
+                      payload: []
+                      timeout: 5
+                      valid_status_codes: ["2*"]
+                      max_redirect_count: 5
+                      expected_final_redirect_url: null
+                      http_client_headers: []
+                    badge_id: badge-123
+                    marked_for_deletion_at: null
+                    created_at: "2019-09-16 07:25:00"
+                    updated_at: "2019-09-16 07:25:00"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [Monitors]
+      summary: Update a monitor
+      operationId: updateMonitor
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMonitorRequest'
+            examples:
+              example:
+                value:
+                  url: https://example.com/docs
+                  type: http
+                  checks: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                  group_name: Internal
+                  label: Documentation
+                  tags: [internal, production, docs]
+                  notes: Internal notes for our team members
+                  description: Documentation site monitoring
+                  uptime_check_settings:
+                    location: paris
+                    expected_final_redirect_url: https://redirect-to-this-url.com
+                    failed_notification_threshold: 2
+                    http_verb: get
+                    timeout: 5
+                    max_redirect_count: 5
+                    payload:
+                      - name: payload-name-1
+                        value: payload-value-1
+                    valid_status_codes: ["2*"]
+                    look_for_string: null
+                    absent_string: null
+                    expected_response_headers:
+                      - name: my-response-header
+                        condition: equals
+                        value: my-response-value
+                    http_client_headers:
+                      - name: my-header
+                        value: my-value
+                  performance_check_settings:
+                    threshold_in_ms: 3500
+                    change_percentage: 50
+                  broken_links_check_settings:
+                    check_include_external_links: false
+                    types: [link, image, script, stylesheet, "og:image"]
+                    whitelisted_urls: []
+                    respect_robots: true
+                  sitemap_check_settings:
+                    path: /sitemap.xml
+                    speed: slow
+                  application_health_check_settings:
+                    result_url: https://example.com/health
+                    secret: null
+                    headers:
+                      - name: my-header
+                        value: my-value
+                  certificate_health_check_settings:
+                    expires_soon_threshold_in_days: 14
+                  dns_check_settings:
+                    check_nameservers_in_sync: true
+                    monitor_main_domain: false
+                    extra_cnames: [cname1, cname2]
+                    ignored_record_types: [A, CNAME]
+                  domain_check_settings:
+                    expires_soon_threshold_in_days: 30
+                  lighthouse_check_settings:
+                    continent: europe
+                    cpu_slowdown_modifier: 0
+                  crawler_headers:
+                    - name: my-broken-links-header
+                      value: my-broken-links-value
+                  send_report_to_emails: ["a@example.com","b@example.com"]
+                  include_check_types_in_report: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+      responses:
+        '200':
+          description: Updated monitor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Monitor'
+              examples:
+                success:
+                  value:
+                    id: 99
+                    label: Documentation
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/Validation' }
+    delete:
+      tags: [Monitors]
+      summary: Delete a monitor
+      operationId: deleteMonitor
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '204':
+          description: No Content
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/check-summary/{checkType}:
+    get:
+      tags: [Checks]
+      summary: Get summary for a check type on a monitor
+      operationId: getCheckSummary
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - name: checkType
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/CheckType'
+      responses:
+        '200':
+          description: Check summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckSummary'
+              examples:
+                success:
+                  value:
+                    result: succeeded
+                    summary: Up
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /checks/{checkId}/enable:
+    post:
+      tags: [Checks]
+      summary: Enable a check
+      operationId: enableCheck
+      parameters:
+        - $ref: '#/components/parameters/CheckId'
+      responses:
+        '200':
+          description: Enabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckEnableToggle'
+              examples:
+                success:
+                  value: { id: 405, type: uptime, enabled: true }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /checks/{checkId}/disable:
+    post:
+      tags: [Checks]
+      summary: Disable a check
+      operationId: disableCheck
+      parameters:
+        - $ref: '#/components/parameters/CheckId'
+      responses:
+        '200':
+          description: Disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckEnableToggle'
+              examples:
+                success:
+                  value: { id: 405, type: uptime, enabled: false }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /checks/{checkId}/request-run:
+    post:
+      tags: [Checks]
+      summary: Request an immediate run of a check
+      operationId: requestCheckRun
+      parameters:
+        - $ref: '#/components/parameters/CheckId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckRunRequest'
+            examples:
+              withHeaders:
+                value:
+                  http_client_headers:
+                    User-Agent: Custom User Agent
+                    Authorization: Bearer token123
+      responses:
+        '200':
+          description: Check details after run request accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Check'
+              examples:
+                success:
+                  value:
+                    id: 1
+                    type: mixed_content
+                    label: Mixed content
+                    enabled: true
+                    latest_run_ended_at: "2019-09-16 07:29:05"
+                    latest_run_result: succeeded
+                    settings: []
+                    active_snooze: null
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /checks/{checkId}/snooze:
+    post:
+      tags: [Checks]
+      summary: Snooze notifications for a check
+      operationId: snoozeCheck
+      parameters:
+        - $ref: '#/components/parameters/CheckId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [minutes]
+              properties:
+                minutes:
+                  type: string
+                  description: Duration in minutes (string)
+            examples:
+              example:
+                value: { minutes: "10" }
+      responses:
+        '200':
+          description: Snooze applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Check'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /checks/{checkId}/unsnooze:
+    post:
+      tags: [Checks]
+      summary: Remove snooze from a check
+      operationId: unsnoozeCheck
+      parameters:
+        - $ref: '#/components/parameters/CheckId'
+      responses:
+        '200':
+          description: Unsnoozed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Check'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /cron-checks/{cronCheckId}/snooze:
+    post:
+      tags: [Cron Checks]
+      summary: Snooze a cron check
+      operationId: snoozeCronCheck
+      parameters:
+        - $ref: '#/components/parameters/CronCheckId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [minutes]
+              properties:
+                minutes:
+                  type: string
+            examples:
+              example:
+                value: { minutes: "10" }
+      responses:
+        '200':
+          description: Snoozed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CronCheck'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /cron-checks/{cronCheckId}/unsnooze:
+    post:
+      tags: [Cron Checks]
+      summary: Unsnooze a cron check
+      operationId: unsnoozeCronCheck
+      parameters:
+        - $ref: '#/components/parameters/CronCheckId'
+      responses:
+        '200':
+          description: Unsnoozed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CronCheck'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/application-health-checks:
+    get:
+      tags: [Application Health Checks]
+      summary: List application health checks for a monitor
+      operationId: listApplicationHealthChecks
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Health checks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ApplicationHealthCheck'
+              examples:
+                success:
+                  value:
+                    data:
+                      - id: 42
+                        name: queue
+                        latest_result: succeeded
+                        latest_run_ended_at: "2024-11-10 12:00:00"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/application-health-checks/{healthCheckId}/snooze:
+    post:
+      tags: [Application Health Checks]
+      summary: Snooze an application health check
+      operationId: snoozeApplicationHealthCheck
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/HealthCheckId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [minutes]
+              properties:
+                minutes:
+                  type: string
+            examples:
+              example:
+                value: { minutes: "10" }
+      responses:
+        '200':
+          description: Snoozed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationHealthCheck'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/application-health-checks/{healthCheckId}/unsnooze:
+    post:
+      tags: [Application Health Checks]
+      summary: Unsnooze an application health check
+      operationId: unsnoozeApplicationHealthCheck
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/HealthCheckId'
+      responses:
+        '200':
+          description: Unsnoozed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationHealthCheck'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/uptime:
+    get:
+      tags: [Uptime]
+      summary: Uptime percentages for a monitor
+      operationId: getUptime
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/FilterStartedAt'
+        - $ref: '#/components/parameters/FilterEndedAt'
+        - name: split
+          in: query
+          description: Granularity of the periods
+          schema:
+            type: string
+            enum: [hour, day, month]
+      responses:
+        '200':
+          description: Uptime series
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UptimePoint'
+              examples:
+                success:
+                  value:
+                    - datetime: "2018-01-01 00:00:00"
+                      uptime_percentage: 100
+                    - datetime: "2018-01-01 01:00:00"
+                      uptime_percentage: 99.76
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/downtime:
+    get:
+      tags: [Downtime]
+      summary: Downtime periods for a monitor
+      operationId: getDowntime
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/FilterStartedAt'
+        - $ref: '#/components/parameters/FilterEndedAt'
+      responses:
+        '200':
+          description: Downtime periods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDowntime'
+              examples:
+                success:
+                  value:
+                    data:
+                      - id: 1
+                        started_at: "2018-01-01 15:00:00"
+                        ended_at: "2018-01-01 15:07:00"
+                        notes_html: "We contacted our provider and they fixed the issue."
+                        notes_markdown: "We contacted our provider and they fixed the issue."
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /downtime/{downtimeId}:
+    delete:
+      tags: [Downtime]
+      summary: Delete a downtime period
+      operationId: deleteDowntime
+      parameters:
+        - name: downtimeId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204':
+          description: No Content
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/http-uptime-metrics:
+    get:
+      tags: [Uptime Metrics]
+      summary: HTTP uptime metrics
+      operationId: httpUptimeMetrics
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/FilterStart'
+        - $ref: '#/components/parameters/FilterEnd'
+        - $ref: '#/components/parameters/FilterGroupBy'
+      responses:
+        '200':
+          description: Metrics series
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UptimeMetricsHttpResponse'
+              examples:
+                success:
+                  value:
+                    data:
+                      - dns_time_in_seconds: 0.001399
+                        tcp_time_in_seconds: 0.01651
+                        ssl_handshake_time_in_seconds: 0.053852
+                        remote_server_processing_time_in_seconds: 0.021595
+                        download_time_in_seconds: 0.000535
+                        total_time_in_seconds: 0.093891
+                        curl:
+                          namelookup_time: 0.001399
+                          connect_time: 0.017909
+                          appconnect_time: 0.071761
+                          starttransfer_time: 0.093356
+                          pretransfer_time: 0.071864
+                          redirect_time: 0
+                          total_time: 0.093891
+                          header_size: 1261
+                          size_download: 12814
+                          speed_download: 137784
+                        date: "2024-04-19 13:25:00"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/ping-uptime-metrics:
+    get:
+      tags: [Uptime Metrics]
+      summary: Ping uptime metrics
+      operationId: pingUptimeMetrics
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/FilterStart'
+        - $ref: '#/components/parameters/FilterEnd'
+        - $ref: '#/components/parameters/FilterGroupBy'
+      responses:
+        '200':
+          description: Metrics series
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UptimeMetricsPingResponse'
+              examples:
+                success:
+                  value:
+                    data:
+                      - minimum_time_in_ms: 12.5
+                        maximum_time_in_ms: 45.2
+                        average_time_in_ms: 28.7
+                        packet_loss_percentage: 0.0
+                        uptime_percentage: 100.0
+                        downtime_percentage: 0.0
+                        uptime_seconds: 60
+                        downtime_seconds: 0
+                        date: "2024-04-19 13:25:00"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/tcp-uptime-metrics:
+    get:
+      tags: [Uptime Metrics]
+      summary: TCP uptime metrics
+      operationId: tcpUptimeMetrics
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/FilterStart'
+        - $ref: '#/components/parameters/FilterEnd'
+        - $ref: '#/components/parameters/FilterGroupBy'
+      responses:
+        '200':
+          description: Metrics series
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UptimeMetricsTcpResponse'
+              examples:
+                success:
+                  value:
+                    data:
+                      - time_to_connect_in_ms: 15.3
+                        uptime_percentage: 100.0
+                        downtime_percentage: 0.0
+                        uptime_seconds: 60
+                        downtime_seconds: 0
+                        date: "2024-04-19 13:25:00"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /broken-links/{monitorId}:
+    get:
+      tags: [Broken Links]
+      summary: Get broken links for a monitor
+      operationId: listBrokenLinks
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Broken links
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrokenLinksResponse'
+              examples:
+                success:
+                  value:
+                    data:
+                      - crawled_url: https://example.com/broken
+                        relative_crawled_url: /broken
+                        status_code: 404
+                        found_on_url: https://example.com
+                        relative_found_on_url: https://example.com
+                        internal: true
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/add-to-broken-links-whitelist:
+    post:
+      tags: [Broken Links]
+      summary: Add a URL to the broken links whitelist
+      operationId: addBrokenLinksWhitelistUrl
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [whitelistUrl]
+              properties:
+                whitelistUrl:
+                  type: string
+                  format: uri
+            examples:
+              example:
+                value: { whitelistUrl: "https://externalsite.tld/page1" }
+      responses:
+        '200':
+          description: Whitelist updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              examples:
+                success:
+                  value: { message: "URL added to whitelist." }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/update-broken-links-settings:
+    put:
+      tags: [Broken Links]
+      summary: Update broken links settings
+      operationId: updateBrokenLinksSettings
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrokenLinksSettingsUpdate'
+            examples:
+              example:
+                value:
+                  broken_links_check_include_external_links: true
+                  broken_links_whitelisted_urls_string: |
+                    https://externalsite.tld/page1
+                    https://externalsite.tld/page2
+      responses:
+        '200':
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              examples:
+                success:
+                  value: { message: "Broken links settings updated." }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/update-uptime-check-payload:
+    put:
+      tags: [Uptime]
+      summary: Update non-GET uptime check payload
+      operationId: updateUptimeCheckPayload
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/NameValuePair'
+            examples:
+              example:
+                value:
+                  - name: my-name
+                    value: my-value
+      responses:
+        '200':
+          description: Payload updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              examples:
+                success:
+                  value: { message: "Uptime check payload updated." }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /mixed-content/{monitorId}:
+    get:
+      tags: [Mixed Content]
+      summary: Get mixed content results for a monitor
+      operationId: listMixedContent
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Mixed content items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MixedContentResponse'
+              examples:
+                success:
+                  value:
+                    data:
+                      - element_name: img
+                        mixed_content_url: http://example.com/image.jpg
+                        found_on_url: https://example.com
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /certificate-health/{monitorId}:
+    get:
+      tags: [Certificates]
+      summary: Get certificate health for a monitor
+      operationId: getCertificateHealth
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Certificate health
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateHealth'
+              examples:
+                success:
+                  value:
+                    certificate_details:
+                      issuer: "Let's Encrypt Authority X3"
+                      valid_from: "2019-09-10 15:16:01"
+                      valid_until: "2019-12-09 15:16:01"
+                    certificate_checks:
+                      - type: notFound
+                        label: Certificate present
+                        passed: true
+                      - type: expiresSoon
+                        label: Will not expire in the next 14 days
+                        passed: true
+                    certificate_chain_issuers:
+                      - "US, Let's Encrypt, Let's Encrypt Authority X3"
+                      - "Digital Signature Trust Co., DST Root CA X3"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/detected-certificates:
+    get:
+      tags: [Detected Certificates]
+      summary: List detected certificates for a monitor
+      operationId: listDetectedCertificates
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+        - name: filter[fingerprint]
+          in: query
+          schema:
+            type: string
+          description: Filter by certificate fingerprint
+        - name: sort
+          in: query
+          schema:
+            type: string
+          description: Sort by created_at, updated_at, or fingerprint. Prefix with - for desc.
+      responses:
+        '200':
+          description: Paginated detected certificates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDetectedCertificates'
+              examples:
+                success:
+                  value:
+                    data:
+                      - id: 123
+                        monitor_id: 1
+                        fingerprint: abcd1234567890abcd1234567890abcd12345678
+                        certificate_details:
+                          issuer: "Let's Encrypt Authority X3"
+                          domain: example.com
+                          additional_domains: [www.example.com]
+                          valid_from: "2023-10-01T12:00:00Z"
+                          valid_until: "2024-01-01T12:00:00Z"
+                          days_until_expiration: 45
+                          signature_algorithm: sha256WithRSAEncryption
+                          is_valid: true
+                          is_expired: false
+                        created_at: "2023-10-01T12:30:00Z"
+                        updated_at: "2023-10-01T12:30:00Z"
+                    links:
+                      first: https://ohdear.app/api/monitors/1/detected-certificates?page=1
+                      last: https://ohdear.app/api/monitors/1/detected-certificates?page=1
+                      prev: null
+                      next: null
+                    meta:
+                      current_page: 1
+                      from: 1
+                      last_page: 1
+                      per_page: 15
+                      to: 1
+                      total: 1
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/detected-certificates/{certificateId}:
+    get:
+      tags: [Detected Certificates]
+      summary: Get a detected certificate
+      operationId: getDetectedCertificate
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+        - name: certificateId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Detected certificate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetectedCertificate'
+              examples:
+                success:
+                  value:
+                    id: 123
+                    monitor_id: 1
+                    fingerprint: abcd1234567890abcd1234567890abcd12345678
+                    certificate_details:
+                      issuer: "Let's Encrypt Authority X3"
+                      domain: example.com
+                      additional_domains: [www.example.com]
+                      valid_from: "2023-10-01T12:00:00Z"
+                      valid_until: "2024-01-01T12:00:00Z"
+                      days_until_expiration: 45
+                      signature_algorithm: sha256WithRSAEncryption
+                      is_valid: true
+                      is_expired: false
+                    created_at: "2023-10-01T12:30:00Z"
+                    updated_at: "2023-10-01T12:30:00Z"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/maintenance-periods:
+    get:
+      tags: [Maintenance Periods]
+      summary: List maintenance periods for a monitor
+      operationId: listMaintenancePeriods
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Maintenance periods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenancePeriodsResponse'
+              examples:
+                success:
+                  value:
+                    data:
+                      - id: 101
+                        monitor_id: 1
+                        name: Deployment
+                        starts_at: "2020-01-09 10:37:24"
+                        ends_at: "2020-01-09 10:42:24"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/start-maintenance:
+    post:
+      tags: [Maintenance Periods]
+      summary: Start an immediate maintenance period (default 60 minutes)
+      operationId: startMaintenance
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stop_maintenance_after_seconds:
+                  type: string
+                  description: Duration in seconds to auto-stop
+                name:
+                  type: string
+                  description: Optional name
+            examples:
+              withDuration:
+                value:
+                  stop_maintenance_after_seconds: "300"
+      responses:
+        '200':
+          description: Maintenance started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenancePeriod'
+              examples:
+                success:
+                  value:
+                    id: 101
+                    monitor_id: 1
+                    name: "Optional name of your maintenance period"
+                    starts_at: "2020-01-09 10:28:54"
+                    ends_at: "2020-01-09 11:28:54"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/stop-maintenance:
+    post:
+      tags: [Maintenance Periods]
+      summary: Stop the active maintenance period(s)
+      operationId: stopMaintenance
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Maintenance stopped
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+              examples:
+                success:
+                  value: { message: "Maintenance stopped." }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /maintenance-periods:
+    post:
+      tags: [Maintenance Periods]
+      summary: Create a scheduled maintenance period
+      operationId: createMaintenancePeriod
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMaintenancePeriodRequest'
+            examples:
+              example:
+                value:
+                  monitor_id: "1"
+                  starts_at: "2020-02-01 14:00"
+                  ends_at: "2020-02-01 18:00"
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenancePeriod'
+              examples:
+                success:
+                  value:
+                    id: 101
+                    monitor_id: "1"
+                    starts_at: "2020-02-01 14:00:00"
+                    ends_at: "2020-02-01 18:00:00"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Validation' }
+
+  /maintenance-periods/{maintenancePeriodId}:
+    delete:
+      tags: [Maintenance Periods]
+      summary: Delete a maintenance period
+      operationId: deleteMaintenancePeriod
+      parameters:
+        - name: maintenancePeriodId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204':
+          description: No Content
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /status-pages:
+    get:
+      tags: [Status Pages]
+      summary: List status pages
+      operationId: listStatusPages
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Paginated status pages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStatusPages'
+              examples:
+                success:
+                  value:
+                    data:
+                      - id: 1
+                        team: { id: 1, name: Your Team Name }
+                        title: Your Status Page Title
+                        domain: status.your-domain.tld
+                        slug: autem-quos-...
+                        full_url: https://ohdear.app/status-page/autem-quos-...
+                        timezone: Europe/Brussels
+                        summarized_status: up
+                        monitors:
+                          - id: 1
+                            url: https://site1.tld
+                        created_at: "2019-09-13 07:06:51"
+                        updated_at: "2019-09-13 07:06:51"
+                    links:
+                      first: https://ohdear.app/api/status-pages?page%5Bnumber%5D=1
+                      last: https://ohdear.app/api/status-pages?page%5Bnumber%5D=1
+                      prev: null
+                      next: null
+                    meta:
+                      current_page: 1
+                      from: 1
+                      last_page: 1
+                      path: https://ohdear.app/api/status-pages
+                      per_page: 200
+                      to: 2
+                      total: 2
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    post:
+      tags: [Status Pages]
+      summary: Create a status page
+      operationId: createStatusPage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStatusPageRequest'
+            examples:
+              example:
+                value:
+                  team_id: 1
+                  title: My New Status Page
+                  monitors:
+                    - id: 1
+                      clickable: true
+                    - id: 2
+                      clickable: false
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusPage'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Validation' }
+
+  /status-pages/{statusPageId}:
+    get:
+      tags: [Status Pages]
+      summary: Get a status page
+      operationId: getStatusPage
+      parameters:
+        - name: statusPageId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Status page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusPageWithUpdates'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Status Pages]
+      summary: Delete a status page
+      operationId: deleteStatusPage
+      parameters:
+        - name: statusPageId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204':
+          description: No Content
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /status-pages/{statusPageId}/monitors:
+    post:
+      tags: [Status Pages]
+      summary: Add monitors to a status page
+      operationId: addStatusPageMonitors
+      parameters:
+        - name: statusPageId
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddStatusPageMonitorsRequest'
+            examples:
+              example:
+                value:
+                  sync: true
+                  monitors:
+                    - id: 17
+                      clickable: true
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusPage'
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /status-pages/{statusPageId}/monitors/{monitorId}:
+    delete:
+      tags: [Status Pages]
+      summary: Remove a monitor from a status page
+      operationId: removeStatusPageMonitor
+      parameters:
+        - name: statusPageId
+          in: path
+          required: true
+          schema: { type: integer }
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '204':
+          description: No Content
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /status-pages/{statusPageId}/updates:
+    get:
+      tags: [Status Page Updates]
+      summary: List updates for a status page
+      operationId: listStatusPageUpdates
+      parameters:
+        - name: statusPageId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Updates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusPageUpdatesResponse'
+              examples:
+                empty:
+                  value: { data: [] }
+                success:
+                  value:
+                    data:
+                      - id: 65
+                        title: 3rd party API issue resolved
+                        text: We have contacted our API provider and they have resolved the situation, everything is back to normal. We apologize for the inconvenience!
+                        pinned: false
+                        severity: resolved
+                        time: "2019-09-16 08:24:00"
+                        status_page_url: https://ohdear.app/status-page/your-slug
+                      - id: 64
+                        title: We are experiencing an outage on our service
+                        text: Due to errors in our 3rd party API provider, we are experiencing an outage of our website. Our team is working on getting it resolved ASAP.
+                        pinned: false
+                        severity: high
+                        time: "2019-09-16 08:11:00"
+                        status_page_url: https://ohdear.app/status-page/your-slug
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /status-page-updates:
+    post:
+      tags: [Status Page Updates]
+      summary: Create a status page update
+      operationId: createStatusPageUpdate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStatusPageUpdateRequest'
+            examples:
+              example:
+                value:
+                  status_page_id: 1
+                  title: Our site is down
+                  text: We are working on it!
+                  severity: high
+                  time: "2019-09-16 10:24"
+                  pinned: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusPageUpdate'
+              examples:
+                success:
+                  value:
+                    id: 66
+                    title: Our site is down
+                    text: We are working on it!
+                    pinned: true
+                    severity: high
+                    time: "2019-09-16 08:24:00"
+                    status_page_url: https://ohdear.app/status-page/your-slug
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Validation' }
+
+  /status-page-updates/{updateId}:
+    delete:
+      tags: [Status Page Updates]
+      summary: Delete a status page update
+      operationId: deleteStatusPageUpdate
+      parameters:
+        - name: updateId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204':
+          description: No Content
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /monitors/{monitorId}/cron-checks:
+    get:
+      tags: [Cron Checks]
+      summary: List cron checks for a monitor
+      operationId: listCronChecks
+      parameters:
+        - $ref: '#/components/parameters/MonitorId'
+      responses:
+        '200':
+          description: Cron checks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CronChecksResponse'
+              examples:
+                success:
+                  value:
+                    data:
+                      - id: 1
+                        uuid: 0d210b09
+                        name: cronjob number one
+                        type: simple
+                        description: a description goes here
+                        frequency_in_minutes: 15
+                        grace_time_in_minutes: 5
+                        cron_expression: null
+                        server_timezone: Europe/Brussels
+                        ping_url: https://ping.ohdear.app/0d210b09
+                        created_at: "2020-07-28 13:27:02"
+                        latest_result: pingFinished
+                        latest_ping_at: "2020-11-16 09:19:40"
+                        human_readable_latest_ping_at: "5 minutes ago"
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    MonitorId:
+      name: monitorId
+      in: path
+      required: true
+      schema: { type: integer }
+    CheckId:
+      name: checkId
+      in: path
+      required: true
+      schema: { type: integer }
+    CronCheckId:
+      name: cronCheckId
+      in: path
+      required: true
+      schema: { type: integer }
+    HealthCheckId:
+      name: healthCheckId
+      in: path
+      required: true
+      schema: { type: integer }
+    PageNumber:
+      name: page[number]
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    PageSize:
+      name: page[size]
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 200, default: 200 }
+    FilterStartedAt:
+      name: filter[started_at]
+      in: query
+      description: Start timestamp (format YYYYMMDDHHMMSS)
+      schema: { type: string, pattern: '^[0-9]{14}$' }
+    FilterEndedAt:
+      name: filter[ended_at]
+      in: query
+      description: End timestamp (format YYYYMMDDHHMMSS)
+      schema: { type: string, pattern: '^[0-9]{14}$' }
+    FilterStart:
+      name: filter[start]
+      in: query
+      description: Start timestamp (format YYYYMMDDHHMMSS)
+      schema: { type: string, pattern: '^[0-9]{14}$' }
+    FilterEnd:
+      name: filter[end]
+      in: query
+      description: End timestamp (format YYYYMMDDHHMMSS)
+      schema: { type: string, pattern: '^[0-9]{14}$' }
+    FilterGroupBy:
+      name: filter[group_by]
+      in: query
+      description: Grouping granularity
+      schema:
+        type: string
+        enum: [minute, hour, day]
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string, format: email }
+        photo_url: { type: string, format: uri }
+        teams:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              name: { type: string }
+
+    Monitor:
+      type: object
+      properties:
+        id: { type: integer }
+        team_id: { type: integer }
+        type:
+          type: string
+          enum: [http, ping, tcp]
+        url: { type: string }
+        uses_https: { type: boolean }
+        sort_url: { type: string }
+        label: { type: string }
+        group_name: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        description:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        latest_run_date:
+          type: string
+          nullable: true
+        summarized_check_result:
+          type: string
+          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
+        checks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Check'
+        uptime_check_settings:
+          $ref: '#/components/schemas/UptimeCheckSettings'
+        badge_id: { type: string }
+        marked_for_deletion_at:
+          type: string
+          nullable: true
+        created_at: { type: string }
+        updated_at: { type: string }
+
+    CreateMonitorRequest:
+      type: object
+      required: [url, team_id, type]
+      properties:
+        url: { type: string, format: uri }
+        team_id: { type: integer }
+        type: { type: string, enum: [http, ping, tcp] }
+        checks:
+          type: array
+          items: { $ref: '#/components/schemas/CheckType' }
+        group_name: { type: string }
+        friendly_name: { type: string, description: Deprecated in favor of label }
+        label: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        notes: { type: string }
+        description: { type: string }
+        uptime_check_location: { type: string }
+        uptime_check_expected_final_redirect_url: { type: string, nullable: true }
+        uptime_check_failed_notification_threshold: { type: integer }
+        uptime_check_http_verb: { type: string }
+        uptime_check_timeout: { type: integer }
+        uptime_check_max_redirect_count: { type: integer }
+        uptime_check_payload:
+          type: array
+          items: { $ref: '#/components/schemas/NameValuePair' }
+        uptime_check_valid_status_codes:
+          type: array
+          items: { type: string }
+        uptime_check_look_for_string:
+          type: string
+          nullable: true
+        uptime_check_absent_string:
+          type: string
+          nullable: true
+        uptime_check_expected_response_headers:
+          type: array
+          items: { $ref: '#/components/schemas/ExpectedHeader' }
+        http_client_headers:
+          type: array
+          items: { $ref: '#/components/schemas/NameValuePair' }
+        performance_threshold_in_ms: { type: integer }
+        performance_change_percentage: { type: integer }
+        crawler_headers:
+          type: array
+          items: { $ref: '#/components/schemas/NameValuePair' }
+        broken_links_check_include_external_links: { type: boolean }
+        broken_link_types:
+          type: array
+          items: { type: string }
+        broken_links_whitelisted_urls:
+          type: array
+          items: { type: string, format: uri }
+        respect_robots: { type: boolean }
+        sitemap_path: { type: string }
+        sitemap_speed: { type: string, enum: [default, fast, slow] }
+        application_health_check_result_url: { type: string, format: uri }
+        application_health_headers:
+          type: array
+          items: { $ref: '#/components/schemas/NameValuePair' }
+        certificate_health_check_expires_soon_threshold_in_days: { type: integer }
+        dns_check_nameservers_in_sync: { type: boolean }
+        dns_monitor_main_domain: { type: boolean }
+        dns_extra_cnames:
+          type: array
+          items: { type: string }
+        dns_ignored_record_types:
+          type: array
+          items: { type: string }
+        domain_check_expires_soon_threshold_in_days: { type: integer }
+        lighthouse_check_continent: { type: string }
+        lighthouse_cpu_slowdown_modifier: { type: number }
+        send_report_to_emails:
+          type: array
+          items: { type: string, format: email }
+        include_check_types_in_report:
+          type: array
+          items: { $ref: '#/components/schemas/CheckType' }
+
+    UpdateMonitorRequest:
+      type: object
+      properties:
+        url: { type: string, format: uri }
+        type: { type: string, enum: [http, ping, tcp] }
+        checks:
+          type: array
+          items: { $ref: '#/components/schemas/CheckType' }
+        group_name: { type: string }
+        label: { type: string }
+        tags:
+          type: array
+          items: { type: string }
+        notes: { type: string }
+        description: { type: string }
+        uptime_check_settings:
+          $ref: '#/components/schemas/UptimeCheckSettings'
+        performance_check_settings:
+          type: object
+          properties:
+            threshold_in_ms: { type: integer }
+            change_percentage: { type: integer }
+        broken_links_check_settings:
+          type: object
+          properties:
+            check_include_external_links: { type: boolean }
+            types:
+              type: array
+              items: { type: string }
+            whitelisted_urls:
+              type: array
+              items: { type: string, format: uri }
+            respect_robots: { type: boolean }
+        sitemap_check_settings:
+          type: object
+          properties:
+            path: { type: string }
+            speed:
+              type: string
+              enum: [default, fast, slow]
+        application_health_check_settings:
+          type: object
+          properties:
+            result_url: { type: string, format: uri }
+            secret:
+              type: string
+              nullable: true
+            headers:
+              type: array
+              items: { $ref: '#/components/schemas/NameValuePair' }
+        certificate_health_check_settings:
+          type: object
+          properties:
+            expires_soon_threshold_in_days: { type: integer }
+        dns_check_settings:
+          type: object
+          properties:
+            check_nameservers_in_sync: { type: boolean }
+            monitor_main_domain: { type: boolean }
+            extra_cnames:
+              type: array
+              items: { type: string }
+            ignored_record_types:
+              type: array
+              items: { type: string }
+        domain_check_settings:
+          type: object
+          properties:
+            expires_soon_threshold_in_days: { type: integer }
+        lighthouse_check_settings:
+          type: object
+          properties:
+            continent: { type: string }
+            cpu_slowdown_modifier: { type: number }
+        crawler_headers:
+          type: array
+          items: { $ref: '#/components/schemas/NameValuePair' }
+        send_report_to_emails:
+          type: array
+          items: { type: string, format: email }
+        include_check_types_in_report:
+          type: array
+          items: { $ref: '#/components/schemas/CheckType' }
+
+    UptimeCheckSettings:
+      type: object
+      properties:
+        location: { type: string }
+        look_for_string:
+          type: string
+          nullable: true
+        absent_string:
+          type: string
+          nullable: true
+        expected_response_headers:
+          type: array
+          items: { $ref: '#/components/schemas/ExpectedHeader' }
+        failed_notification_threshold: { type: integer }
+        http_verb: { type: string }
+        payload:
+          type: array
+          items: { $ref: '#/components/schemas/NameValuePair' }
+        timeout: { type: integer }
+        valid_status_codes:
+          type: array
+          items: { type: string }
+        max_redirect_count: { type: integer }
+        expected_final_redirect_url:
+          type: string
+          nullable: true
+        http_client_headers:
+          type: array
+          items: { $ref: '#/components/schemas/NameValuePair' }
+
+    ExpectedHeader:
+      type: object
+      properties:
+        name: { type: string }
+        condition: { type: string }
+        value: { type: string }
+
+    NameValuePair:
+      type: object
+      properties:
+        name: { type: string }
+        value: { type: string }
+
+    Check:
+      type: object
+      properties:
+        id: { type: integer }
+        type:
+          $ref: '#/components/schemas/CheckType'
+        label: { type: string }
+        enabled: { type: boolean }
+        latest_run_ended_at:
+          type: string
+          nullable: true
+        latest_run_result:
+          type: string
+          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
+        summary:
+          type: string
+          nullable: true
+        settings:
+          type: object
+          description: Check-specific settings
+        active_snooze:
+          type: object
+          nullable: true
+          properties:
+            id: { type: integer }
+            starts_at: { type: string }
+            ends_at: { type: string }
+            snoozed_by: { type: string }
+            unsnoozed_by:
+              type: string
+              nullable: true
+            source: { type: string }
+            created_at: { type: string }
+
+    CheckType:
+      type: string
+      enum: [uptime, performance, certificate_health, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain]
+
+    CheckEnableToggle:
+      type: object
+      properties:
+        id: { type: integer }
+        type: { $ref: '#/components/schemas/CheckType' }
+        enabled: { type: boolean }
+
+    CheckRunRequest:
+      type: object
+      properties:
+        http_client_headers:
+          type: object
+          additionalProperties:
+            type: string
+
+    CheckSummary:
+      type: object
+      properties:
+        result:
+          type: string
+          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
+        summary: { type: string }
+
+    UptimePoint:
+      type: object
+      properties:
+        datetime: { type: string }
+        uptime_percentage: { type: number }
+
+    DowntimeRecord:
+      type: object
+      properties:
+        id: { type: integer }
+        started_at: { type: string }
+        ended_at: { type: string }
+        notes_html: { type: string }
+        notes_markdown: { type: string }
+
+    PaginatedDowntime:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/DowntimeRecord' }
+
+    UptimeMetricsHttpPoint:
+      type: object
+      properties:
+        dns_time_in_seconds: { type: number }
+        tcp_time_in_seconds: { type: number }
+        ssl_handshake_time_in_seconds: { type: number }
+        remote_server_processing_time_in_seconds: { type: number }
+        download_time_in_seconds: { type: number }
+        total_time_in_seconds: { type: number }
+        curl:
+          type: object
+          properties:
+            namelookup_time: { type: number }
+            connect_time: { type: number }
+            appconnect_time: { type: number }
+            starttransfer_time: { type: number }
+            pretransfer_time: { type: number }
+            redirect_time: { type: number }
+            total_time: { type: number }
+            header_size: { type: integer }
+            size_download: { type: integer }
+            speed_download: { type: integer }
+        date: { type: string }
+
+    UptimeMetricsHttpResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/UptimeMetricsHttpPoint' }
+
+    UptimeMetricsPingPoint:
+      type: object
+      properties:
+        minimum_time_in_ms: { type: number }
+        maximum_time_in_ms: { type: number }
+        average_time_in_ms: { type: number }
+        packet_loss_percentage: { type: number }
+        uptime_percentage: { type: number }
+        downtime_percentage: { type: number }
+        uptime_seconds: { type: integer }
+        downtime_seconds: { type: integer }
+        date: { type: string }
+
+    UptimeMetricsPingResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/UptimeMetricsPingPoint' }
+
+    UptimeMetricsTcpPoint:
+      type: object
+      properties:
+        time_to_connect_in_ms: { type: number }
+        uptime_percentage: { type: number }
+        downtime_percentage: { type: number }
+        uptime_seconds: { type: integer }
+        downtime_seconds: { type: integer }
+        date: { type: string }
+
+    UptimeMetricsTcpResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/UptimeMetricsTcpPoint' }
+
+    BrokenLinksResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              crawled_url: { type: string, format: uri }
+              relative_crawled_url: { type: string }
+              status_code: { type: integer }
+              found_on_url: { type: string, format: uri }
+              relative_found_on_url: { type: string }
+              internal: { type: boolean }
+
+    BrokenLinksSettingsUpdate:
+      type: object
+      properties:
+        broken_links_check_include_external_links: { type: boolean }
+        broken_links_whitelisted_urls_string: { type: string, description: 'Newline-separated list of URLs' }
+
+    MixedContentResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              element_name: { type: string }
+              mixed_content_url: { type: string }
+              found_on_url: { type: string }
+
+    CertificateHealth:
+      type: object
+      properties:
+        certificate_details:
+          type: object
+          properties:
+            issuer: { type: string }
+            valid_from: { type: string }
+            valid_until: { type: string }
+        certificate_checks:
+          type: array
+          items:
+            type: object
+            properties:
+              type: { type: string }
+              label: { type: string }
+              passed: { type: boolean }
+        certificate_chain_issuers:
+          type: array
+          items: { type: string }
+
+    DetectedCertificate:
+      type: object
+      properties:
+        id: { type: integer }
+        monitor_id: { type: integer }
+        fingerprint: { type: string }
+        certificate_details:
+          type: object
+          properties:
+            issuer: { type: string }
+            domain: { type: string }
+            additional_domains:
+              type: array
+              items: { type: string }
+            valid_from: { type: string, format: date-time }
+            valid_until: { type: string, format: date-time }
+            days_until_expiration: { type: integer }
+            signature_algorithm: { type: string }
+            is_valid: { type: boolean }
+            is_expired: { type: boolean }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    PaginatedDetectedCertificates:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/DetectedCertificate' }
+        links:
+          type: object
+          additionalProperties: {}
+        meta:
+          type: object
+          properties:
+            current_page: { type: integer }
+            from: { type: integer }
+            last_page: { type: integer }
+            per_page: { type: integer }
+            to: { type: integer }
+            total: { type: integer }
+
+    MaintenancePeriod:
+      type: object
+      properties:
+        id: { type: integer }
+        monitor_id:
+          oneOf:
+            - type: integer
+            - type: string
+        name:
+          type: string
+          nullable: true
+        starts_at: { type: string }
+        ends_at: { type: string }
+
+    MaintenancePeriodsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/MaintenancePeriod' }
+
+    CreateMaintenancePeriodRequest:
+      type: object
+      required: [monitor_id, starts_at, ends_at]
+      properties:
+        monitor_id:
+          oneOf:
+            - type: integer
+            - type: string
+        starts_at: { type: string, description: 'Y-m-d H:i in team timezone' }
+        ends_at: { type: string, description: 'Y-m-d H:i in team timezone' }
+        name:
+          type: string
+          nullable: true
+
+    StatusPage:
+      type: object
+      properties:
+        id: { type: integer }
+        team:
+          type: object
+          properties:
+            id: { type: integer }
+            name: { type: string }
+        title: { type: string }
+        domain: { type: string }
+        slug: { type: string }
+        full_url: { type: string, format: uri }
+        timezone: { type: string }
+        summarized_status: { type: string, enum: [up, down, unknown] }
+        monitors:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              url: { type: string }
+        created_at: { type: string }
+        updated_at: { type: string }
+
+    StatusPageWithUpdates:
+      allOf:
+        - $ref: '#/components/schemas/StatusPage'
+        - type: object
+          properties:
+            updates:
+              type: array
+              items:
+                $ref: '#/components/schemas/StatusPageUpdate'
+
+    PaginatedStatusPages:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/StatusPage' }
+        links:
+          type: object
+          additionalProperties: {}
+        meta:
+          type: object
+          properties:
+            current_page: { type: integer }
+            from: { type: integer }
+            last_page: { type: integer }
+            path: { type: string }
+            per_page: { type: integer }
+            to: { type: integer }
+            total: { type: integer }
+
+    CreateStatusPageRequest:
+      type: object
+      required: [team_id, title, monitors]
+      properties:
+        team_id: { type: integer }
+        title: { type: string }
+        monitors:
+          type: array
+          items:
+            type: object
+            required: [id, clickable]
+            properties:
+              id: { type: integer }
+              clickable: { type: boolean }
+
+    AddStatusPageMonitorsRequest:
+      type: object
+      required: [monitors]
+      properties:
+        sync: { type: boolean }
+        monitors:
+          type: array
+          items:
+            type: object
+            required: [id, clickable]
+            properties:
+              id: { type: integer }
+              clickable: { type: boolean }
+
+    StatusPageUpdatesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusPageUpdate'
+
+    StatusPageUpdate:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        text: { type: string }
+        pinned: { type: boolean }
+        severity: { type: string, enum: [info, warning, high, resolved, scheduled] }
+        time: { type: string }
+        status_page_url: { type: string, format: uri }
+
+    CreateStatusPageUpdateRequest:
+      type: object
+      required: [status_page_id, title, text, severity, time, pinned]
+      properties:
+        status_page_id: { type: integer }
+        title: { type: string }
+        text: { type: string }
+        severity: { type: string, enum: [info, warning, high, resolved, scheduled] }
+        time: { type: string, description: 'UTC Y-m-d H:i' }
+        pinned: { type: boolean }
+
+    CronCheck:
+      type: object
+      properties:
+        id: { type: integer }
+        uuid: { type: string }
+        name: { type: string }
+        type: { type: string, enum: [simple, cron] }
+        description: { type: string }
+        frequency_in_minutes:
+          type: integer
+          nullable: true
+        grace_time_in_minutes:
+          type: integer
+          nullable: true
+        cron_expression:
+          type: string
+          nullable: true
+        server_timezone: { type: string }
+        ping_url: { type: string, format: uri }
+        created_at: { type: string }
+        latest_result: { type: string }
+        latest_ping_at: { type: string }
+        human_readable_latest_ping_at: { type: string }
+
+    ApplicationHealthCheck:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        latest_result: { type: string }
+        latest_run_ended_at:
+          type: string
+          nullable: true
+
+    CronChecksResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CronCheck'
+
+    PaginatedMonitors:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Monitor'
+        links:
+          type: object
+          additionalProperties: {}
+        meta:
+          type: object
+          properties:
+            current_page: { type: integer }
+            from: { type: integer }
+            last_page: { type: integer }
+            path: { type: string }
+            per_page: { type: integer }
+            to: { type: integer }
+            total: { type: integer }
+
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items: { type: string }
+
+  responses:
+    Unauthorized:
+      description: Unauthenticated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                message: Unauthenticated.
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                message: This action is unauthorized.
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            default:
+              value:
+                message: Resource not found.
+    Validation:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            missing_url:
+              value:
+                message: The given data was invalid.
+                errors:
+                  url:
+                    - The url field is required.
