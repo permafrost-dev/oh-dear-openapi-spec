@@ -9,28 +9,30 @@ on:
   pull_request:
 
 jobs:
-  tests:
-
+  lint-oas:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        node-version: [22]
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v5
       with:
         fetch-depth: 1
-
     - uses: oven-sh/setup-bun@v2
       with:
         bun-version: latest
+    - name: Run the OpenAPI linter
+      run: bunx @stoplight/spectral-cli lint ./specs/oh-dear.openapi.yaml --format github-actions
 
-    - name: Run the tests with coverage
-      run: bunx @stoplight/spectral-cli lint openapi.yaml --format github-actions
-      continue-on-error: false
+  lint-arazzo:
+    runs-on: ubuntu-latest
 
-    - name: Linting Success Message
-      if: success()
-      run: echo "Spec linting passed!"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 1
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+    - name: Run the Arazzo linter
+      run: bunx @redocly/cli lint ./specs/oh-dear.arazzo.yaml --format github-actions

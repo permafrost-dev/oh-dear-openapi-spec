@@ -1,0 +1,31 @@
+{
+  "name": "oh-dear-openapi-spec",
+  "version": "1.0.0",
+  "description": "OpenAPI & Arrazzo specifications for the Oh Dear! API",
+  "author": "Patrick Organ <patrick@permafrost.dev>",
+  "license": "MIT",
+  "keywords": [
+    "api",
+    "arazzo",
+    "oh-dear",
+    "openapi"
+  ],
+  "homepage": "https://github.com/permafrost-dev/oh-dear-openapi-spec#readme",
+  "bugs": {
+    "url": "https://github.com/permafrost-dev/oh-dear-openapi-spec/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/permafrost-dev/oh-dear-openapi-spec.git"
+  },
+  "type": "module",
+  "scripts": {
+    "lint:open-api": "spectral-cli lint specs/oh-dear.openapi.yaml",
+    "lint:arazzo": "@redocly/cli lint specs/oh-dear.arazzo.yaml",
+    "lint": "npm run lint:open-api && npm run lint:arazzo"
+  },
+  "dependencies": {
+    "@redocly/cli": "^2.1.5",
+    "@stoplight/spectral-cli": "^6.15.0"
+  }
+}

@@ -1,3 +1,7 @@
 *.zip
 *.tar
 *.gz
+bun.lock
+package-lock.json
+node_modules
+dist
