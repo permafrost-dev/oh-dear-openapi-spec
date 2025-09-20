@@ -10,6 +10,10 @@
     "oh-dear",
     "openapi"
   ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/permafrost-dev"
+  },
   "homepage": "https://github.com/permafrost-dev/oh-dear-openapi-spec#readme",
   "bugs": {
     "url": "https://github.com/permafrost-dev/oh-dear-openapi-spec/issues"

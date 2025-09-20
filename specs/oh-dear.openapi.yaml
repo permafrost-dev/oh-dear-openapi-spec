@@ -12,17 +12,16 @@ info:
     name: Oh Dear Support
     url: https://ohdear.app
   description: >
-    OpenAPI 3.1 specification for the Oh Dear API, aligned with the public documentation and PHP SDK.
-    Base URL is https://ohdear.app/api. Authentication is via Bearer token.
+    OpenAPI 3.1 specification for the Oh Dear API, aligned with the public documentation and SDK.
+    Authentication is via the HTTP Authorization Header using a Bearer token.
 servers:
   - url: https://ohdear.app/api
     description: Production
-
 security:
   - bearerAuth: []
-
 tags:
   - name: Me
+  - name: Current User
   - name: Monitors
   - name: Checks
   - name: Uptime
@@ -41,8 +40,9 @@ tags:
 paths:
   /me:
     get:
-      tags: [Me]
-      summary: Get user and team info for the API token
+      tags: [Me, Current User]
+      summary: Get current user
+      description: Returns the user and team info for the authenticated user. This endpoint can be used to retrieve information about the current user.
       operationId: getMe
       responses:
         '200':
@@ -70,6 +70,7 @@ paths:
     get:
       tags: [Monitors]
       summary: List monitors
+      description: Returns a paginated list of monitors for the authenticated user's team.
       operationId: listMonitors
       parameters:
         - $ref: '#/components/parameters/PageNumber'
@@ -145,6 +146,7 @@ paths:
     post:
       tags: [Monitors]
       summary: Create a monitor
+      description: Create a new monitor for the authenticated user's team.
       operationId: createMonitor
       requestBody:
         required: true
@@ -284,6 +286,7 @@ paths:
     get:
       tags: [Monitors]
       summary: Get a monitor
+      description: Retrieve detailed information about a specific monitor by its ID.
       operationId: getMonitor
       parameters:
         - $ref: '#/components/parameters/MonitorId'
@@ -345,6 +348,7 @@ paths:
     put:
       tags: [Monitors]
       summary: Update a monitor
+      description: Update the settings of an existing monitor.
       operationId: updateMonitor
       parameters:
         - $ref: '#/components/parameters/MonitorId'
@@ -438,6 +442,7 @@ paths:
     delete:
       tags: [Monitors]
       summary: Delete a monitor
+      description: Delete a monitor by its ID. This action is irreversible.
       operationId: deleteMonitor
       parameters:
         - $ref: '#/components/parameters/MonitorId'
@@ -452,6 +457,7 @@ paths:
     get:
       tags: [Checks]
       summary: Get summary for a check type on a monitor
+      description: Retrieve a summary of the latest result for a specific check type on a monitor.
       operationId: getCheckSummary
       parameters:
         - $ref: '#/components/parameters/MonitorId'
@@ -480,6 +486,7 @@ paths:
     post:
       tags: [Checks]
       summary: Enable a check
+      description: Enable a specific check by its ID.
       operationId: enableCheck
       parameters:
         - $ref: '#/components/parameters/CheckId'
@@ -501,6 +508,7 @@ paths:
     post:
       tags: [Checks]
       summary: Disable a check
+      description: Disable a specific check by its ID.
       operationId: disableCheck
       parameters:
         - $ref: '#/components/parameters/CheckId'
@@ -522,6 +530,7 @@ paths:
     post:
       tags: [Checks]
       summary: Request an immediate run of a check
+      description: Request an immediate run of a specific check. Optionally, custom HTTP headers can be provided for HTTP-based checks.
       operationId: requestCheckRun
       parameters:
         - $ref: '#/components/parameters/CheckId'
@@ -564,6 +573,7 @@ paths:
     post:
       tags: [Checks]
       summary: Snooze notifications for a check
+      description: Snooze notifications for a specific check for a given duration in minutes.
       operationId: snoozeCheck
       parameters:
         - $ref: '#/components/parameters/CheckId'
@@ -596,6 +606,7 @@ paths:
     post:
       tags: [Checks]
       summary: Remove snooze from a check
+      description: Remove any active snooze from a specific check.
       operationId: unsnoozeCheck
       parameters:
         - $ref: '#/components/parameters/CheckId'
@@ -614,6 +625,7 @@ paths:
     post:
       tags: [Cron Checks]
       summary: Snooze a cron check
+      description: Snooze notifications for a specific cron check for a given duration in minutes.
       operationId: snoozeCronCheck
       parameters:
         - $ref: '#/components/parameters/CronCheckId'
@@ -645,6 +657,7 @@ paths:
     post:
       tags: [Cron Checks]
       summary: Unsnooze a cron check
+      description: Remove any active snooze from a specific cron check.
       operationId: unsnoozeCronCheck
       parameters:
         - $ref: '#/components/parameters/CronCheckId'
@@ -663,6 +676,7 @@ paths:
     get:
       tags: [Application Health Checks]
       summary: List application health checks for a monitor
+      description: Retrieve a list of application health checks associated with a specific monitor.
       operationId: listApplicationHealthChecks
       parameters:
         - $ref: '#/components/parameters/MonitorId'
@@ -694,6 +708,7 @@ paths:
     post:
       tags: [Application Health Checks]
       summary: Snooze an application health check
+      description: Snooze notifications for a specific application health check for a given duration in minutes.
       operationId: snoozeApplicationHealthCheck
       parameters:
         - $ref: '#/components/parameters/MonitorId'
@@ -726,6 +741,7 @@ paths:
     post:
       tags: [Application Health Checks]
       summary: Unsnooze an application health check
+      description: Remove any active snooze from a specific application health check.
       operationId: unsnoozeApplicationHealthCheck
       parameters:
         - $ref: '#/components/parameters/MonitorId'

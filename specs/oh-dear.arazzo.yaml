@@ -5,7 +5,7 @@ info:
 sourceDescriptions:
   - name: openapi
     type: openapi
-    url: openapi.yaml
+    url: oh-dear.openapi.yaml
 workflows:
   - workflowId: get-me-workflow
     inputs:
@@ -15,7 +15,7 @@ workflows:
         value: Bearer {$inputs.bearerAuth}
         in: header
     steps:
-      - stepId: get-me-step
+      - stepId: fetch-current-user-step
         operationId: $sourceDescriptions.openapi.getMe
         successCriteria:
           - condition: $statusCode == 200
