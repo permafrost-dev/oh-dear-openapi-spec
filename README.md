@@ -6,16 +6,14 @@
 <br/>
 <br/>
 
-This project provides both [OpenAPI v3.1](https://spec.openapis.org/oas/v3.1.0) and Arazzo v1.x specifications for the API of the excellent
-[Oh Dear! monitoring service](https://ohdear.app).
+This project provides both [OpenAPI](./specs/oh-dear.openapi.yaml) and [Arazzo](./specs/oh-dear.arazzo.yaml) specifications for the excellent [Oh Dear! monitoring service](https://ohdear.app).
 
 ## Specifications
 
-The OpenAPI specification follows the [OpenAPI 3.1 standard](https://spec.openapis.org/oas/v3.1.0), making it easy to generate client SDKs,
-server stubs, Postman collections, documentation, and more. It is particularly useful for building robust [third-party integrations](https://ohdear.app/docs/integrations/3rd-party-integrations-of-oh-dear) 
-and [SDKs](https://ohdear.app/docs/integrations/the-oh-dear-php-sdk).
+The OpenAPI specification follows the [v3.1.0 standard](https://spec.openapis.org/oas/v3.1.0), making it easy to generate client SDKs,
+server stubs, Postman collections, documentation, and more. It is particularly useful for building robust [third-party integrations](https://ohdear.app/docs/integrations/3rd-party-integrations-of-oh-dear) and [SDKs](https://ohdear.app/docs/integrations/the-oh-dear-php-sdk).
 
-The Arazzo specification follows the [Arazzo v1.0.1 standard](https://github.com/OAI/Arazzo-Specification/blob/main/versions/1.0.1.md), defines how the API should work in practice. It describes scenarios that require multiple steps with requests and responses, providing a practical way to ensure that the OpenAPI specification is accurate. Additionally, it helps provide clarity on how the API behaves in real-world situations.
+The Arazzo specification follows the [v1.0.1 standard](https://github.com/OAI/Arazzo-Specification/blob/main/versions/1.0.1.md), and defines how the API works in real-world scenarios. It describes workflows that require one or more steps with request/response series. A primary benefit is providing the ability to programmatically test the OpenAPI specification.
 
 ## Development
 
