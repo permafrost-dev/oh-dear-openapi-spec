@@ -1,8 +1,8 @@
-<center>
-    <img src="./assets/oh-dear-logo-rgb.png" alt="Oh Dear!" width="200"/>
+<p align="center">
+    <img src="./assets/oh-dear-logo-rgb.png" alt="Oh Dear!" width="200" />
     <br/>
     <img src="./assets/openapi-pantone.png" alt="OpenAPI" height="120"/>
-</center>
+</p>
 <br/>
 <br/>
 
