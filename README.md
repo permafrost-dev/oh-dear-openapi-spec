@@ -1,30 +1,159 @@
 <p align="center">
-    <img src="./assets/oh-dear-logo-rgb.png" alt="Oh Dear!" width="200" />
-    <br/>
-    <img src="./assets/openapi-pantone.png" alt="OpenAPI" height="120"/>
+  <img src="./assets/oh-dear-logo-rgb.png" alt="Oh Dear! Logo" width="200"/>
+  <br/>
+    <img src="./assets/openapi-pantone.png" alt="OpenAPI Logo" width="200"/>
 </p>
-<br/>
-<br/>
+
+[![License](https://img.shields.io/github/license/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge)](./LICENSE.md)
+[![Latest Version](https://img.shields.io/github/v/release/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge)](./CHANGELOG.md)
+![GitHub Created At](https://img.shields.io/github/created-at/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge&logo=github&logoColor=white&label=created&color=%236BA539)
+<!-- [![Issues](https://img.shields.io/github/issues/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge)](https://github.com/permafrost-dev/oh-dear-openapi-spec/issues) -->
+<!-- [![Contributors](https://img.shields.io/github/contributors/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge)](https://github.com/permafrost-dev/oh-dear-openapi-spec/graphs/contributors) -->
 
 This project provides both [OpenAPI](./specs/oh-dear.openapi.yaml) and [Arazzo](./specs/oh-dear.arazzo.yaml) specifications for the excellent [Oh Dear! monitoring service](https://ohdear.app).
 
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [About Oh Dear](#about-oh-dear)
+- [Specifications](#specifications)
+  - [OpenAPI](#openapi)
+  - [Arazzo](#arazzo)
+- [Repository Structure](#repository-structure)
+- [Usage](#usage)
+  - [Generating Documentation](#generating-documentation)
+  - [Generating SDKs](#generating-sdks)
+- [Validation](#validation)
+- [Development](#development)
+- [Status](#status)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
+- [Security Vulnerabilities](#security-vulnerabilities)
+- [Credits](#credits)
+- [License](#license)
+
+## About Oh Dear
+
+[Oh Dear!](https://ohdear.app) is an all-in-one monitoring tool for your websites. It offers uptime monitoring, SSL certificate checking, broken link detection, scheduled task monitoring, and much more. This project aims to provide comprehensive, community-driven API specifications to make integrations with Oh Dear! a breeze.
+
 ## Specifications
 
-The OpenAPI specification follows the [v3.1.0 standard](https://spec.openapis.org/oas/v3.1.0), making it easy to generate client SDKs,
-server stubs, Postman collections, documentation, and more. It is particularly useful for building robust [third-party integrations](https://ohdear.app/docs/integrations/3rd-party-integrations-of-oh-dear) and [SDKs](https://ohdear.app/docs/integrations/the-oh-dear-php-sdk).
+### OpenAPI
 
-The Arazzo specification follows the [v1.0.1 standard](https://github.com/OAI/Arazzo-Specification/blob/main/versions/1.0.1.md), and defines how the API works in real-world scenarios. It describes workflows that require one or more steps with request/response series. A primary benefit is providing the ability to programmatically test the OpenAPI specification.
+The OpenAPI specification follows the [v3.1.0 standard](https://spec.openapis.org/oas/v3.1.0). It provides a detailed, machine-readable description of the Oh Dear! API. This makes it easy to:
+
+- Generate client SDKs for various programming languages.
+- Create server stubs for testing and development.
+- Produce interactive API documentation.
+- Import into tools like Postman for easy API exploration.
+
+It is particularly useful for building robust [third-party integrations](https://ohdear.app/docs/integrations/3rd-party-integrations-of-oh-dear) and [SDKs](https://ohdear.app/docs/integrations/the-oh-dear-php-sdk).
+
+### Arazzo
+
+The Arazzo specification follows the [v1.0.1 standard](https://github.com/OAI/Arazzo-Specification/blob/main/versions/1.0.1.md) and defines how the API works in real-world scenarios. It describes workflows that require one or more steps with request/response series. A primary benefit is providing the ability to programmatically test the OpenAPI specification and ensure that API workflows behave as expected.
+
+## Repository Structure
+
+A quick overview of the most relevant files and directories:
+
+```text
+├── specs/
+│   ├── oh-dear.openapi.yaml   # Primary OpenAPI 3.1 specification
+│   └── oh-dear.arazzo.yaml    # Arazzo 1.0.1 workflow specification
+├── config/
+│   ├── .spectral.yaml           # Spectral configuration for linting the OpenAPI spec
+│   └── vacuum-ruleset.yaml    # Custom ruleset used for additional quality linting
+├── assets/                    # Logos and images used in the README/docs
+├── package.json               # Lint scripts and dependencies (Spectral & Redocly CLI)
+└── README.md
+```
+
+- `specs/` contains the source-of-truth API contract files. Any change here should ideally be validated via the lint commands and—where applicable—reflected in downstream SDKs or docs.
+- `config/.spectral.yaml` configures [Spectral](https://github.com/stoplightio/spectral) for linting the OpenAPI specification.
+- `config/vacuum-ruleset.yaml` is an extended quality ruleset (Vacuum) enforcing style, documentation completeness, schema rigor, and structural integrity on top of default linters.
+- `assets/` stores project branding and visual resources.
+
+## Usage
+
+To use these specifications, you'll need Node.js and npm installed. First, clone the repository and install the dependencies:
+
+```bash
+git clone https://github.com/permafrost-dev/oh-dear-openapi-spec.git
+cd oh-dear-openapi-spec
+npm install
+```
+
+### Generating Documentation
+
+You can generate beautiful, interactive API documentation from the OpenAPI specification using tools like [Redocly](https://redocly.com/):
+
+```bash
+npx @redocly/cli build-docs specs/oh-dear.openapi.yaml
+```
+
+This will generate a `redoc-static.html` file in the root of the project.
+
+### Generating SDKs
+
+A wide range of tools can generate client SDKs from OpenAPI specifications. One popular option is the [OpenAPI Generator CLI](https://openapi-generator.tech/).
+
+For example, to generate a TypeScript SDK:
+
+```bash
+npx @openapitools/openapi-generator-cli generate -i specs/oh-dear.openapi.yaml -g typescript-axios -o ./generated-sdk/ts
+```
+
+## Validation
+
+This project uses multiple layers of validation to ensure specification quality:
+
+1. **Spectral** (`@stoplight/spectral-cli`) – General OpenAPI best practice and style conformance.
+2. **Redocly CLI** (`@redocly/cli`) – Structural validation and bundling consistency.
+3. **Vacuum Ruleset** (`config/vacuum-ruleset.yaml`) – Enhanced quality checks: description presence & duplication, schema typing, path ambiguity, enum uniqueness, security-related markdown hygiene, and naming conventions.
+
+Run all standard validations:
+
+```bash
+npm run lint
+```
+
+Run individually:
+
+```bash
+npm run lint:open-api   # Lints specs/oh-dear.openapi.yaml via Spectral
+npm run lint:arazzo     # Lints specs/oh-dear.arazzo.yaml via Redocly CLI
+```
+
+To experiment with the Vacuum ruleset manually (example using Spectral-style invocation if integrated into workflow tools):
+
+```bash
+spectral lint -c config/.spectral.yaml specs/oh-dear.openapi.yaml
+@redocly/cli lint -r config/vacuum-ruleset.yaml specs/oh-dear.openapi.yaml
+```
+
+(If you add custom rules or split the spec into components, keep them under `specs/` and update references accordingly.)
 
 ## Development
 
-The OpenAPI specification file was created using [Stoplight Studio](https://stoplight.io/studio/), GPT-5, and manual editing in VSCode. The documentation and PHP SDK source code were treated as the source of truth.
+The OpenAPI specification file was created using [Stoplight Studio](https://stoplight.io/studio/), GPT-4, and manual editing in VSCode. The official Oh Dear! documentation and PHP SDK source code were treated as the source of truth.
 
 The Arazzo specification was initially generated by `@redocly/cli` from the OpenAPI specification, then manually edited in VSCode to ensure accuracy and completeness.
 
 ## Status
 
-The specifications are a work in progress. The OpenAPI specification is approximately 95% complete, while the Arazzo specification is around 70% complete.
-Keep an eye on the [changelog](CHANGELOG.md) and the issue tracker for updates.
+The specifications are a work in progress. The OpenAPI specification is approximately 95% complete, while the Arazzo specification is around 70% complete. Keep an eye on the [changelog](CHANGELOG.md) and the issue tracker for updates.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a pull request or create an issue for any bugs, suggestions, or questions you may have. See the [issue tracker](https://github.com/permafrost-dev/oh-dear-openapi-spec/issues) for a list of open items.
+
+When contributing changes to the specs:
+
+- Run `npm run lint` before opening a PR.
+- Keep descriptions meaningful—avoid duplication.
+- Favor reusable components where appropriate (consider refactoring repeated schema fragments).
+- If adding workflows, ensure Arazzo steps align with existing operationIds.
 
 ## Changelog
 
@@ -32,13 +161,13 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Security Vulnerabilities
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## License
-
-This project is licensed under the [MIT License](./LICENSE.md).
+Please review our [security policy](https://github.com/permafrost-dev/oh-dear-openapi-spec/security/policy) on how to report security vulnerabilities.
 
 ## Credits
 
 - [Patrick Organ](https://github.com/patinthehat)
-- [All Contributors](../../contributors)
+- [All Contributors](https://github.com/permafrost-dev/oh-dear-openapi-spec/graphs/contributors)
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE.md).
