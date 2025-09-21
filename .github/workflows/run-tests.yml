@@ -20,8 +20,14 @@ jobs:
     - uses: oven-sh/setup-bun@v2
       with:
         bun-version: latest
-    - name: Run the OpenAPI linter
-      run: bunx @stoplight/spectral-cli lint ./specs/oh-dear.openapi.yaml --format github-actions
+
+    - name: spectral linter (OpenAPI ruleset)
+      run: bunx @stoplight/spectral-cli lint -r ./config/.spectral.yaml ./specs/oh-dear.openapi.yaml --format github-actions
+
+    - name: vacuum linter (recommended ruleset)
+      run: |
+        curl -fsSL https://quobix.com/scripts/install_vacuum.sh | sh
+        vacuum -r ./config/vacuum-ruleset.yaml lint ./specs/oh-dear.openapi.yaml --no-banner --pipeline-output
 
   lint-arazzo:
     runs-on: ubuntu-latest
@@ -34,5 +40,6 @@ jobs:
     - uses: oven-sh/setup-bun@v2
       with:
         bun-version: latest
-    - name: Run the Arazzo linter
+
+    - name: redocly linter (arazzo)
       run: bunx @redocly/cli lint ./specs/oh-dear.arazzo.yaml --format github-actions

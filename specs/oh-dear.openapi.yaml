@@ -1787,14 +1787,11 @@ components:
           type: array
           items: { type: string }
         description:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         notes:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         latest_run_date:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         summarized_check_result:
           type: string
           enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
@@ -1806,8 +1803,7 @@ components:
           $ref: '#/components/schemas/UptimeCheckSettings'
         badge_id: { type: string }
         marked_for_deletion_at:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         created_at: { type: string }
         updated_at: { type: string }
 
@@ -1830,7 +1826,7 @@ components:
         notes: { type: string }
         description: { type: string }
         uptime_check_location: { type: string }
-        uptime_check_expected_final_redirect_url: { type: string, nullable: true }
+        uptime_check_expected_final_redirect_url: { type: ['string', 'null'] }
         uptime_check_failed_notification_threshold: { type: integer }
         uptime_check_http_verb: { type: string }
         uptime_check_timeout: { type: integer }
@@ -1842,11 +1838,9 @@ components:
           type: array
           items: { type: string }
         uptime_check_look_for_string:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         uptime_check_absent_string:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         uptime_check_expected_response_headers:
           type: array
           items: { $ref: '#/components/schemas/ExpectedHeader' }
@@ -1936,8 +1930,7 @@ components:
           properties:
             result_url: { type: string, format: uri }
             secret:
-              type: string
-              nullable: true
+              type: ['string', 'null']
             headers:
               type: array
               items: { $ref: '#/components/schemas/NameValuePair' }
@@ -1980,11 +1973,9 @@ components:
       properties:
         location: { type: string }
         look_for_string:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         absent_string:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         expected_response_headers:
           type: array
           items: { $ref: '#/components/schemas/ExpectedHeader' }
@@ -1999,8 +1990,7 @@ components:
           items: { type: string }
         max_redirect_count: { type: integer }
         expected_final_redirect_url:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         http_client_headers:
           type: array
           items: { $ref: '#/components/schemas/NameValuePair' }
@@ -2027,28 +2017,24 @@ components:
         label: { type: string }
         enabled: { type: boolean }
         latest_run_ended_at:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         latest_run_result:
           type: string
           enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
         summary:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         settings:
           type: object
           description: Check-specific settings
         active_snooze:
-          type: object
-          nullable: true
+          type: ['object', 'null']
           properties:
             id: { type: integer }
             starts_at: { type: string }
             ends_at: { type: string }
             snoozed_by: { type: string }
             unsnoozed_by:
-              type: string
-              nullable: true
+              type: ['string', 'null']
             source: { type: string }
             created_at: { type: string }
 
@@ -2274,8 +2260,7 @@ components:
             - type: integer
             - type: string
         name:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         starts_at: { type: string }
         ends_at: { type: string }
 
@@ -2297,8 +2282,7 @@ components:
         starts_at: { type: string, description: 'Y-m-d H:i in team timezone' }
         ends_at: { type: string, description: 'Y-m-d H:i in team timezone' }
         name:
-          type: string
-          nullable: true
+          type: ['string', 'null']
 
     StatusPage:
       type: object
@@ -2423,14 +2407,11 @@ components:
         type: { type: string, enum: [simple, cron] }
         description: { type: string }
         frequency_in_minutes:
-          type: integer
-          nullable: true
+          type: ['integer', 'null']
         grace_time_in_minutes:
-          type: integer
-          nullable: true
+          type: ['integer', 'null']
         cron_expression:
-          type: string
-          nullable: true
+          type: ['string', 'null']
         server_timezone: { type: string }
         ping_url: { type: string, format: uri }
         created_at: { type: string }
@@ -2445,8 +2426,7 @@ components:
         name: { type: string }
         latest_result: { type: string }
         latest_run_ended_at:
-          type: string
-          nullable: true
+          type: ['string', 'null']
 
     CronChecksResponse:
       type: object
