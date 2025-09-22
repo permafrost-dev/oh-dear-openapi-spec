@@ -93,18 +93,18 @@ paths:
                         uses_https: true
                         sort_url: example.com
                         label: example.com
-                        group_name: ""
+                        group_name: ''
                         tags: []
                         description: null
                         notes: null
-                        latest_run_date: "2019-09-16 07:29:02"
+                        latest_run_date: '2019-09-16 07:29:02'
                         summarized_check_result: succeeded
                         checks:
                           - id: 100
                             type: uptime
                             label: Uptime
                             enabled: true
-                            latest_run_ended_at: "2019-09-16 07:29:02"
+                            latest_run_ended_at: '2019-09-16 07:29:02'
                             latest_run_result: succeeded
                             summary: Up
                             settings:
@@ -113,21 +113,21 @@ paths:
                             active_snooze: null
                         uptime_check_settings:
                           location: paris
-                          look_for_string: ""
+                          look_for_string: ''
                           absent_string: null
                           expected_response_headers: []
                           failed_notification_threshold: 2
                           http_verb: get
                           payload: []
                           timeout: 5
-                          valid_status_codes: ["2*"]
+                          valid_status_codes: ['2*']
                           max_redirect_count: 5
                           expected_final_redirect_url: null
                           http_client_headers: []
                         badge_id: badge-123
                         marked_for_deletion_at: null
-                        created_at: "2019-09-16 07:25:00"
-                        updated_at: "2019-09-16 07:25:00"
+                        created_at: '2019-09-16 07:25:00'
+                        updated_at: '2019-09-16 07:25:00'
                     links:
                       first: https://ohdear.app/api/monitors?page%5Bnumber%5D=1
                       last: https://ohdear.app/api/monitors?page%5Bnumber%5D=1
@@ -180,7 +180,7 @@ paths:
                   uptime_check_payload:
                     - name: payload-name-1
                       value: payload-value-1
-                  uptime_check_valid_status_codes: ["2*"]
+                  uptime_check_valid_status_codes: ['2*']
                   uptime_check_look_for_string: null
                   uptime_check_absent_string: null
                   uptime_check_expected_response_headers:
@@ -196,7 +196,7 @@ paths:
                     - name: my-broken-links-header
                       value: my-broken-links-value
                   broken_links_check_include_external_links: false
-                  broken_link_types: [link, image, script, stylesheet, "og:image"]
+                  broken_link_types: [link, image, script, stylesheet, 'og:image']
                   broken_links_whitelisted_urls: []
                   respect_robots: true
                   sitemap_path: /sitemap.xml
@@ -213,8 +213,9 @@ paths:
                   domain_check_expires_soon_threshold_in_days: 30
                   lighthouse_check_continent: europe
                   lighthouse_cpu_slowdown_modifier: 0
-                  send_report_to_emails: ["a@example.com","b@example.com"]
-                  include_check_types_in_report: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                  send_report_to_emails: ['a@example.com', 'b@example.com']
+                  include_check_types_in_report:
+                    [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
       responses:
         '201':
           description: Monitor created
@@ -232,7 +233,7 @@ paths:
                     uses_https: true
                     sort_url: example.com
                     label: example.com
-                    group_name: ""
+                    group_name: ''
                     tags: []
                     description: null
                     notes: null
@@ -263,21 +264,21 @@ paths:
                         active_snooze: null
                     uptime_check_settings:
                       location: paris
-                      look_for_string: ""
+                      look_for_string: ''
                       absent_string: null
                       expected_response_headers: []
                       failed_notification_threshold: 2
                       http_verb: get
                       payload: []
                       timeout: 5
-                      valid_status_codes: ["2*"]
+                      valid_status_codes: ['2*']
                       max_redirect_count: 5
                       expected_final_redirect_url: null
                       http_client_headers: []
                     badge_id: badge-abc123
                     marked_for_deletion_at: null
-                    created_at: "2019-09-16 08:00:00"
-                    updated_at: "2019-09-16 08:00:00"
+                    created_at: '2019-09-16 08:00:00'
+                    updated_at: '2019-09-16 08:00:00'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '422': { $ref: '#/components/responses/Validation' }
@@ -307,18 +308,18 @@ paths:
                     uses_https: true
                     sort_url: example.com
                     label: example.com
-                    group_name: ""
+                    group_name: ''
                     tags: []
                     description: null
                     notes: null
-                    latest_run_date: "2019-09-16 07:29:02"
+                    latest_run_date: '2019-09-16 07:29:02'
                     summarized_check_result: succeeded
                     checks:
                       - id: 100
                         type: uptime
                         label: Uptime
                         enabled: true
-                        latest_run_ended_at: "2019-09-16 07:29:02"
+                        latest_run_ended_at: '2019-09-16 07:29:02'
                         latest_run_result: succeeded
                         summary: Up
                         settings:
@@ -327,21 +328,21 @@ paths:
                         active_snooze: null
                     uptime_check_settings:
                       location: paris
-                      look_for_string: ""
+                      look_for_string: ''
                       absent_string: null
                       expected_response_headers: []
                       failed_notification_threshold: 2
                       http_verb: get
                       payload: []
                       timeout: 5
-                      valid_status_codes: ["2*"]
+                      valid_status_codes: ['2*']
                       max_redirect_count: 5
                       expected_final_redirect_url: null
                       http_client_headers: []
                     badge_id: badge-123
                     marked_for_deletion_at: null
-                    created_at: "2019-09-16 07:25:00"
-                    updated_at: "2019-09-16 07:25:00"
+                    created_at: '2019-09-16 07:25:00'
+                    updated_at: '2019-09-16 07:25:00'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -379,7 +380,7 @@ paths:
                     payload:
                       - name: payload-name-1
                         value: payload-value-1
-                    valid_status_codes: ["2*"]
+                    valid_status_codes: ['2*']
                     look_for_string: null
                     absent_string: null
                     expected_response_headers:
@@ -394,7 +395,7 @@ paths:
                     change_percentage: 50
                   broken_links_check_settings:
                     check_include_external_links: false
-                    types: [link, image, script, stylesheet, "og:image"]
+                    types: [link, image, script, stylesheet, 'og:image']
                     whitelisted_urls: []
                     respect_robots: true
                   sitemap_check_settings:
@@ -421,8 +422,9 @@ paths:
                   crawler_headers:
                     - name: my-broken-links-header
                       value: my-broken-links-value
-                  send_report_to_emails: ["a@example.com","b@example.com"]
-                  include_check_types_in_report: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                  send_report_to_emails: ['a@example.com', 'b@example.com']
+                  include_check_types_in_report:
+                    [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
       responses:
         '200':
           description: Updated monitor
@@ -560,10 +562,10 @@ paths:
                     type: mixed_content
                     label: Mixed content
                     enabled: true
-                    latest_run_ended_at: "2019-09-16 07:29:05"
+                    latest_run_ended_at: '2019-09-16 07:29:05'
                     latest_run_result: succeeded
                     settings: {}
-                    
+
                     active_snooze: null
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -590,7 +592,7 @@ paths:
                   description: Duration in minutes (string)
             examples:
               example:
-                value: { minutes: "10" }
+                value: { minutes: '10' }
       responses:
         '200':
           description: Snooze applied
@@ -641,7 +643,7 @@ paths:
                   type: string
             examples:
               example:
-                value: { minutes: "10" }
+                value: { minutes: '10' }
       responses:
         '200':
           description: Snoozed
@@ -699,7 +701,7 @@ paths:
                       - id: 42
                         name: queue
                         latest_result: succeeded
-                        latest_run_ended_at: "2024-11-10 12:00:00"
+                        latest_run_ended_at: '2024-11-10 12:00:00'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -725,7 +727,7 @@ paths:
                   type: string
             examples:
               example:
-                value: { minutes: "10" }
+                value: { minutes: '10' }
       responses:
         '200':
           description: Snoozed
@@ -784,9 +786,9 @@ paths:
               examples:
                 success:
                   value:
-                    - datetime: "2018-01-01 00:00:00"
+                    - datetime: '2018-01-01 00:00:00'
                       uptime_percentage: 100
-                    - datetime: "2018-01-01 01:00:00"
+                    - datetime: '2018-01-01 01:00:00'
                       uptime_percentage: 99.76
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -813,10 +815,10 @@ paths:
                   value:
                     data:
                       - id: 1
-                        started_at: "2018-01-01 15:00:00"
-                        ended_at: "2018-01-01 15:07:00"
-                        notes_html: "We contacted our provider and they fixed the issue."
-                        notes_markdown: "We contacted our provider and they fixed the issue."
+                        started_at: '2018-01-01 15:00:00'
+                        ended_at: '2018-01-01 15:07:00'
+                        notes_html: 'We contacted our provider and they fixed the issue.'
+                        notes_markdown: 'We contacted our provider and they fixed the issue.'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -876,7 +878,7 @@ paths:
                           header_size: 1261
                           size_download: 12814
                           speed_download: 137784
-                        date: "2024-04-19 13:25:00"
+                        date: '2024-04-19 13:25:00'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -910,7 +912,7 @@ paths:
                         downtime_percentage: 0.0
                         uptime_seconds: 60
                         downtime_seconds: 0
-                        date: "2024-04-19 13:25:00"
+                        date: '2024-04-19 13:25:00'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -941,7 +943,7 @@ paths:
                         downtime_percentage: 0.0
                         uptime_seconds: 60
                         downtime_seconds: 0
-                        date: "2024-04-19 13:25:00"
+                        date: '2024-04-19 13:25:00'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -994,7 +996,7 @@ paths:
                   format: uri
             examples:
               example:
-                value: { whitelistUrl: "https://externalsite.tld/page1" }
+                value: { whitelistUrl: 'https://externalsite.tld/page1' }
       responses:
         '200':
           description: Whitelist updated
@@ -1006,7 +1008,7 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: "URL added to whitelist." }
+                  value: { message: 'URL added to whitelist.' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1042,7 +1044,7 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: "Broken links settings updated." }
+                  value: { message: 'Broken links settings updated.' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1078,7 +1080,7 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: "Uptime check payload updated." }
+                  value: { message: 'Uptime check payload updated.' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1127,8 +1129,8 @@ paths:
                   value:
                     certificate_details:
                       issuer: "Let's Encrypt Authority X3"
-                      valid_from: "2019-09-10 15:16:01"
-                      valid_until: "2019-12-09 15:16:01"
+                      valid_from: '2019-09-10 15:16:01'
+                      valid_until: '2019-12-09 15:16:01'
                     certificate_checks:
                       - type: notFound
                         label: Certificate present
@@ -1138,7 +1140,7 @@ paths:
                         passed: true
                     certificate_chain_issuers:
                       - "US, Let's Encrypt, Let's Encrypt Authority X3"
-                      - "Digital Signature Trust Co., DST Root CA X3"
+                      - 'Digital Signature Trust Co., DST Root CA X3'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1180,14 +1182,14 @@ paths:
                           issuer: "Let's Encrypt Authority X3"
                           domain: example.com
                           additional_domains: [www.example.com]
-                          valid_from: "2023-10-01T12:00:00Z"
-                          valid_until: "2024-01-01T12:00:00Z"
+                          valid_from: '2023-10-01T12:00:00Z'
+                          valid_until: '2024-01-01T12:00:00Z'
                           days_until_expiration: 45
                           signature_algorithm: sha256WithRSAEncryption
                           is_valid: true
                           is_expired: false
-                        created_at: "2023-10-01T12:30:00Z"
-                        updated_at: "2023-10-01T12:30:00Z"
+                        created_at: '2023-10-01T12:30:00Z'
+                        updated_at: '2023-10-01T12:30:00Z'
                     links:
                       first: https://ohdear.app/api/monitors/1/detected-certificates?page=1
                       last: https://ohdear.app/api/monitors/1/detected-certificates?page=1
@@ -1232,14 +1234,14 @@ paths:
                       issuer: "Let's Encrypt Authority X3"
                       domain: example.com
                       additional_domains: [www.example.com]
-                      valid_from: "2023-10-01T12:00:00Z"
-                      valid_until: "2024-01-01T12:00:00Z"
+                      valid_from: '2023-10-01T12:00:00Z'
+                      valid_until: '2024-01-01T12:00:00Z'
                       days_until_expiration: 45
                       signature_algorithm: sha256WithRSAEncryption
                       is_valid: true
                       is_expired: false
-                    created_at: "2023-10-01T12:30:00Z"
-                    updated_at: "2023-10-01T12:30:00Z"
+                    created_at: '2023-10-01T12:30:00Z'
+                    updated_at: '2023-10-01T12:30:00Z'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1265,8 +1267,8 @@ paths:
                       - id: 101
                         monitor_id: 1
                         name: Deployment
-                        starts_at: "2020-01-09 10:37:24"
-                        ends_at: "2020-01-09 10:42:24"
+                        starts_at: '2020-01-09 10:37:24'
+                        ends_at: '2020-01-09 10:42:24'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1294,7 +1296,7 @@ paths:
             examples:
               withDuration:
                 value:
-                  stop_maintenance_after_seconds: "300"
+                  stop_maintenance_after_seconds: '300'
       responses:
         '200':
           description: Maintenance started
@@ -1307,9 +1309,9 @@ paths:
                   value:
                     id: 101
                     monitor_id: 1
-                    name: "Optional name of your maintenance period"
-                    starts_at: "2020-01-09 10:28:54"
-                    ends_at: "2020-01-09 11:28:54"
+                    name: 'Optional name of your maintenance period'
+                    starts_at: '2020-01-09 10:28:54'
+                    ends_at: '2020-01-09 11:28:54'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1332,7 +1334,7 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: "Maintenance stopped." }
+                  value: { message: 'Maintenance stopped.' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1351,9 +1353,9 @@ paths:
             examples:
               example:
                 value:
-                  monitor_id: "1"
-                  starts_at: "2020-02-01 14:00"
-                  ends_at: "2020-02-01 18:00"
+                  monitor_id: '1'
+                  starts_at: '2020-02-01 14:00'
+                  ends_at: '2020-02-01 18:00'
       responses:
         '201':
           description: Created
@@ -1365,9 +1367,9 @@ paths:
                 success:
                   value:
                     id: 101
-                    monitor_id: "1"
-                    starts_at: "2020-02-01 14:00:00"
-                    ends_at: "2020-02-01 18:00:00"
+                    monitor_id: '1'
+                    starts_at: '2020-02-01 14:00:00'
+                    ends_at: '2020-02-01 18:00:00'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '422': { $ref: '#/components/responses/Validation' }
@@ -1419,8 +1421,8 @@ paths:
                         monitors:
                           - id: 1
                             url: https://site1.tld
-                        created_at: "2019-09-13 07:06:51"
-                        updated_at: "2019-09-13 07:06:51"
+                        created_at: '2019-09-13 07:06:51'
+                        updated_at: '2019-09-13 07:06:51'
                     links:
                       first: https://ohdear.app/api/status-pages?page%5Bnumber%5D=1
                       last: https://ohdear.app/api/status-pages?page%5Bnumber%5D=1
@@ -1583,14 +1585,14 @@ paths:
                         text: We have contacted our API provider and they have resolved the situation, everything is back to normal. We apologize for the inconvenience!
                         pinned: false
                         severity: resolved
-                        time: "2019-09-16 08:24:00"
+                        time: '2019-09-16 08:24:00'
                         status_page_url: https://ohdear.app/status-page/your-slug
                       - id: 64
                         title: We are experiencing an outage on our service
                         text: Due to errors in our 3rd party API provider, we are experiencing an outage of our website. Our team is working on getting it resolved ASAP.
                         pinned: false
                         severity: high
-                        time: "2019-09-16 08:11:00"
+                        time: '2019-09-16 08:11:00'
                         status_page_url: https://ohdear.app/status-page/your-slug
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1614,7 +1616,7 @@ paths:
                   title: Our site is down
                   text: We are working on it!
                   severity: high
-                  time: "2019-09-16 10:24"
+                  time: '2019-09-16 10:24'
                   pinned: true
       responses:
         '201':
@@ -1631,7 +1633,7 @@ paths:
                     text: We are working on it!
                     pinned: true
                     severity: high
-                    time: "2019-09-16 08:24:00"
+                    time: '2019-09-16 08:24:00'
                     status_page_url: https://ohdear.app/status-page/your-slug
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
@@ -1682,10 +1684,10 @@ paths:
                         cron_expression: null
                         server_timezone: Europe/Brussels
                         ping_url: https://ping.ohdear.app/0d210b09
-                        created_at: "2020-07-28 13:27:02"
+                        created_at: '2020-07-28 13:27:02'
                         latest_result: pingFinished
-                        latest_ping_at: "2020-11-16 09:19:40"
-                        human_readable_latest_ping_at: "5 minutes ago"
+                        latest_ping_at: '2020-11-16 09:19:40'
+                        human_readable_latest_ping_at: '5 minutes ago'
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
@@ -1794,7 +1796,7 @@ components:
           type: ['string', 'null']
         summarized_check_result:
           type: string
-          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
+          enum: [pending, succeeded, warning, failed, 'errored-or-timed-out']
         checks:
           type: array
           items:
@@ -2020,7 +2022,7 @@ components:
           type: ['string', 'null']
         latest_run_result:
           type: string
-          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
+          enum: [pending, succeeded, warning, failed, 'errored-or-timed-out']
         summary:
           type: ['string', 'null']
         settings:
@@ -2062,7 +2064,7 @@ components:
       properties:
         result:
           type: string
-          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
+          enum: [pending, succeeded, warning, failed, 'errored-or-timed-out']
         summary: { type: string }
 
     UptimePoint:
