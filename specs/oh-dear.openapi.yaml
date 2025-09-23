@@ -1,5 +1,5 @@
 openapi: 3.1.2
-jsonSchemaDialect: https://spec.openapis.org/oas/3.1/schema/2021-09-28
+jsonSchemaDialect: https://spec.openapis.org/oas/3.1/dialect/base
 info:
   title: Oh Dear API
   version: '1.0.0'
@@ -2573,11 +2573,9 @@ components:
             total: { type: integer }
 
     NoContent:
-      type: object
+      type: 'null'
       description: No content returned
       properties: {}
-      content:
-        application/json:
 
     Error:
       type: object
