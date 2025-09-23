@@ -1,3 +1,4 @@
+#$schema: https://raw.githubusercontent.com/daveshanley/vacuum/refs/heads/main/rulesets/schemas/ruleset.schema.json
 description: Recommended rules for a high quality specification.
 documentationUrl: https://quobix.com/vacuum/rulesets/recommended
 rules:
@@ -8,9 +9,11 @@ rules:
             name: Schemas
         description: Schema property names should use camelCase instead of snake_case, PascalCase, kebab-case, or other formats.
         formats:
-            - oas3
-            - oas3_1
-            - oas3_2
+            - disable
+            # - oas2
+            # - oas3
+            # - oas3_1
+            # - oas3_2
         given: $
         howToFix: Schema property names should use camelCase for consistency and better compatibility with code generation tools. Property names should start with a lowercase letter and use uppercase letters for word boundaries.
         id: camel-case-properties
@@ -46,10 +49,11 @@ rules:
             name: Descriptions
         description: Description duplication check
         formats:
-            - oas3
-            - oas3_1
-            - oas3_2
-            - oas2
+            - disable
+            # - oas3
+            # - oas3_1
+            # - oas3_2
+            # - oas2
         given: $
         howToFix: Descriptions are only useful, if they are meaningful. If a description is meaningful, then it won't be something you copy and paste. Please don't duplicate descriptions, make them deliberate and meaningful.
         id: description-duplication
@@ -700,7 +704,7 @@ rules:
         then:
             function: oasDescriptions
             functionOptions:
-                minWords: "1"
+                minWords: '1'
         type: validation
     operation-operationId:
         category:
