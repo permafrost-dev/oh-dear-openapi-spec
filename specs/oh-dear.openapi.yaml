@@ -83,18 +83,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-              examples:
-                success:
-                  value:
-                    id: 1
-                    name: SomeUser Lastname
-                    email: someuser.lastname@example.com
-                    photo_url: 'https://www.gravatar.com/avatar/1f25bba8e111110ea011115d2cbbbb.jpg?s=100&d=mm'
-                    teams:
-                      - id: 121015
-                        name: Main Team
-                        timezone: America/New_York
-                        created_at: 2024-03-14 15:37:03
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -3105,36 +3093,36 @@ components:
       description: ID of the monitor
       in: path
       required: true
-      schema: { type: integer }
+      schema: { type: integer, format: int64, minimum: 1 }
     StatusPageId:
       name: statusPageId
       description: ID of the status page
       in: path
       required: true
-      schema: { type: integer }
+      schema: { type: integer, format: int64, minimum: 1 }
     CheckId:
       name: checkId
       description: ID of the check
       in: path
       required: true
-      schema: { type: integer }
+      schema: { type: integer, format: int64, minimum: 1 }
     CronCheckId:
       name: cronCheckId
       description: ID of the cron check
       in: path
       required: true
-      schema: { type: integer }
+      schema: { type: integer, format: int64, minimum: 1 }
     HealthCheckId:
       name: healthCheckId
       description: ID of the health check
       in: path
       required: true
-      schema: { type: integer }
+      schema: { type: integer, format: int64, minimum: 1 }
     PageNumber:
       name: page[number]
       description: The page number to retrieve
       in: query
-      schema: { type: integer, minimum: 1, default: 1 }
+      schema: { type: integer, minimum: 1, default: 1, format: int32 }
     PageSize:
       name: page[size]
       description: The number of items to retrieve per page
@@ -3259,7 +3247,17 @@ components:
               name: { type: string }
               timezone: { type: string }
               created_at: { type: string, format: date-time }
-
+      examples:
+        - example:
+            id: 1
+            name: John Doe
+            email: john.doe@example.com
+            photo_url: https://example.com/photos/john.jpg
+            teams:
+              - id: 12345
+                name: Awesome Team
+                timezone: Europe/Brussels
+                created_at: '2019-09-13 13:06:51'
     Monitor:
       type: object
       description: A monitor
