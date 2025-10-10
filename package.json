@@ -25,14 +25,14 @@
   },
   "type": "module",
   "scripts": {
-    "lint:open-api:spectral": "spectral lint specs/oh-dear.openapi.yaml",
-    "lint:open-api:vacuum": "vacuum lint specs/oh-dear.openapi.yaml --no-banner --details --no-clip --pipeline-output --ruleset config/vacuum-ruleset.yaml --ext-refs",
+    "lint:open-api:spectral": "spectral lint ./specs/oh-dear.openapi.yaml --ruleset ./config/.spectral.yaml",
+    "lint:open-api:vacuum": "vacuum lint ./specs/oh-dear.openapi.yaml --no-banner --details --no-clip --pipeline-output --ruleset ./config/vacuum.yaml --ext-refs",
     "lint:open-api": "npm run lint:open-api:spectral",
-    "lint:arazzo": "@redocly/cli lint specs/oh-dear.arazzo.yaml",
+    "lint:arazzo": "redocly lint ./specs/oh-dear.arazzo.yaml",
     "lint": "npm run lint:open-api && npm run lint:arazzo"
   },
   "dependencies": {
-    "@redocly/cli": "^2.1.5",
+    "@redocly/cli": "^2.5.0",
     "@stoplight/spectral-cli": "^6.15.0"
   }
 }
