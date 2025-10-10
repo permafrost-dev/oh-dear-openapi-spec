@@ -71,12 +71,14 @@ paths:
                 success:
                   value:
                     id: 1
-                    name: Firstname Lastname
-                    email: user@example.com
-                    photo_url: https://www.gravatar.com/avatar/...
+                    name: SomeUser Lastname
+                    email: someuser.lastname@example.com
+                    photo_url: 'https://www.gravatar.com/avatar/1f25bba8e111110ea011115d2cbbbb.jpg?s=100&d=mm'
                     teams:
-                      - id: 1
-                        name: Your Team Name
+                      - id: 121015
+                        name: Main Team
+                        timezone: America/New_York
+                        created_at: 2024-03-14 15:37:03
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1836,6 +1838,8 @@ components:
             properties:
               id: { type: integer }
               name: { type: string }
+              timezone: { type: string }
+              created_at: { type: string, format: date-time }
 
     Monitor:
       type: object
@@ -2588,6 +2592,12 @@ components:
             type: array
             items: { type: string }
 
+    ErrorMessage:
+      type: object
+      description: Error response
+      properties:
+        error: { type: string }
+
   responses:
     NoContent:
       description: No Content
@@ -2601,11 +2611,11 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ErrorMessage'
           examples:
             default:
               value:
-                message: Unauthenticated.
+                error: Unauthenticated.
     Forbidden:
       description: Forbidden
       content:
