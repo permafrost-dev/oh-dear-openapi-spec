@@ -58,20 +58,26 @@ A quick overview of the most relevant files and directories:
 
 ```text
 ├── specs/
-│   ├── oh-dear.openapi.yaml   # Primary OpenAPI 3.1 specification
-│   └── oh-dear.arazzo.yaml    # Arazzo 1.0.1 workflow specification
+│   ├── oh-dear.openapi.yaml   # Primary OpenAPI 3.1.2 specification
+│   └── oh-dear.arazzo.yaml    # OpenAPI Arazzo 1.0.1 workflow specification
 ├── config/
-│   ├── .spectral.yaml           # Spectral configuration for linting the OpenAPI spec
+│   ├── .markdownlint.yaml     # markdownlint configuration for linting Markdown files
+│   ├── .spectral.yaml         # Spectral configuration for linting the OpenAPI spec
 │   └── vacuum-ruleset.yaml    # Custom ruleset used for additional quality linting
 ├── assets/                    # Logos and images used in the README/docs
 ├── package.json               # Lint scripts and dependencies (Spectral & Redocly CLI)
+├── CHANGELOG.md               # Changelog for tracking notable changes
+├── LICENSE.md                 # MIT License
 └── README.md
 ```
 
 - `specs/` contains the source-of-truth API contract files. Any change here should ideally be validated via the lint commands and—where applicable—reflected in downstream SDKs or docs.
 - `config/.spectral.yaml` configures [Spectral](https://github.com/stoplightio/spectral) for linting the OpenAPI specification.
-- `config/vacuum-ruleset.yaml` is an extended quality ruleset (Vacuum) enforcing style, documentation completeness, schema rigor, and structural integrity on top of default linters.
+- `config/.markdownlint.yaml` configures [markdownlint](https://github.com/igorshubovych/markdownlint-cli) for linting Markdown files.
+- `config/vacuum.yaml` is an extended quality ruleset (Vacuum) enforcing style, documentation completeness, schema rigor, and structural integrity on top of default linters.
 - `assets/` stores project branding and visual resources.
+
+<img src="./assets/chart-project-files.png" alt="Project Structure" width="100%" style="align: center; width:100%;"/>
 
 ## Usage
 
@@ -124,6 +130,14 @@ Run individually:
 ```bash
 npm run lint:open-api   # Lints specs/oh-dear.openapi.yaml via Spectral
 npm run lint:arazzo     # Lints specs/oh-dear.arazzo.yaml via Redocly CLI
+```
+
+Or lint the OpenAPI specification using individual npm scripts:
+
+```bash
+npm run lint:open-api:spectral  # Lints specs/oh-dear.openapi.yaml via Spectral
+npm run lint:open-api:vacuum    # Lints specs/oh-dear.openapi.yaml via Vacuum
+npm run lint:open-api           # Lints using Spectral CLI only.
 ```
 
 ## Development
