@@ -4,7 +4,7 @@
     <img src="./assets/openapi-pantone.png" alt="OpenAPI Logo" width="200"/>
     <br/>
     <img src="https://img.shields.io/github/license/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge" alt="License: MIT" />
-    <img src="https://img.shields.io/github/v/release/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge" alt="Latest Version" />
+    <img src="https://img.shields.io/github/v/release/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge&nocache=1" alt="Latest Version" />
     <img src="https://img.shields.io/github/created-at/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge&logo=github&logoColor=white&label=created&color=%236BA539" alt="GitHub Created At" />
 </p>
 
