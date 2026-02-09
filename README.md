@@ -3,9 +3,10 @@
   <br/>
     <img src="./assets/openapi-pantone.png" alt="OpenAPI Logo" width="200"/>
     <br/>
-    <img src="https://img.shields.io/github/license/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge" alt="License: MIT" />
-    <img src="https://img.shields.io/github/v/release/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge&nocache=1" alt="Latest Version" />
-    <img src="https://img.shields.io/github/created-at/permafrost-dev/oh-dear-openapi-spec?style=for-the-badge&logo=github&logoColor=white&label=created&color=%236BA539" alt="GitHub Created At" />
+    <img src="https://img.shields.io/github/license/permafrost-dev/oh-dear-openapi-spec?logo=opensourceinitiative&logoColor=white" alt="License: MIT" />
+    <img src="https://img.shields.io/github/v/release/permafrost-dev/oh-dear-openapi-spec?logo=github&logoColor=white&nocache=1" alt="Latest Version" />
+    <img src="https://img.shields.io/github/release-date/permafrost-dev/oh-dear-openapi-spec?logo=github&displayDate=published_at&logoColor=white&label=last+released&color=%236BA539" alt="GitHub Last Release" />
+    <img src="https://qlty.sh/badges/b28124b6-e46f-429d-8abb-7426ba909401/maintainability.svg" alt="Maintainability" />
 </p>
 
 This project provides both [OpenAPI](./specs/oh-dear.openapi.yaml) and [Arazzo](./specs/oh-dear.arazzo.yaml) specifications for the excellent [Oh Dear! monitoring service](https://ohdear.app).
