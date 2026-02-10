@@ -1,6 +1,5 @@
 default: true
 first-line-heading: false
-
 no-hard-tabs: true
 no-inline-html: false
 no-trailing-spaces: false
@@ -8,11 +7,15 @@ no-trailing-spaces: false
 header-style:
   style: atx
 
+html: false
+
 line-length:
   heading_line_length: 120
-  line_length: 160
+  line_length: 190
   code_blocks: false
   tables: false
+  severity: warning
+  strict: false
 
 ul-indent:
   indent: 4

@@ -5,7 +5,10 @@
     <br/>
     <img src="https://img.shields.io/github/license/permafrost-dev/oh-dear-openapi-spec?logo=opensourceinitiative&logoColor=white" alt="License: MIT" />
     <img src="https://img.shields.io/github/v/release/permafrost-dev/oh-dear-openapi-spec?logo=github&logoColor=white&nocache=1" alt="Latest Version" />
-    <img src="https://img.shields.io/github/release-date/permafrost-dev/oh-dear-openapi-spec?logo=github&displayDate=published_at&logoColor=white&label=last+released&color=%236BA539" alt="GitHub Last Release" />
+    <img 
+        src="https://img.shields.io/github/release-date/permafrost-dev/oh-dear-openapi-spec?logo=github&displayDate=published_at&logoColor=white&label=last+released&color=%236BA539" 
+        alt="GitHub Last Release" 
+    />
     <img src="https://qlty.sh/badges/b28124b6-e46f-429d-8abb-7426ba909401/maintainability.svg" alt="Maintainability" />
 </p>
 
@@ -15,13 +18,14 @@ This project provides both [OpenAPI](./specs/oh-dear.openapi.yaml) and [Arazzo](
 
 - [Table of Contents](#table-of-contents)
 - [About Oh Dear](#about-oh-dear)
+- [Looking for `permafrost-dev`?](#looking-for-permafrost-dev)
 - [Specifications](#specifications)
-  - [OpenAPI](#openapi)
-  - [Arazzo](#arazzo)
+    - [OpenAPI](#openapi)
+    - [Arazzo](#arazzo)
 - [Repository Structure](#repository-structure)
 - [Usage](#usage)
-  - [Generating Documentation](#generating-documentation)
-  - [Generating SDKs](#generating-sdks)
+    - [Generating Documentation](#generating-documentation)
+    - [Generating SDKs](#generating-sdks)
 - [Validation](#validation)
 - [Development](#development)
 - [Status](#status)
@@ -33,7 +37,13 @@ This project provides both [OpenAPI](./specs/oh-dear.openapi.yaml) and [Arazzo](
 
 ## About Oh Dear
 
-[Oh Dear!](https://ohdear.app) is an all-in-one monitoring tool for your websites. It offers uptime monitoring, SSL certificate checking, broken link detection, scheduled task monitoring, and much more. This project aims to provide comprehensive, community-driven API specifications to make integrations with Oh Dear! a breeze.
+[Oh Dear!](https://ohdear.app) is an all-in-one monitoring tool for your websites. 
+It offers uptime monitoring, SSL certificate checking, broken link detection, scheduled task monitoring, and much more. 
+This project aims to provide comprehensive, community-driven API specifications to make integrations with Oh Dear! a breeze.
+
+## Looking for `permafrost-dev`? 
+
+This is the new home for the original `permafrost-dev` repository.
 
 ## Specifications
 
@@ -50,7 +60,10 @@ It is particularly useful for building robust [third-party integrations](https:/
 
 ### Arazzo
 
-The Arazzo specification follows the [v1.0.1 standard](https://github.com/OAI/Arazzo-Specification/blob/main/versions/1.0.1.md) and defines how the API works in real-world scenarios. It describes workflows that require one or more steps with request/response series. A primary benefit is providing the ability to programmatically test the OpenAPI specification and ensure that API workflows behave as expected.
+The Arazzo specification follows the [v1.0.1 standard](https://github.com/OAI/Arazzo-Specification/blob/main/versions/1.0.1.md) and 
+defines how the API works in real-world scenarios. It describes workflows that require one or more steps with request/response 
+series. A primary benefit is providing the ability to programmatically test the OpenAPI specification and ensure that API workflows 
+behave as expected.
 
 ## Repository Structure
 
@@ -117,7 +130,9 @@ This project uses multiple layers of validation to ensure specification quality:
 
 1. **Spectral** (`@stoplight/spectral-cli`) – General OpenAPI best practice and style conformance.
 2. **Redocly CLI** (`@redocly/cli`) – Structural validation and bundling consistency.
-3. [**Vacuum**](https://github.com/daveshanley/vacuum) – An ultra-super-fast, lightweight OpenAPI linter and quality checking tool. Enhanced quality checks: description presence & duplication, schema typing, path ambiguity, enum uniqueness, security-related markdown hygiene, and naming conventions.
+3. [**Vacuum**](https://github.com/daveshanley/vacuum) – An ultra-super-fast, lightweight OpenAPI linter and quality checking tool. 
+4. Enhanced quality checks: description presence & duplication, schema typing, path ambiguity, enum uniqueness, security-related 
+5. markdown hygiene, and naming conventions.
 
 Run all standard validations:
 
@@ -142,17 +157,21 @@ npm run lint:open-api           # Lints using Spectral CLI only.
 
 ## Development
 
-The OpenAPI specification file was created using [Stoplight Studio](https://stoplight.io/studio/), GPT-5, and manual editing in VSCode. The official Oh Dear! documentation and PHP SDK source code were treated as the source of truth.
+The OpenAPI specification file was created using [Stoplight Studio](https://stoplight.io/studio/), GPT-5, and manual 
+editing in VSCode. The official Oh Dear! documentation and PHP SDK source code were treated as the source of truth.
 
-The Arazzo specification was initially generated by `@redocly/cli` from the OpenAPI specification, then manually edited in VSCode to ensure accuracy and completeness.
+The Arazzo specification was initially generated by `@redocly/cli` from the OpenAPI specification, then manually edited 
+in VSCode to ensure accuracy and completeness.
 
 ## Status
 
-The specifications are a work in progress. The OpenAPI specification is approximately 95% complete, while the Arazzo specification is around 70% complete. Keep an eye on the [changelog](CHANGELOG.md) and the issue tracker for updates.
+The specifications are a work in progress. The OpenAPI specification is approximately 95% complete, while the Arazzo specification
+is around 70% complete. Keep an eye on the [CHANGELOG](CHANGELOG.md) and the issue tracker for updates.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a pull request or create an issue for any bugs, suggestions, or questions you may have. See the [issue tracker](https://github.com/permafrost-dev/oh-dear-openapi-spec/issues) for a list of open items.
+Contributions are welcome! Please feel free to submit a pull request or create an issue for any bugs, suggestions, or questions you
+may have. See the [issue tracker](https://github.com/permafrost-dev/oh-dear-openapi-spec/issues) for a list of open items.
 
 When contributing changes to the specs:
 
@@ -172,6 +191,7 @@ Please review our [security policy](https://github.com/permafrost-dev/oh-dear-op
 ## Credits
 
 - [Patrick Organ](https://github.com/patinthehat)
+- [Mattias Geniar](https://github.com/mattiasgeniar)
 - [All Contributors](https://github.com/permafrost-dev/oh-dear-openapi-spec/graphs/contributors)
 
 ## License
