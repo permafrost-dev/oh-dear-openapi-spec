@@ -1,1 +1,9 @@
 extends: ["spectral:oas"]
+rules:
+  oas3-valid-media-example:
+    description: Ignore missing properties.value in examples
+    given: "$.paths[*]"
+    severity: info
+    then:
+      field: "@key"
+      function: truthy

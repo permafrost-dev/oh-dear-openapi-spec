@@ -1,10 +1,10 @@
 openapi: 3.1.2
 jsonSchemaDialect: https://spec.openapis.org/oas/3.1/dialect/base
-schema:
-  $ref: ./oh-dear-schema.json
+# schema:
+# $ref: ./oh-dear-schema.json
 info:
   title: Oh Dear API
-  version: '1.0.0'
+  version: "1.0.0"
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
@@ -79,16 +79,16 @@ paths:
       description: Returns the user and team info for the authenticated user. This endpoint can be used to retrieve information about the current user.
       operationId: getMe
       responses:
-        '200':
+        "200":
           description: User info
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+                $ref: "#/components/schemas/User"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
 
   /monitors:
     get:
@@ -97,15 +97,15 @@ paths:
       description: Returns a paginated list of monitors for the authenticated user's team.
       operationId: listMonitors
       parameters:
-        - $ref: '#/components/parameters/PageNumber'
-        - $ref: '#/components/parameters/PageSize'
+        - $ref: "#/components/parameters/PageNumber"
+        - $ref: "#/components/parameters/PageSize"
       responses:
-        '200':
+        "200":
           description: Paginated monitors
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedMonitors'
+                $ref: "#/components/schemas/PaginatedMonitors"
               examples:
                 success:
                   value:
@@ -117,18 +117,18 @@ paths:
                         uses_https: true
                         sort_url: example.com
                         label: example.com
-                        group_name: ''
+                        group_name: ""
                         tags: []
                         description: null
                         notes: null
-                        latest_run_date: '2019-09-16 07:29:02'
+                        latest_run_date: "2019-09-16 07:29:02"
                         summarized_check_result: succeeded
                         checks:
                           - id: 100
                             type: uptime
                             label: Uptime
                             enabled: true
-                            latest_run_ended_at: '2019-09-16 07:29:02'
+                            latest_run_ended_at: "2019-09-16 07:29:02"
                             latest_run_result: succeeded
                             summary: Up
                             settings:
@@ -137,21 +137,21 @@ paths:
                             active_snooze: null
                         uptime_check_settings:
                           location: paris
-                          look_for_string: ''
+                          look_for_string: ""
                           absent_string: null
                           expected_response_headers: []
                           failed_notification_threshold: 2
                           http_verb: get
                           payload: []
                           timeout: 5
-                          valid_status_codes: ['2*']
+                          valid_status_codes: ["2*"]
                           max_redirect_count: 5
                           expected_final_redirect_url: null
                           http_client_headers: []
                         badge_id: badge-123
                         marked_for_deletion_at: null
-                        created_at: '2019-09-16 07:25:00'
-                        updated_at: '2019-09-16 07:25:00'
+                        created_at: "2019-09-16 07:25:00"
+                        updated_at: "2019-09-16 07:25:00"
                     links:
                       first: https://ohdear.app/api/monitors?page%5Bnumber%5D=1
                       last: https://ohdear.app/api/monitors?page%5Bnumber%5D=5
@@ -165,8 +165,8 @@ paths:
                       per_page: 100
                       to: 100
                       total: 500
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
     post:
       tags: [Monitors]
       summary: Create a monitor
@@ -178,7 +178,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateMonitorRequest'
+              $ref: "#/components/schemas/CreateMonitorRequest"
             examples:
               minimal:
                 value:
@@ -190,7 +190,20 @@ paths:
                   url: https://ohdear.app/docs
                   type: http
                   team_id: 1
-                  checks: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                  checks:
+                    [
+                      uptime,
+                      performance,
+                      broken_links,
+                      mixed_content,
+                      lighthouse,
+                      cron,
+                      application_health,
+                      sitemap,
+                      dns,
+                      domain,
+                      certificate_health,
+                    ]
                   group_name: Internal
                   friendly_name: Documentation
                   tags: [internal, production, docs]
@@ -205,7 +218,7 @@ paths:
                   uptime_check_payload:
                     - name: payload-name-1
                       value: payload-value-1
-                  uptime_check_valid_status_codes: ['2*']
+                  uptime_check_valid_status_codes: ["2*"]
                   uptime_check_look_for_string: null
                   uptime_check_absent_string: null
                   uptime_check_expected_response_headers:
@@ -221,7 +234,8 @@ paths:
                     - name: my-broken-links-header
                       value: my-broken-links-value
                   broken_links_check_include_external_links: false
-                  broken_link_types: [link, image, script, stylesheet, 'og:image']
+                  broken_link_types:
+                    [link, image, script, stylesheet, "og:image"]
                   broken_links_whitelisted_urls: []
                   respect_robots: true
                   sitemap_path: /sitemap.xml
@@ -238,16 +252,28 @@ paths:
                   domain_check_expires_soon_threshold_in_days: 30
                   lighthouse_check_continent: europe
                   lighthouse_cpu_slowdown_modifier: 0
-                  send_report_to_emails: ['a@example.com', 'b@example.com']
+                  send_report_to_emails: ["a@example.com", "b@example.com"]
                   include_check_types_in_report:
-                    [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                    [
+                      uptime,
+                      performance,
+                      broken_links,
+                      mixed_content,
+                      lighthouse,
+                      cron,
+                      application_health,
+                      sitemap,
+                      dns,
+                      domain,
+                      certificate_health,
+                    ]
       responses:
-        '201':
+        "201":
           description: Monitor created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Monitor'
+                $ref: "#/components/schemas/Monitor"
               examples:
                 created:
                   value:
@@ -258,7 +284,7 @@ paths:
                     uses_https: true
                     sort_url: example.com
                     label: example.com
-                    group_name: ''
+                    group_name: ""
                     tags: []
                     description: null
                     notes: null
@@ -289,24 +315,24 @@ paths:
                         active_snooze: null
                     uptime_check_settings:
                       location: paris
-                      look_for_string: ''
+                      look_for_string: ""
                       absent_string: null
                       expected_response_headers: []
                       failed_notification_threshold: 2
                       http_verb: get
                       payload: []
                       timeout: 5
-                      valid_status_codes: ['2*']
+                      valid_status_codes: ["2*"]
                       max_redirect_count: 5
                       expected_final_redirect_url: null
                       http_client_headers: []
                     badge_id: badge-abc123
                     marked_for_deletion_at: null
-                    created_at: '2019-09-16 08:00:00'
-                    updated_at: '2019-09-16 08:00:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+                    created_at: "2019-09-16 08:00:00"
+                    updated_at: "2019-09-16 08:00:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /monitors/{monitorId}:
     get:
@@ -315,14 +341,14 @@ paths:
       description: Retrieve detailed information about a specific monitor by its ID.
       operationId: getMonitor
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Monitor
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Monitor'
+                $ref: "#/components/schemas/Monitor"
               examples:
                 success:
                   value:
@@ -333,18 +359,18 @@ paths:
                     uses_https: true
                     sort_url: example.com
                     label: example.com
-                    group_name: ''
+                    group_name: ""
                     tags: []
                     description: null
                     notes: null
-                    latest_run_date: '2019-09-16 07:29:02'
+                    latest_run_date: "2019-09-16 07:29:02"
                     summarized_check_result: succeeded
                     checks:
                       - id: 100
                         type: uptime
                         label: Uptime
                         enabled: true
-                        latest_run_ended_at: '2019-09-16 07:29:02'
+                        latest_run_ended_at: "2019-09-16 07:29:02"
                         latest_run_result: succeeded
                         summary: Up
                         settings:
@@ -353,44 +379,57 @@ paths:
                         active_snooze: null
                     uptime_check_settings:
                       location: paris
-                      look_for_string: ''
+                      look_for_string: ""
                       absent_string: null
                       expected_response_headers: []
                       failed_notification_threshold: 2
                       http_verb: get
                       payload: []
                       timeout: 5
-                      valid_status_codes: ['2*']
+                      valid_status_codes: ["2*"]
                       max_redirect_count: 5
                       expected_final_redirect_url: null
                       http_client_headers: []
                     badge_id: badge-123
                     marked_for_deletion_at: null
-                    created_at: '2019-09-16 07:25:00'
-                    updated_at: '2019-09-16 07:25:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                    created_at: "2019-09-16 07:25:00"
+                    updated_at: "2019-09-16 07:25:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
     put:
       tags: [Monitors]
       summary: Update a monitor
       description: Update the settings of an existing monitor.
       operationId: updateMonitor
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         description: The payload to update the monitor with.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateMonitorRequest'
+              $ref: "#/components/schemas/UpdateMonitorRequest"
             examples:
               example:
                 value:
                   url: https://example.com/docs
                   type: http
-                  checks: [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                  checks:
+                    [
+                      uptime,
+                      performance,
+                      broken_links,
+                      mixed_content,
+                      lighthouse,
+                      cron,
+                      application_health,
+                      sitemap,
+                      dns,
+                      domain,
+                      certificate_health,
+                    ]
                   group_name: Internal
                   label: Documentation
                   tags: [internal, production, docs]
@@ -406,7 +445,7 @@ paths:
                     payload:
                       - name: payload-name-1
                         value: payload-value-1
-                    valid_status_codes: ['2*']
+                    valid_status_codes: ["2*"]
                     look_for_string: null
                     absent_string: null
                     expected_response_headers:
@@ -421,7 +460,7 @@ paths:
                     change_percentage: 50
                   broken_links_check_settings:
                     check_include_external_links: false
-                    types: [link, image, script, stylesheet, 'og:image']
+                    types: [link, image, script, stylesheet, "og:image"]
                     whitelisted_urls: []
                     respect_robots: true
                   sitemap_check_settings:
@@ -448,37 +487,49 @@ paths:
                   crawler_headers:
                     - name: my-broken-links-header
                       value: my-broken-links-value
-                  send_report_to_emails: ['a@example.com', 'b@example.com']
+                  send_report_to_emails: ["a@example.com", "b@example.com"]
                   include_check_types_in_report:
-                    [uptime, performance, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain, certificate_health]
+                    [
+                      uptime,
+                      performance,
+                      broken_links,
+                      mixed_content,
+                      lighthouse,
+                      cron,
+                      application_health,
+                      sitemap,
+                      dns,
+                      domain,
+                      certificate_health,
+                    ]
       responses:
-        '200':
+        "200":
           description: Updated monitor
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Monitor'
+                $ref: "#/components/schemas/Monitor"
               examples:
                 success:
                   value:
                     id: 99
                     label: Documentation
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Monitors]
       summary: Delete a monitor
       description: Delete a monitor by its ID. This action is irreversible.
       operationId: deleteMonitor
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/check-summary/{checkType}:
     get:
@@ -487,28 +538,28 @@ paths:
       description: Retrieve a summary of the latest result for a specific check type on a monitor.
       operationId: getCheckSummary
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
         - name: checkType
           description: The type of check to retrieve the summary for.
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/CheckType'
+            $ref: "#/components/schemas/CheckType"
       responses:
-        '200':
+        "200":
           description: Check summary
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckSummary'
+                $ref: "#/components/schemas/CheckSummary"
               examples:
                 success:
                   value:
                     result: succeeded
                     summary: Up
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /checks/{checkId}/enable:
     post:
@@ -517,20 +568,20 @@ paths:
       description: Enable a specific check by its ID.
       operationId: enableCheck
       parameters:
-        - $ref: '#/components/parameters/CheckId'
+        - $ref: "#/components/parameters/CheckId"
       responses:
-        '200':
+        "200":
           description: Enabled
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckEnableToggle'
+                $ref: "#/components/schemas/CheckEnableToggle"
               examples:
                 success:
                   value: { id: 405, type: uptime, enabled: true }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /checks/{checkId}/disable:
     post:
@@ -539,20 +590,20 @@ paths:
       description: Disable a specific check by its ID.
       operationId: disableCheck
       parameters:
-        - $ref: '#/components/parameters/CheckId'
+        - $ref: "#/components/parameters/CheckId"
       responses:
-        '200':
+        "200":
           description: Disabled
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckEnableToggle'
+                $ref: "#/components/schemas/CheckEnableToggle"
               examples:
                 success:
                   value: { id: 405, type: uptime, enabled: false }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /checks/{checkId}/request-run:
     post:
@@ -561,14 +612,14 @@ paths:
       description: Request an immediate run of a specific check. Optionally, custom HTTP headers can be provided for HTTP-based checks.
       operationId: requestCheckRun
       parameters:
-        - $ref: '#/components/parameters/CheckId'
+        - $ref: "#/components/parameters/CheckId"
       requestBody:
         description: The optional payload to include with the request.
         required: false
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CheckRunRequest'
+              $ref: "#/components/schemas/CheckRunRequest"
             examples:
               withHeaders:
                 value:
@@ -576,12 +627,12 @@ paths:
                     User-Agent: Custom User Agent
                     Authorization: Bearer token123
       responses:
-        '200':
+        "200":
           description: Check details after run request accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Check'
+                $ref: "#/components/schemas/Check"
               examples:
                 success:
                   value:
@@ -589,14 +640,14 @@ paths:
                     type: mixed_content
                     label: Mixed content
                     enabled: true
-                    latest_run_ended_at: '2019-09-16 07:29:05'
+                    latest_run_ended_at: "2019-09-16 07:29:05"
                     latest_run_result: succeeded
                     settings: {}
 
                     active_snooze: null
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /checks/{checkId}/snooze:
     post:
@@ -605,7 +656,7 @@ paths:
       description: Snooze notifications for a specific check for a given duration in minutes.
       operationId: snoozeCheck
       parameters:
-        - $ref: '#/components/parameters/CheckId'
+        - $ref: "#/components/parameters/CheckId"
       requestBody:
         description: The payload to include with the request.
         required: true
@@ -620,17 +671,17 @@ paths:
                   description: Duration in minutes (string)
             examples:
               example:
-                value: { minutes: '10' }
+                value: { minutes: "10" }
       responses:
-        '200':
+        "200":
           description: Snooze applied
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Check'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/Check"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /checks/{checkId}/unsnooze:
     post:
@@ -639,17 +690,17 @@ paths:
       description: Remove any active snooze from a specific check.
       operationId: unsnoozeCheck
       parameters:
-        - $ref: '#/components/parameters/CheckId'
+        - $ref: "#/components/parameters/CheckId"
       responses:
-        '200':
+        "200":
           description: Unsnoozed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Check'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/Check"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /cron-checks/{cronCheckId}/snooze:
     post:
@@ -658,7 +709,7 @@ paths:
       description: Snooze notifications for a specific cron check for a given duration in minutes.
       operationId: snoozeCronCheck
       parameters:
-        - $ref: '#/components/parameters/CronCheckId'
+        - $ref: "#/components/parameters/CronCheckId"
       requestBody:
         description: The payload to include with the request.
         required: true
@@ -672,17 +723,17 @@ paths:
                   type: string
             examples:
               example:
-                value: { minutes: '10' }
+                value: { minutes: "10" }
       responses:
-        '200':
+        "200":
           description: Snoozed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CronCheck'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/CronCheck"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /cron-checks/{cronCheckId}/unsnooze:
     post:
@@ -691,17 +742,17 @@ paths:
       description: Remove any active snooze from a specific cron check.
       operationId: unsnoozeCronCheck
       parameters:
-        - $ref: '#/components/parameters/CronCheckId'
+        - $ref: "#/components/parameters/CronCheckId"
       responses:
-        '200':
+        "200":
           description: Unsnoozed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CronCheck'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/CronCheck"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/application-health-checks:
     get:
@@ -710,9 +761,9 @@ paths:
       description: Retrieve a list of application health checks associated with a specific monitor.
       operationId: listApplicationHealthChecks
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Health checks
           content:
             application/json:
@@ -722,7 +773,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ApplicationHealthCheck'
+                      $ref: "#/components/schemas/ApplicationHealthCheck"
               examples:
                 success:
                   value:
@@ -730,10 +781,10 @@ paths:
                       - id: 42
                         name: queue
                         latest_result: succeeded
-                        latest_run_ended_at: '2024-11-10 12:00:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        latest_run_ended_at: "2024-11-10 12:00:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/application-health-checks/{healthCheckId}/snooze:
     post:
@@ -742,8 +793,8 @@ paths:
       description: Snooze notifications for a specific application health check for a given duration in minutes.
       operationId: snoozeApplicationHealthCheck
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/HealthCheckId'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/HealthCheckId"
       requestBody:
         description: The payload to include with the request.
         required: true
@@ -757,17 +808,17 @@ paths:
                   type: string
             examples:
               example:
-                value: { minutes: '10' }
+                value: { minutes: "10" }
       responses:
-        '200':
+        "200":
           description: Snoozed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationHealthCheck'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/ApplicationHealthCheck"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/application-health-checks/{healthCheckId}/unsnooze:
     post:
@@ -776,18 +827,18 @@ paths:
       description: Remove any active snooze from a specific application health check.
       operationId: unsnoozeApplicationHealthCheck
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/HealthCheckId'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/HealthCheckId"
       responses:
-        '200':
+        "200":
           description: Unsnoozed
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationHealthCheck'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/ApplicationHealthCheck"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/uptime:
     get:
@@ -796,9 +847,9 @@ paths:
       description: Retrieve uptime percentages for a specific monitor over a defined period, with optional granularity.
       operationId: getUptime
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/FilterStartedAt'
-        - $ref: '#/components/parameters/FilterEndedAt'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterStartedAt"
+        - $ref: "#/components/parameters/FilterEndedAt"
         - name: split
           in: query
           description: Granularity of the periods
@@ -806,24 +857,24 @@ paths:
             type: string
             enum: [hour, day, month]
       responses:
-        '200':
+        "200":
           description: Uptime series
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UptimePoint'
+                  $ref: "#/components/schemas/UptimePoint"
               examples:
                 success:
                   value:
-                    - datetime: '2018-01-01 00:00:00'
+                    - datetime: "2018-01-01 00:00:00"
                       uptime_percentage: 100
-                    - datetime: '2018-01-01 01:00:00'
+                    - datetime: "2018-01-01 01:00:00"
                       uptime_percentage: 99.76
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/downtime:
     get:
@@ -832,28 +883,28 @@ paths:
       description: Retrieve a list of downtime periods for a specific monitor within a defined time range.
       operationId: getDowntime
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/FilterStartedAt'
-        - $ref: '#/components/parameters/FilterEndedAt'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterStartedAt"
+        - $ref: "#/components/parameters/FilterEndedAt"
       responses:
-        '200':
+        "200":
           description: Downtime periods
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedDowntime'
+                $ref: "#/components/schemas/PaginatedDowntime"
               examples:
                 success:
                   value:
                     data:
                       - id: 1
-                        started_at: '2018-01-01 15:00:00'
-                        ended_at: '2018-01-01 15:07:00'
-                        notes_html: 'We contacted our provider and they fixed the issue.'
-                        notes_markdown: 'We contacted our provider and they fixed the issue.'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        started_at: "2018-01-01 15:00:00"
+                        ended_at: "2018-01-01 15:07:00"
+                        notes_html: "We contacted our provider and they fixed the issue."
+                        notes_markdown: "We contacted our provider and they fixed the issue."
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /downtime/{downtimeId}:
     delete:
@@ -868,10 +919,10 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/http-uptime-metrics:
     get:
@@ -880,17 +931,17 @@ paths:
       description: Retrieve HTTP uptime metrics for a specific monitor over a defined period.
       operationId: httpUptimeMetrics
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/FilterStart'
-        - $ref: '#/components/parameters/FilterEnd'
-        - $ref: '#/components/parameters/FilterGroupBy'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterStart"
+        - $ref: "#/components/parameters/FilterEnd"
+        - $ref: "#/components/parameters/FilterGroupBy"
       responses:
-        '200':
+        "200":
           description: Metrics series
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UptimeMetricsHttpResponse'
+                $ref: "#/components/schemas/UptimeMetricsHttpResponse"
               examples:
                 success:
                   value:
@@ -912,10 +963,10 @@ paths:
                           header_size: 1261
                           size_download: 12814
                           speed_download: 137784
-                        date: '2024-04-19 13:25:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        date: "2024-04-19 13:25:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/ping-uptime-metrics:
     get:
@@ -924,17 +975,17 @@ paths:
       description: Retrieve ping uptime metrics for a specific monitor over a defined period.
       operationId: pingUptimeMetrics
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/FilterStart'
-        - $ref: '#/components/parameters/FilterEnd'
-        - $ref: '#/components/parameters/FilterGroupBy'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterStart"
+        - $ref: "#/components/parameters/FilterEnd"
+        - $ref: "#/components/parameters/FilterGroupBy"
       responses:
-        '200':
+        "200":
           description: Metrics series
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UptimeMetricsPingResponse'
+                $ref: "#/components/schemas/UptimeMetricsPingResponse"
               examples:
                 success:
                   value:
@@ -947,10 +998,10 @@ paths:
                         downtime_percentage: 0.0
                         uptime_seconds: 60
                         downtime_seconds: 0
-                        date: '2024-04-19 13:25:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        date: "2024-04-19 13:25:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/tcp-uptime-metrics:
     get:
@@ -959,17 +1010,17 @@ paths:
       description: Retrieve TCP uptime metrics for a specific monitor over a defined period.
       operationId: tcpUptimeMetrics
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/FilterStart'
-        - $ref: '#/components/parameters/FilterEnd'
-        - $ref: '#/components/parameters/FilterGroupBy'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterStart"
+        - $ref: "#/components/parameters/FilterEnd"
+        - $ref: "#/components/parameters/FilterGroupBy"
       responses:
-        '200':
+        "200":
           description: Metrics series
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UptimeMetricsTcpResponse'
+                $ref: "#/components/schemas/UptimeMetricsTcpResponse"
               examples:
                 success:
                   value:
@@ -979,10 +1030,10 @@ paths:
                         downtime_percentage: 0.0
                         uptime_seconds: 60
                         downtime_seconds: 0
-                        date: '2024-04-19 13:25:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        date: "2024-04-19 13:25:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /broken-links/{monitorId}:
     get:
@@ -991,14 +1042,14 @@ paths:
       description: Retrieve a list of broken links found by the broken links check for a specific monitor.
       operationId: listBrokenLinks
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Broken links
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BrokenLinksResponse'
+                $ref: "#/components/schemas/BrokenLinksResponse"
               examples:
                 success:
                   value:
@@ -1009,9 +1060,9 @@ paths:
                         found_on_url: https://example.com
                         relative_found_on_url: https://example.com
                         internal: true
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/add-to-broken-links-whitelist:
     post:
@@ -1020,7 +1071,7 @@ paths:
       description: Add a URL to the broken links whitelist for a specific monitor. The URL will be ignored in future broken links checks.
       operationId: addBrokenLinksWhitelistUrl
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         description: The payload to include with the request.
         required: true
@@ -1035,9 +1086,9 @@ paths:
                   format: uri
             examples:
               example:
-                value: { whitelistUrl: 'https://externalsite.tld/page1' }
+                value: { whitelistUrl: "https://externalsite.tld/page1" }
       responses:
-        '200':
+        "200":
           description: Whitelist updated
           content:
             application/json:
@@ -1047,10 +1098,10 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: 'URL added to whitelist.' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                  value: { message: "URL added to whitelist." }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/update-broken-links-settings:
     put:
@@ -1059,14 +1110,14 @@ paths:
       description: Update the broken links check settings for a specific monitor.
       operationId: updateBrokenLinksSettings
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         description: The payload to include with the request.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BrokenLinksSettingsUpdate'
+              $ref: "#/components/schemas/BrokenLinksSettingsUpdate"
             examples:
               example:
                 value:
@@ -1075,7 +1126,7 @@ paths:
                     https://externalsite.tld/page1
                     https://externalsite.tld/page2
       responses:
-        '200':
+        "200":
           description: Settings updated
           content:
             application/json:
@@ -1085,10 +1136,10 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: 'Broken links settings updated.' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                  value: { message: "Broken links settings updated." }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/update-uptime-check-payload:
     put:
@@ -1097,7 +1148,7 @@ paths:
       description: Update the payload used for non-GET uptime checks for a specific monitor.
       operationId: updateUptimeCheckPayload
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         description: The payload to include with the request.
         required: true
@@ -1106,14 +1157,14 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/NameValuePair'
+                $ref: "#/components/schemas/NameValuePair"
             examples:
               example:
                 value:
                   - name: my-name
                     value: my-value
       responses:
-        '200':
+        "200":
           description: Payload updated
           content:
             application/json:
@@ -1123,10 +1174,10 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: 'Uptime check payload updated.' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                  value: { message: "Uptime check payload updated." }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /mixed-content/{monitorId}:
     get:
@@ -1135,14 +1186,14 @@ paths:
       description: Retrieve a list of mixed content items found by the mixed content check for a specific monitor.
       operationId: listMixedContent
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Mixed content items
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MixedContentResponse'
+                $ref: "#/components/schemas/MixedContentResponse"
               examples:
                 success:
                   value:
@@ -1150,9 +1201,9 @@ paths:
                       - element_name: img
                         mixed_content_url: http://example.com/image.jpg
                         found_on_url: https://example.com
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /certificate-health/{monitorId}:
     get:
@@ -1161,21 +1212,21 @@ paths:
       description: Retrieve the certificate health details for a specific monitor.
       operationId: getCertificateHealth
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Certificate health
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CertificateHealth'
+                $ref: "#/components/schemas/CertificateHealth"
               examples:
                 success:
                   value:
                     certificate_details:
                       issuer: "Let's Encrypt Authority X3"
-                      valid_from: '2019-09-10 15:16:01'
-                      valid_until: '2019-12-09 15:16:01'
+                      valid_from: "2019-09-10 15:16:01"
+                      valid_until: "2019-12-09 15:16:01"
                     certificate_checks:
                       - type: notFound
                         label: Certificate present
@@ -1185,10 +1236,10 @@ paths:
                         passed: true
                     certificate_chain_issuers:
                       - "US, Let's Encrypt, Let's Encrypt Authority X3"
-                      - 'Digital Signature Trust Co., DST Root CA X3'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                      - "Digital Signature Trust Co., DST Root CA X3"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/detected-certificates:
     get:
@@ -1197,9 +1248,9 @@ paths:
       description: Retrieve a paginated list of detected certificates for a specific monitor, with optional filtering and sorting.
       operationId: listDetectedCertificates
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/PageNumber'
-        - $ref: '#/components/parameters/PageSize'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/PageNumber"
+        - $ref: "#/components/parameters/PageSize"
         - name: filter[fingerprint]
           in: query
           schema:
@@ -1211,12 +1262,12 @@ paths:
             type: string
           description: Sort by created_at, updated_at, or fingerprint. Prefix with - for desc.
       responses:
-        '200':
+        "200":
           description: Paginated detected certificates
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedDetectedCertificates'
+                $ref: "#/components/schemas/PaginatedDetectedCertificates"
               examples:
                 success:
                   value:
@@ -1228,14 +1279,14 @@ paths:
                           issuer: "Let's Encrypt Authority X3"
                           domain: example.com
                           additional_domains: [www.example.com]
-                          valid_from: '2023-10-01T12:00:00Z'
-                          valid_until: '2024-01-01T12:00:00Z'
+                          valid_from: "2023-10-01T12:00:00Z"
+                          valid_until: "2024-01-01T12:00:00Z"
                           days_until_expiration: 45
                           signature_algorithm: sha256WithRSAEncryption
                           is_valid: true
                           is_expired: false
-                        created_at: '2023-10-01T12:30:00Z'
-                        updated_at: '2023-10-01T12:30:00Z'
+                        created_at: "2023-10-01T12:30:00Z"
+                        updated_at: "2023-10-01T12:30:00Z"
                     links:
                       first: https://ohdear.app/api/monitors/1/detected-certificates?page=1
                       last: https://ohdear.app/api/monitors/1/detected-certificates?page=1
@@ -1248,9 +1299,9 @@ paths:
                       per_page: 15
                       to: 1
                       total: 1
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/detected-certificates/{certificateId}:
     get:
@@ -1259,19 +1310,19 @@ paths:
       description: Retrieve details of a specific detected certificate by its ID for a given monitor.
       operationId: getDetectedCertificate
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
         - name: certificateId
           description: The ID of the detected certificate to retrieve.
           in: path
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Detected certificate
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DetectedCertificate'
+                $ref: "#/components/schemas/DetectedCertificate"
               examples:
                 success:
                   value:
@@ -1282,17 +1333,17 @@ paths:
                       issuer: "Let's Encrypt Authority X3"
                       domain: example.com
                       additional_domains: [www.example.com]
-                      valid_from: '2023-10-01T12:00:00Z'
-                      valid_until: '2024-01-01T12:00:00Z'
+                      valid_from: "2023-10-01T12:00:00Z"
+                      valid_until: "2024-01-01T12:00:00Z"
                       days_until_expiration: 45
                       signature_algorithm: sha256WithRSAEncryption
                       is_valid: true
                       is_expired: false
-                    created_at: '2023-10-01T12:30:00Z'
-                    updated_at: '2023-10-01T12:30:00Z'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                    created_at: "2023-10-01T12:30:00Z"
+                    updated_at: "2023-10-01T12:30:00Z"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/maintenance-periods:
     get:
@@ -1301,14 +1352,14 @@ paths:
       description: Retrieve a list of maintenance periods associated with a specific monitor.
       operationId: listMaintenancePeriods
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Maintenance periods
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MaintenancePeriodsResponse'
+                $ref: "#/components/schemas/MaintenancePeriodsResponse"
               examples:
                 success:
                   value:
@@ -1316,11 +1367,11 @@ paths:
                       - id: 101
                         monitor_id: 1
                         name: Deployment
-                        starts_at: '2020-01-09 10:37:24'
-                        ends_at: '2020-01-09 10:42:24'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        starts_at: "2020-01-09 10:37:24"
+                        ends_at: "2020-01-09 10:42:24"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/start-maintenance:
     post:
@@ -1329,7 +1380,7 @@ paths:
       description: Start an immediate maintenance period for a specific monitor. By default, the maintenance period lasts 60 minutes, but you can specify a different duration in seconds. You can also provide an optional name for the maintenance period.
       operationId: startMaintenance
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         description: The optional payload to include with the request.
         required: false
@@ -1347,25 +1398,25 @@ paths:
             examples:
               withDuration:
                 value:
-                  stop_maintenance_after_seconds: '300'
+                  stop_maintenance_after_seconds: "300"
       responses:
-        '200':
+        "200":
           description: Maintenance started
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MaintenancePeriod'
+                $ref: "#/components/schemas/MaintenancePeriod"
               examples:
                 success:
                   value:
                     id: 101
                     monitor_id: 1
-                    name: 'Optional name of your maintenance period'
-                    starts_at: '2020-01-09 10:28:54'
-                    ends_at: '2020-01-09 11:28:54'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                    name: "Optional name of your maintenance period"
+                    starts_at: "2020-01-09 10:28:54"
+                    ends_at: "2020-01-09 11:28:54"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/stop-maintenance:
     post:
@@ -1374,9 +1425,9 @@ paths:
       description: Stop any active maintenance period(s) for a specific monitor.
       operationId: stopMaintenance
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Maintenance stopped
           content:
             application/json:
@@ -1386,10 +1437,10 @@ paths:
                   message: { type: string }
               examples:
                 success:
-                  value: { message: 'Maintenance stopped.' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                  value: { message: "Maintenance stopped." }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /maintenance-periods:
     post:
@@ -1403,30 +1454,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateMaintenancePeriodRequest'
+              $ref: "#/components/schemas/CreateMaintenancePeriodRequest"
             examples:
               example:
                 value:
-                  monitor_id: '1'
-                  starts_at: '2020-02-01 14:00'
-                  ends_at: '2020-02-01 18:00'
+                  monitor_id: "1"
+                  starts_at: "2020-02-01 14:00"
+                  ends_at: "2020-02-01 18:00"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MaintenancePeriod'
+                $ref: "#/components/schemas/MaintenancePeriod"
               examples:
                 success:
                   value:
                     id: 101
-                    monitor_id: '1'
-                    starts_at: '2020-02-01 14:00:00'
-                    ends_at: '2020-02-01 18:00:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+                    monitor_id: "1"
+                    starts_at: "2020-02-01 14:00:00"
+                    ends_at: "2020-02-01 18:00:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /maintenance-periods/{maintenancePeriodId}:
     delete:
@@ -1441,10 +1492,10 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /status-pages:
     get:
@@ -1453,15 +1504,15 @@ paths:
       description: Retrieve a paginated list of status pages, with optional pagination parameters.
       operationId: listStatusPages
       parameters:
-        - $ref: '#/components/parameters/PageNumber'
-        - $ref: '#/components/parameters/PageSize'
+        - $ref: "#/components/parameters/PageNumber"
+        - $ref: "#/components/parameters/PageSize"
       responses:
-        '200':
+        "200":
           description: Paginated status pages
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedStatusPages'
+                $ref: "#/components/schemas/PaginatedStatusPages"
               examples:
                 success:
                   value:
@@ -1477,8 +1528,8 @@ paths:
                         monitors:
                           - id: 1
                             url: https://site1.tld
-                        created_at: '2019-09-13 07:06:51'
-                        updated_at: '2019-09-13 07:06:51'
+                        created_at: "2019-09-13 07:06:51"
+                        updated_at: "2019-09-13 07:06:51"
                     links:
                       first: https://ohdear.app/api/status-pages?page%5Bnumber%5D=1
                       last: https://ohdear.app/api/status-pages?page%5Bnumber%5D=1
@@ -1492,8 +1543,8 @@ paths:
                       per_page: 200
                       to: 2
                       total: 2
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
     post:
       tags: [Status Pages]
       summary: Create a status page
@@ -1505,7 +1556,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateStatusPageRequest'
+              $ref: "#/components/schemas/CreateStatusPageRequest"
             examples:
               example:
                 value:
@@ -1517,15 +1568,15 @@ paths:
                     - id: 2
                       clickable: false
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusPage'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/StatusPage"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /status-pages/{statusPageId}:
     get:
@@ -1534,29 +1585,29 @@ paths:
       description: Retrieve details of a specific status page by its ID, including associated monitors and recent updates.
       operationId: getStatusPage
       parameters:
-        - $ref: '#/components/parameters/StatusPageId'
+        - $ref: "#/components/parameters/StatusPageId"
       responses:
-        '200':
+        "200":
           description: Status page
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusPageWithUpdates'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/StatusPageWithUpdates"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
     delete:
       tags: [Status Pages]
       summary: Delete a status page
       description: Delete a specific status page by its ID. This action is irreversible.
       operationId: deleteStatusPage
       parameters:
-        - $ref: '#/components/parameters/StatusPageId'
+        - $ref: "#/components/parameters/StatusPageId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /status-pages/{statusPageId}/monitors:
     post:
@@ -1565,14 +1616,14 @@ paths:
       description: Add one or more monitors to a specific status page, with an option to synchronize the status page with the current monitor statuses.
       operationId: addStatusPageMonitors
       parameters:
-        - $ref: '#/components/parameters/StatusPageId'
+        - $ref: "#/components/parameters/StatusPageId"
       requestBody:
         description: The payload to include with the request.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddStatusPageMonitorsRequest'
+              $ref: "#/components/schemas/AddStatusPageMonitorsRequest"
             examples:
               example:
                 value:
@@ -1581,15 +1632,15 @@ paths:
                     - id: 17
                       clickable: true
       responses:
-        '200':
+        "200":
           description: Updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusPage'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/StatusPage"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /status-pages/{statusPageId}/monitors/{monitorId}:
     delete:
@@ -1598,13 +1649,13 @@ paths:
       description: Remove a specific monitor from a status page by providing the status page ID and monitor ID.
       operationId: removeStatusPageMonitor
       parameters:
-        - $ref: '#/components/parameters/StatusPageId'
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/StatusPageId"
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /status-pages/{statusPageId}/updates:
     get:
@@ -1613,14 +1664,14 @@ paths:
       description: Retrieve a list of status page updates for a specific status page by its ID.
       operationId: listStatusPageUpdates
       parameters:
-        - $ref: '#/components/parameters/StatusPageId'
+        - $ref: "#/components/parameters/StatusPageId"
       responses:
-        '200':
+        "200":
           description: Updates
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusPageUpdatesResponse'
+                $ref: "#/components/schemas/StatusPageUpdatesResponse"
               examples:
                 empty:
                   value: { data: [] }
@@ -1632,18 +1683,18 @@ paths:
                         text: We have contacted our API provider and they have resolved the situation, everything is back to normal. We apologize for the inconvenience!
                         pinned: false
                         severity: resolved
-                        time: '2019-09-16 08:24:00'
+                        time: "2019-09-16 08:24:00"
                         status_page_url: https://ohdear.app/status-page/your-slug
                       - id: 64
                         title: We are experiencing an outage on our service
                         text: Due to errors in our 3rd party API provider, we are experiencing an outage of our website. Our team is working on getting it resolved ASAP.
                         pinned: false
                         severity: high
-                        time: '2019-09-16 08:11:00'
+                        time: "2019-09-16 08:11:00"
                         status_page_url: https://ohdear.app/status-page/your-slug
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /status-page-updates:
     post:
@@ -1657,7 +1708,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateStatusPageUpdateRequest'
+              $ref: "#/components/schemas/CreateStatusPageUpdateRequest"
             examples:
               example:
                 value:
@@ -1665,15 +1716,15 @@ paths:
                   title: Our site is down
                   text: We are working on it!
                   severity: high
-                  time: '2019-09-16 10:24'
+                  time: "2019-09-16 10:24"
                   pinned: true
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StatusPageUpdate'
+                $ref: "#/components/schemas/StatusPageUpdate"
               examples:
                 success:
                   value:
@@ -1682,11 +1733,11 @@ paths:
                     text: We are working on it!
                     pinned: true
                     severity: high
-                    time: '2019-09-16 08:24:00'
+                    time: "2019-09-16 08:24:00"
                     status_page_url: https://ohdear.app/status-page/your-slug
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /status-page-updates/{updateId}:
     delete:
@@ -1701,10 +1752,10 @@ paths:
           required: true
           schema: { type: integer }
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/cron-checks:
     get:
@@ -1713,14 +1764,14 @@ paths:
       description: Retrieve a list of cron checks associated with a specific monitor.
       operationId: listCronChecks
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Cron checks
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CronChecksResponse'
+                $ref: "#/components/schemas/CronChecksResponse"
               examples:
                 success:
                   value:
@@ -1735,13 +1786,13 @@ paths:
                         cron_expression: null
                         server_timezone: Europe/Brussels
                         ping_url: https://ping.ohdear.app/0d210b09
-                        created_at: '2020-07-28 13:27:02'
+                        created_at: "2020-07-28 13:27:02"
                         latest_result: pingFinished
-                        latest_ping_at: '2020-11-16 09:19:40'
-                        human_readable_latest_ping_at: '5 minutes ago'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        latest_ping_at: "2020-11-16 09:19:40"
+                        human_readable_latest_ping_at: "5 minutes ago"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
     post:
       tags: [Cron Checks]
       summary: Create a cron check
@@ -1752,13 +1803,13 @@ paths:
         For cron type: provide `cron_expression`, `grace_time_in_minutes`, and `server_timezone`.
       operationId: createCronCheck
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCronCheckRequest'
+              $ref: "#/components/schemas/CreateCronCheckRequest"
             examples:
               simple:
                 summary: Simple frequency-based cron check
@@ -1773,17 +1824,17 @@ paths:
                 value:
                   name: your cron job name
                   type: cron
-                  cron_expression: '* * * * *'
+                  cron_expression: "* * * * *"
                   grace_time_in_minutes: 10
                   description: a description goes here
                   server_timezone: UTC
       responses:
-        '201':
+        "201":
           description: Cron check created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CronCheck'
+                $ref: "#/components/schemas/CronCheck"
               examples:
                 success:
                   value:
@@ -1794,14 +1845,14 @@ paths:
                     description: a description goes here
                     frequency_in_minutes: 10
                     grace_time_in_minutes: 15
-                    cron_expression: ''
+                    cron_expression: ""
                     server_timezone: null
                     ping_url: https://ping.ohdear.app/ba4322cf
-                    created_at: '2020-08-03 12:18:33'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                    created_at: "2020-08-03 12:18:33"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /monitors/{monitorId}/cron-checks/sync:
     post:
@@ -1813,38 +1864,38 @@ paths:
         Useful for managing cron checks programmatically, such as from the PHP SDK.
       operationId: syncCronChecks
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SyncCronChecksRequest'
+              $ref: "#/components/schemas/SyncCronChecksRequest"
             examples:
               sync:
                 value:
                   cron_checks:
                     - name: cron job #1
                       type: cron
-                      cron_expression: '* * * * *'
+                      cron_expression: "* * * * *"
                       grace_time_in_minutes: 10
                       description: description for cron #1
                       server_timezone: UTC
                     - name: cron job #2
                       type: cron
-                      cron_expression: '0 * * * *'
+                      cron_expression: "0 * * * *"
                       grace_time_in_minutes: 10
                       description: description for cron #2
                       server_timezone: UTC
       responses:
-        '200':
+        "200":
           description: Cron checks synchronized
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CronCheck'
+                  $ref: "#/components/schemas/CronCheck"
               examples:
                 success:
                   value:
@@ -1855,12 +1906,12 @@ paths:
                       description: description for cron #1
                       frequency_in_minutes: null
                       grace_time_in_minutes: 10
-                      cron_expression: '* * * * *'
+                      cron_expression: "* * * * *"
                       server_timezone: UTC
                       ping_url: https://ping.ohdear.app/c1803dce
-                      created_at: '2020-09-03 19:20:25'
+                      created_at: "2020-09-03 19:20:25"
                       latest_result: pingFinished
-                      latest_ping_at: '2020-11-16 09:19:40'
+                      latest_ping_at: "2020-11-16 09:19:40"
                     - id: 10
                       uuid: 40e8e39e
                       name: cron job #2
@@ -1868,16 +1919,16 @@ paths:
                       description: description for cron #2
                       frequency_in_minutes: null
                       grace_time_in_minutes: 10
-                      cron_expression: '0 * * * *'
+                      cron_expression: "0 * * * *"
                       server_timezone: UTC
                       ping_url: https://ping.ohdear.app/40e8e39e
-                      created_at: '2020-09-03 19:20:25'
+                      created_at: "2020-09-03 19:20:25"
                       latest_result: pingFinished
-                      latest_ping_at: '2020-11-16 09:19:40'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                      latest_ping_at: "2020-11-16 09:19:40"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /cron-checks/{cronCheckId}:
     delete:
@@ -1886,12 +1937,12 @@ paths:
       description: Delete a specific cron check by its ID. This action cannot be undone.
       operationId: deleteCronCheck
       parameters:
-        - $ref: '#/components/parameters/CronCheckId'
+        - $ref: "#/components/parameters/CronCheckId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/dns-history-items:
     get:
@@ -1900,14 +1951,14 @@ paths:
       description: Retrieve the DNS history and any issues detected for a monitor's domain. Results are sorted in reverse chronological order.
       operationId: getDnsHistory
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: DNS history items
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DnsHistoryResponse'
+                $ref: "#/components/schemas/DnsHistoryResponse"
               examples:
                 success:
                   value:
@@ -1924,13 +1975,13 @@ paths:
                             ip: 93.184.216.34
                         raw_dns_records:
                           ns1.example.com:
-                            - 'example.com. 1017 IN A 93.184.216.34'
+                            - "example.com. 1017 IN A 93.184.216.34"
                         issues: []
                         diff_summary: No changes
-                        created_at: '2021-11-05 16:07:38'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        created_at: "2021-11-05 16:07:38"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/domain:
     get:
@@ -1939,30 +1990,30 @@ paths:
       description: Retrieve domain registration information from RDAP for a monitor's domain, including expiration dates and domain statuses.
       operationId: getDomainInfo
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Domain information
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DomainInfo'
+                $ref: "#/components/schemas/DomainInfo"
               examples:
                 success:
                   value:
-                    expires_at: '2028-09-14 04:00:00'
-                    registered_at: '1997-09-15 04:00:00'
-                    last_changed_at: '2019-09-09 15:39:04'
-                    last_updated_in_rdap_db_at: '2022-06-11 00:32:59'
+                    expires_at: "2028-09-14 04:00:00"
+                    registered_at: "1997-09-15 04:00:00"
+                    last_changed_at: "2019-09-09 15:39:04"
+                    last_updated_in_rdap_db_at: "2022-06-11 00:32:59"
                     domain_statuses:
                       client delete prohibited: true
                       client transfer prohibited: true
                       client update prohibited: true
                     rdap_domain_response: {}
-                    created_at: '2022-06-10 20:33:06'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                    created_at: "2022-06-10 20:33:06"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/application-health-checks/{healthCheckId}:
     get:
@@ -1971,38 +2022,38 @@ paths:
       description: Retrieve the history of results for a specific application health check. Newest items appear first.
       operationId: getApplicationHealthCheckHistory
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/HealthCheckId'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/HealthCheckId"
       responses:
-        '200':
+        "200":
           description: Application health check history
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApplicationHealthCheckHistoryResponse'
+                $ref: "#/components/schemas/ApplicationHealthCheckHistoryResponse"
               examples:
                 success:
                   value:
                     data:
                       - id: 2
                         status: ok
-                        message: ''
-                        short_summary: '60%'
+                        message: ""
+                        short_summary: "60%"
                         meta:
                           usage: 60
-                        detected_at: '2021-01-01 00:01:00'
-                        updated_at: '2021-01-01 00:01:00'
+                        detected_at: "2021-01-01 00:01:00"
+                        updated_at: "2021-01-01 00:01:00"
                       - id: 1
                         status: failed
                         message: The disk is nearly full (91%)
-                        short_summary: '91%'
+                        short_summary: "91%"
                         meta:
                           usage: 91
-                        detected_at: '2021-01-01 00:00:00'
-                        updated_at: '2021-01-01 00:00:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                        detected_at: "2021-01-01 00:00:00"
+                        updated_at: "2021-01-01 00:00:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/lighthouse-reports:
     get:
@@ -2011,16 +2062,16 @@ paths:
       description: Retrieve all Lighthouse SEO reports for a monitor. The json_report field is not included in this list response.
       operationId: listLighthouseReports
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/PageNumber'
-        - $ref: '#/components/parameters/PageSize'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/PageNumber"
+        - $ref: "#/components/parameters/PageSize"
       responses:
-        '200':
+        "200":
           description: Paginated Lighthouse reports
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedLighthouseReports'
+                $ref: "#/components/schemas/PaginatedLighthouseReports"
               examples:
                 success:
                   value:
@@ -2039,7 +2090,7 @@ paths:
                         cumulative_layout_shift: 0.01
                         performed_on_checker_server: lighthouse-checker-frankfurt-1
                         issues: []
-                        created_at: '2023-01-14 00:00:55'
+                        created_at: "2023-01-14 00:00:55"
                     links:
                       first: https://ohdear.app/api/monitors/1/lighthouse-reports?page%5Bnumber%5D=1
                       last: https://ohdear.app/api/monitors/1/lighthouse-reports?page%5Bnumber%5D=1
@@ -2052,9 +2103,9 @@ paths:
                       per_page: 200
                       to: 1
                       total: 1
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/lighthouse-reports/latest:
     get:
@@ -2063,14 +2114,14 @@ paths:
       description: Retrieve the most recent Lighthouse SEO report for a monitor, including the full json_report.
       operationId: getLatestLighthouseReport
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Latest Lighthouse report
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LighthouseReport'
+                $ref: "#/components/schemas/LighthouseReport"
               examples:
                 success:
                   value:
@@ -2092,10 +2143,10 @@ paths:
                       - category: performance
                         actualScore: 50
                         notificationThreshold: 70
-                    created_at: '2023-01-14 00:00:55'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                    created_at: "2023-01-14 00:00:55"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/lighthouse-reports/{reportId}:
     get:
@@ -2104,22 +2155,22 @@ paths:
       description: Retrieve a specific Lighthouse SEO report by ID, including the full json_report.
       operationId: getLighthouseReport
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
         - name: reportId
           description: ID of the Lighthouse report
           in: path
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: Lighthouse report
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LighthouseReport'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/LighthouseReport"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/ai-responses:
     get:
@@ -2128,16 +2179,16 @@ paths:
       description: Retrieve all AI responses for a monitor.
       operationId: listAiResponses
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/PageNumber'
-        - $ref: '#/components/parameters/PageSize'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/PageNumber"
+        - $ref: "#/components/parameters/PageSize"
       responses:
-        '200':
+        "200":
           description: Paginated AI responses
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedAiResponses'
+                $ref: "#/components/schemas/PaginatedAiResponses"
               examples:
                 success:
                   value:
@@ -2153,9 +2204,9 @@ paths:
                           - http_check
                         used_prompt_tokens: 120
                         used_completion_tokens: 45
-                        started_at: '2024-01-15 11:15:25'
-                        ended_at: '2024-01-15 11:15:30'
-                        created_at: '2024-01-15 11:15:30'
+                        started_at: "2024-01-15 11:15:25"
+                        ended_at: "2024-01-15 11:15:30"
+                        created_at: "2024-01-15 11:15:30"
                     links:
                       first: https://ohdear.app/api/monitors/1/ai-responses?page%5Bnumber%5D=1
                       last: https://ohdear.app/api/monitors/1/ai-responses?page%5Bnumber%5D=1
@@ -2168,9 +2219,9 @@ paths:
                       per_page: 200
                       to: 1
                       total: 1
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/ai-responses/latest:
     get:
@@ -2179,14 +2230,14 @@ paths:
       description: Retrieve the most recent AI response for a monitor, including the raw_response.
       operationId: getLatestAiResponse
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Latest AI response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AiResponse'
+                $ref: "#/components/schemas/AiResponse"
               examples:
                 success:
                   value:
@@ -2203,12 +2254,12 @@ paths:
                     used_prompt_tokens: 150
                     used_completion_tokens: 75
                     raw_response: '{"response": {"message": "Site down"}}'
-                    started_at: '2024-01-15 10:30:40'
-                    ended_at: '2024-01-15 10:30:45'
-                    created_at: '2024-01-15 10:30:45'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                    started_at: "2024-01-15 10:30:40"
+                    ended_at: "2024-01-15 10:30:45"
+                    created_at: "2024-01-15 10:30:45"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/ai-responses/{responseId}:
     get:
@@ -2217,22 +2268,22 @@ paths:
       description: Retrieve a specific AI response by ID, including the raw_response.
       operationId: getAiResponse
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
         - name: responseId
           description: ID of the AI response
           in: path
           required: true
           schema: { type: integer }
       responses:
-        '200':
+        "200":
           description: AI response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AiResponse'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                $ref: "#/components/schemas/AiResponse"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /tags:
     get:
@@ -2241,12 +2292,12 @@ paths:
       description: Retrieve all tags for your teams.
       operationId: listTags
       responses:
-        '200':
+        "200":
           description: List of tags
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagsResponse'
+                $ref: "#/components/schemas/TagsResponse"
               examples:
                 success:
                   value:
@@ -2256,13 +2307,13 @@ paths:
                         team_name: Oh Dear
                         name: production
                         slug: production
-                        created_at: '2025-08-15 09:00:00'
-                        updated_at: '2025-08-15 09:00:00'
+                        created_at: "2025-08-15 09:00:00"
+                        updated_at: "2025-08-15 09:00:00"
                         sites:
                           - 17
                           - 317
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
     post:
       tags: [Tags]
       summary: Create a tag
@@ -2273,7 +2324,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTagRequest'
+              $ref: "#/components/schemas/CreateTagRequest"
             examples:
               basic:
                 value:
@@ -2283,15 +2334,15 @@ paths:
                     - 17
                     - 317
       responses:
-        '201':
+        "201":
           description: Tag created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tag'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/Tag"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /tag-groups:
     get:
@@ -2300,15 +2351,15 @@ paths:
       description: Retrieve all tag groups for your teams.
       operationId: listTagGroups
       parameters:
-        - $ref: '#/components/parameters/PageNumber'
-        - $ref: '#/components/parameters/PageSize'
+        - $ref: "#/components/parameters/PageNumber"
+        - $ref: "#/components/parameters/PageSize"
       responses:
-        '200':
+        "200":
           description: Paginated list of tag groups
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTagGroups'
+                $ref: "#/components/schemas/PaginatedTagGroups"
               examples:
                 success:
                   value:
@@ -2317,16 +2368,16 @@ paths:
                         label: VIP Client Production Sites
                         team_id: 5
                         team_name: Oh Dear
-                        created_at: '2025-08-15 09:00:00'
-                        updated_at: '2025-08-15 09:00:00'
+                        created_at: "2025-08-15 09:00:00"
+                        updated_at: "2025-08-15 09:00:00"
                         tags:
                           - id: 77
                             team_id: 5
                             team_name: Oh Dear
                             name: VIP
                             slug: vip
-                            created_at: '2025-08-15 09:00:00'
-                            updated_at: '2025-08-15 09:00:00'
+                            created_at: "2025-08-15 09:00:00"
+                            updated_at: "2025-08-15 09:00:00"
                             sites: []
                     links:
                       first: https://ohdear.app/api/tag-groups?page%5Bnumber%5D=1
@@ -2340,8 +2391,8 @@ paths:
                       per_page: 200
                       to: 1
                       total: 1
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
     post:
       tags: [Tag Groups]
       summary: Create a tag group
@@ -2352,7 +2403,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTagGroupRequest'
+              $ref: "#/components/schemas/CreateTagGroupRequest"
             examples:
               basic:
                 value:
@@ -2361,17 +2412,17 @@ paths:
                   tags:
                     - VIP
                     - production
-                    - '*client*'
+                    - "*client*"
       responses:
-        '201':
+        "201":
           description: Tag group created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagGroup'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TagGroup"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /tag-groups/{tagGroupId}:
     put:
@@ -2380,13 +2431,13 @@ paths:
       description: Update an existing tag group. An empty tags array will remove all tags from the group. Omit the tags property to only update the label.
       operationId: updateTagGroup
       parameters:
-        - $ref: '#/components/parameters/TagGroupId'
+        - $ref: "#/components/parameters/TagGroupId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTagGroupRequest'
+              $ref: "#/components/schemas/UpdateTagGroupRequest"
             examples:
               updateLabel:
                 value:
@@ -2397,31 +2448,31 @@ paths:
                   tags:
                     - VIP
                     - production
-                    - '*client*'
+                    - "*client*"
                     - additional-tag
       responses:
-        '200':
+        "200":
           description: Tag group updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagGroup'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TagGroup"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Tag Groups]
       summary: Delete a tag group
       description: Delete an existing tag group.
       operationId: deleteTagGroup
       parameters:
-        - $ref: '#/components/parameters/TagGroupId'
+        - $ref: "#/components/parameters/TagGroupId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /team-notification-destinations:
     get:
@@ -2430,12 +2481,12 @@ paths:
       description: Retrieve all notification destinations defined at the team level for all your teams. Only admins and team owners can access this endpoint.
       operationId: listTeamNotificationDestinations
       responses:
-        '200':
+        "200":
           description: Team notification destinations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TeamNotificationDestinationsResponse'
+                $ref: "#/components/schemas/TeamNotificationDestinationsResponse"
               examples:
                 success:
                   value:
@@ -2448,8 +2499,8 @@ paths:
                         notification_types:
                           - HttpUptimeCheckFailedNotification
                           - HttpUptimeCheckRecoveredNotification
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /team-notification-destinations/{teamId}:
     post:
@@ -2458,13 +2509,13 @@ paths:
       description: Create a new notification destination for a team. Only admins and team owners can access this endpoint.
       operationId: createTeamNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TeamId'
+        - $ref: "#/components/parameters/TeamId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateNotificationDestinationRequest'
+              $ref: "#/components/schemas/CreateNotificationDestinationRequest"
             examples:
               mail:
                 value:
@@ -2486,15 +2537,15 @@ paths:
                   destination:
                     mail: example@example.com
       responses:
-        '201':
+        "201":
           description: Notification destination created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TeamNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TeamNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /team-notification-destinations/{teamId}/destination/{destinationId}:
     put:
@@ -2503,14 +2554,14 @@ paths:
       description: Update an existing notification destination for a team. Only admins and team owners can access this endpoint.
       operationId: updateTeamNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TeamId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/TeamId"
+        - $ref: "#/components/parameters/DestinationId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateNotificationDestinationRequest'
+              $ref: "#/components/schemas/UpdateNotificationDestinationRequest"
             examples:
               update:
                 value:
@@ -2519,29 +2570,29 @@ paths:
                   destination:
                     mail: updated@example.com
       responses:
-        '200':
+        "200":
           description: Notification destination updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TeamNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TeamNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Notification Destinations]
       summary: Delete team notification destination
       description: Delete a notification destination from a team. Only admins and team owners can access this endpoint.
       operationId: deleteTeamNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TeamId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/TeamId"
+        - $ref: "#/components/parameters/DestinationId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /monitors/{monitorId}/notification-destinations:
     get:
@@ -2550,14 +2601,14 @@ paths:
       description: Retrieve all notification destinations for a specific monitor. Only admins and team owners can access this endpoint.
       operationId: listMonitorNotificationDestinations
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       responses:
-        '200':
+        "200":
           description: Monitor notification destinations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MonitorNotificationDestinationsResponse'
+                $ref: "#/components/schemas/MonitorNotificationDestinationsResponse"
               examples:
                 success:
                   value:
@@ -2569,22 +2620,22 @@ paths:
                         notification_types:
                           - HttpUptimeCheckFailedNotification
                           - HttpUptimeCheckRecoveredNotification
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
     post:
       tags: [Notification Destinations]
       summary: Create monitor notification destination
       description: Create a new notification destination for a monitor. Only admins and team owners can access this endpoint.
       operationId: createMonitorNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
+        - $ref: "#/components/parameters/MonitorId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateNotificationDestinationRequest'
+              $ref: "#/components/schemas/CreateNotificationDestinationRequest"
             examples:
               mail:
                 value:
@@ -2595,16 +2646,16 @@ paths:
                     - UptimeCheckRecoveredNotification
                     - UptimeCheckFailedNotification
       responses:
-        '201':
+        "201":
           description: Notification destination created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MonitorNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/MonitorNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /monitors/{monitorId}/notification-destinations/{destinationId}:
     put:
@@ -2613,38 +2664,38 @@ paths:
       description: Update an existing notification destination for a monitor. Only admins and team owners can access this endpoint.
       operationId: updateMonitorNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/DestinationId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateNotificationDestinationRequest'
+              $ref: "#/components/schemas/UpdateNotificationDestinationRequest"
       responses:
-        '200':
+        "200":
           description: Notification destination updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MonitorNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/MonitorNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Notification Destinations]
       summary: Delete monitor notification destination
       description: Delete a notification destination from a monitor. Only admins and team owners can access this endpoint.
       operationId: deleteMonitorNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/MonitorId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/DestinationId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /tags/notification-destinations:
     get:
@@ -2653,12 +2704,12 @@ paths:
       description: Retrieve all notification destinations defined at the tag level for all your teams. Only admins and team owners can access this endpoint.
       operationId: listTagNotificationDestinations
       responses:
-        '200':
+        "200":
           description: Tag notification destinations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagNotificationDestinationsResponse'
+                $ref: "#/components/schemas/TagNotificationDestinationsResponse"
               examples:
                 success:
                   value:
@@ -2675,8 +2726,8 @@ paths:
                         notification_types:
                           - HttpUptimeCheckFailedNotification
                           - HttpUptimeCheckRecoveredNotification
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /tags/notification-destinations/{tagId}:
     post:
@@ -2685,24 +2736,24 @@ paths:
       description: Create a new notification destination for a tag. Only admins and team owners can access this endpoint.
       operationId: createTagNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TagId'
+        - $ref: "#/components/parameters/TagId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateNotificationDestinationRequest'
+              $ref: "#/components/schemas/CreateNotificationDestinationRequest"
       responses:
-        '201':
+        "201":
           description: Notification destination created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TagNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /tags/{tagId}/notification-destinations/destination/{destinationId}:
     put:
@@ -2711,38 +2762,38 @@ paths:
       description: Update an existing notification destination for a tag. Only admins and team owners can access this endpoint.
       operationId: updateTagNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TagId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/TagId"
+        - $ref: "#/components/parameters/DestinationId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateNotificationDestinationRequest'
+              $ref: "#/components/schemas/UpdateNotificationDestinationRequest"
       responses:
-        '200':
+        "200":
           description: Notification destination updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TagNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Notification Destinations]
       summary: Delete tag notification destination
       description: Delete a notification destination from a tag. Only admins and team owners can access this endpoint.
       operationId: deleteTagNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TagId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/TagId"
+        - $ref: "#/components/parameters/DestinationId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /tag-groups/{tagGroupId}/notification-destinations:
     get:
@@ -2751,14 +2802,14 @@ paths:
       description: Retrieve all notification destinations for a specific tag group. Only admins and team owners can access this endpoint.
       operationId: listTagGroupNotificationDestinations
       parameters:
-        - $ref: '#/components/parameters/TagGroupId'
+        - $ref: "#/components/parameters/TagGroupId"
       responses:
-        '200':
+        "200":
           description: Tag group notification destinations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagGroupNotificationDestinationsResponse'
+                $ref: "#/components/schemas/TagGroupNotificationDestinationsResponse"
               examples:
                 success:
                   value:
@@ -2769,43 +2820,43 @@ paths:
                           label: VIP Client Production Sites
                           team_id: 5
                           team_name: Oh Dear
-                          created_at: '2025-08-01 09:00:00'
-                          updated_at: '2025-08-01 09:00:00'
+                          created_at: "2025-08-01 09:00:00"
+                          updated_at: "2025-08-01 09:00:00"
                           tags: []
                         channel: slackApi
                         destination:
-                          channel: '#monitoring'
-                          slack_api_token: 'xoxp-2...'
+                          channel: "#monitoring"
+                          slack_api_token: "xoxp-2..."
                         notification_types:
                           - UptimeCheckFailedNotification
                           - UptimeCheckRecoveredNotification
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
     post:
       tags: [Notification Destinations]
       summary: Create tag group notification destination
       description: Create a new notification destination for a tag group. Only admins and team owners can access this endpoint.
       operationId: createTagGroupNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TagGroupId'
+        - $ref: "#/components/parameters/TagGroupId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateNotificationDestinationRequest'
+              $ref: "#/components/schemas/CreateNotificationDestinationRequest"
       responses:
-        '201':
+        "201":
           description: Notification destination created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagGroupNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TagGroupNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /tag-groups/{tagGroupId}/notification-destinations/{destinationId}:
     put:
@@ -2814,38 +2865,38 @@ paths:
       description: Update an existing notification destination for a tag group. Only admins and team owners can access this endpoint.
       operationId: updateTagGroupNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TagGroupId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/TagGroupId"
+        - $ref: "#/components/parameters/DestinationId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateNotificationDestinationRequest'
+              $ref: "#/components/schemas/UpdateNotificationDestinationRequest"
       responses:
-        '200':
+        "200":
           description: Notification destination updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagGroupNotificationDestination'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                $ref: "#/components/schemas/TagGroupNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Notification Destinations]
       summary: Delete tag group notification destination
       description: Delete a notification destination from a tag group. Only admins and team owners can access this endpoint.
       operationId: deleteTagGroupNotificationDestination
       parameters:
-        - $ref: '#/components/parameters/TagGroupId'
-        - $ref: '#/components/parameters/DestinationId'
+        - $ref: "#/components/parameters/TagGroupId"
+        - $ref: "#/components/parameters/DestinationId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /reseller/{resellerTeamId}/managed-teams:
     get:
@@ -2854,18 +2905,18 @@ paths:
       description: Retrieve all teams managed by your reseller account.
       operationId: listManagedTeams
       parameters:
-        - $ref: '#/components/parameters/ResellerTeamId'
-        - $ref: '#/components/parameters/FilterName'
-        - $ref: '#/components/parameters/FilterTimezone'
-        - $ref: '#/components/parameters/Sort'
-        - $ref: '#/components/parameters/Page'
+        - $ref: "#/components/parameters/ResellerTeamId"
+        - $ref: "#/components/parameters/FilterName"
+        - $ref: "#/components/parameters/FilterTimezone"
+        - $ref: "#/components/parameters/Sort"
+        - $ref: "#/components/parameters/Page"
       responses:
-        '200':
+        "200":
           description: Paginated list of managed teams
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedManagedTeams'
+                $ref: "#/components/schemas/PaginatedManagedTeams"
               examples:
                 success:
                   value:
@@ -2873,12 +2924,12 @@ paths:
                       - id: 12345
                         name: Client Company
                         timezone: UTC
-                        created_at: '2024-01-15T10:30:00.000000Z'
+                        created_at: "2024-01-15T10:30:00.000000Z"
                         monitors_count: 5
                       - id: 12346
                         name: Another Client
                         timezone: Europe/Brussels
-                        created_at: '2024-01-20T14:15:00.000000Z'
+                        created_at: "2024-01-20T14:15:00.000000Z"
                         monitors_count: 12
                     links:
                       first: https://ohdear.app/api/reseller/11111/managed-teams?page=1
@@ -2892,21 +2943,21 @@ paths:
                       per_page: 15
                       to: 2
                       total: 2
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
     post:
       tags: [Reseller]
       summary: Create a managed team
       description: Create a new team that will be managed by your reseller account.
       operationId: createManagedTeam
       parameters:
-        - $ref: '#/components/parameters/ResellerTeamId'
+        - $ref: "#/components/parameters/ResellerTeamId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateManagedTeamRequest'
+              $ref: "#/components/schemas/CreateManagedTeamRequest"
             examples:
               basic:
                 value:
@@ -2914,12 +2965,12 @@ paths:
                   timezone: Europe/Brussels
                   default_uptime_check_location: paris
       responses:
-        '201':
+        "201":
           description: Managed team created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManagedTeamResponse'
+                $ref: "#/components/schemas/ManagedTeamResponse"
               examples:
                 success:
                   value:
@@ -2927,11 +2978,11 @@ paths:
                       id: 12347
                       name: New Client Company
                       timezone: Europe/Brussels
-                      created_at: '2024-01-25T09:00:00.000000Z'
+                      created_at: "2024-01-25T09:00:00.000000Z"
                       monitors_count: 0
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '422': { $ref: '#/components/responses/Validation' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /reseller/{resellerTeamId}/managed-teams/{managedTeamId}:
     get:
@@ -2940,15 +2991,15 @@ paths:
       description: Get details for a specific managed team.
       operationId: getManagedTeam
       parameters:
-        - $ref: '#/components/parameters/ResellerTeamId'
-        - $ref: '#/components/parameters/ManagedTeamId'
+        - $ref: "#/components/parameters/ResellerTeamId"
+        - $ref: "#/components/parameters/ManagedTeamId"
       responses:
-        '200':
+        "200":
           description: Managed team details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManagedTeamResponse'
+                $ref: "#/components/schemas/ManagedTeamResponse"
               examples:
                 success:
                   value:
@@ -2956,24 +3007,24 @@ paths:
                       id: 12345
                       name: Client Company
                       timezone: UTC
-                      created_at: '2024-01-15T10:30:00.000000Z'
+                      created_at: "2024-01-15T10:30:00.000000Z"
                       monitors_count: 5
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
     delete:
       tags: [Reseller]
       summary: Delete a managed team
       description: Delete a managed team and all its associated data. This action cannot be undone. All monitors will be deleted, all users will be detached, and all pending invitations will be revoked.
       operationId: deleteManagedTeam
       parameters:
-        - $ref: '#/components/parameters/ResellerTeamId'
-        - $ref: '#/components/parameters/ManagedTeamId'
+        - $ref: "#/components/parameters/ResellerTeamId"
+        - $ref: "#/components/parameters/ManagedTeamId"
       responses:
-        '204': { $ref: '#/components/responses/NoContent' }
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /reseller/{resellerTeamId}/managed-teams/{managedTeamId}/decouple:
     post:
@@ -2982,22 +3033,22 @@ paths:
       description: Remove the reseller relationship from a managed team, making it independent. The team owner will receive an email notification. The team will retain all its configuration and monitors, but monitoring will stop until they subscribe to their own plan.
       operationId: decoupleManagedTeam
       parameters:
-        - $ref: '#/components/parameters/ResellerTeamId'
-        - $ref: '#/components/parameters/ManagedTeamId'
+        - $ref: "#/components/parameters/ResellerTeamId"
+        - $ref: "#/components/parameters/ManagedTeamId"
       responses:
-        '200':
+        "200":
           description: Team successfully decoupled
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DecoupleTeamResponse'
+                $ref: "#/components/schemas/DecoupleTeamResponse"
               examples:
                 success:
                   value:
                     message: Team successfully decoupled from reseller.
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /reseller/{resellerTeamId}/managed-teams/{managedTeamId}/users:
     post:
@@ -3012,14 +3063,14 @@ paths:
         - `guest` - Can perform all member actions except creating, updating, or deleting monitors
       operationId: addUserToManagedTeam
       parameters:
-        - $ref: '#/components/parameters/ResellerTeamId'
-        - $ref: '#/components/parameters/ManagedTeamId'
+        - $ref: "#/components/parameters/ResellerTeamId"
+        - $ref: "#/components/parameters/ManagedTeamId"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddUserToManagedTeamRequest'
+              $ref: "#/components/schemas/AddUserToManagedTeamRequest"
             examples:
               guest:
                 value:
@@ -3032,12 +3083,12 @@ paths:
                   name: John Admin
                   role: admin
       responses:
-        '200':
+        "200":
           description: User added to team
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManagedTeamUserResponse'
+                $ref: "#/components/schemas/ManagedTeamUserResponse"
               examples:
                 success:
                   value:
@@ -3048,12 +3099,12 @@ paths:
                       current_team_id: 12345
                       profile_photo_path: null
                       profile_photo_url: https://www.gravatar.com/avatar/...
-                      created_at: '2024-01-25T11:00:00.000000Z'
-                      updated_at: '2024-01-25T11:00:00.000000Z'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '422': { $ref: '#/components/responses/Validation' }
+                      created_at: "2024-01-25T11:00:00.000000Z"
+                      updated_at: "2024-01-25T11:00:00.000000Z"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
 
   /reseller/{resellerTeamId}/managed-teams/{managedTeamId}/users/{userId}/generate-login-link:
     post:
@@ -3062,24 +3113,24 @@ paths:
       description: Generate a secure, time-limited login link for a user of a managed team. The link will be valid for 5 minutes and automatically log the user into their managed team context.
       operationId: generateLoginLinkForManagedTeamUser
       parameters:
-        - $ref: '#/components/parameters/ResellerTeamId'
-        - $ref: '#/components/parameters/ManagedTeamId'
-        - $ref: '#/components/parameters/UserId'
+        - $ref: "#/components/parameters/ResellerTeamId"
+        - $ref: "#/components/parameters/ManagedTeamId"
+        - $ref: "#/components/parameters/UserId"
       responses:
-        '200':
+        "200":
           description: Login link generated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginLinkResponse'
+                $ref: "#/components/schemas/LoginLinkResponse"
               examples:
                 success:
                   value:
                     login_url: https://ohdear.app/reseller-login/98765/12345?expires=1640995200&signature=abc123...
-                    valid_until: '2025-01-01 12:05:00'
-        '401': { $ref: '#/components/responses/Unauthorized' }
-        '403': { $ref: '#/components/responses/Forbidden' }
-        '404': { $ref: '#/components/responses/NotFound' }
+                    valid_until: "2025-01-01 12:05:00"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
 components:
   securitySchemes:
@@ -3134,22 +3185,22 @@ components:
       name: filter[started_at]
       in: query
       description: Start timestamp (format YYYYMMDDHHMMSS)
-      schema: { type: string, pattern: '^[0-9]{14}$' }
+      schema: { type: string, pattern: "^[0-9]{14}$" }
     FilterEndedAt:
       name: filter[ended_at]
       in: query
       description: End timestamp (format YYYYMMDDHHMMSS)
-      schema: { type: string, pattern: '^[0-9]{14}$' }
+      schema: { type: string, pattern: "^[0-9]{14}$" }
     FilterStart:
       name: filter[start]
       in: query
       description: Start timestamp (format YYYYMMDDHHMMSS)
-      schema: { type: string, pattern: '^[0-9]{14}$' }
+      schema: { type: string, pattern: "^[0-9]{14}$" }
     FilterEnd:
       name: filter[end]
       in: query
       description: End timestamp (format YYYYMMDDHHMMSS)
-      schema: { type: string, pattern: '^[0-9]{14}$' }
+      schema: { type: string, pattern: "^[0-9]{14}$" }
     FilterGroupBy:
       name: filter[group_by]
       in: query
@@ -3228,10 +3279,10 @@ components:
       type: object
       description: Pagination links
       properties:
-        first: { type: ['string', 'null'], format: uri }
-        last: { type: ['string', 'null'], format: uri }
-        prev: { type: ['string', 'null'], format: uri }
-        next: { type: ['string', 'null'], format: uri }
+        first: { type: ["string", "null"], format: uri }
+        last: { type: ["string", "null"], format: uri }
+        prev: { type: ["string", "null"], format: uri }
+        next: { type: ["string", "null"], format: uri }
     User:
       type: object
       description: A user in the system
@@ -3259,7 +3310,7 @@ components:
               - id: 12345
                 name: Awesome Team
                 timezone: Europe/Brussels
-                created_at: '2019-09-13 13:06:51'
+                created_at: "2019-09-13 13:06:51"
     Monitor:
       type: object
       description: A monitor
@@ -3278,23 +3329,23 @@ components:
           type: array
           items: { type: string }
         description:
-          type: ['string', 'null']
+          type: ["string", "null"]
         notes:
-          type: ['string', 'null']
+          type: ["string", "null"]
         latest_run_date:
-          type: ['string', 'null']
+          type: ["string", "null"]
         summarized_check_result:
           type: string
-          enum: [pending, succeeded, warning, failed, 'errored-or-timed-out']
+          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
         checks:
           type: array
           items:
-            $ref: '#/components/schemas/Check'
+            $ref: "#/components/schemas/Check"
         uptime_check_settings:
-          $ref: '#/components/schemas/UptimeCheckSettings'
+          $ref: "#/components/schemas/UptimeCheckSettings"
         badge_id: { type: string }
         marked_for_deletion_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         created_at: { type: string }
         updated_at: { type: string }
 
@@ -3308,9 +3359,10 @@ components:
         type: { type: string, enum: [http, ping, tcp] }
         checks:
           type: array
-          items: { $ref: '#/components/schemas/CheckType' }
+          items: { $ref: "#/components/schemas/CheckType" }
         group_name: { type: string }
-        friendly_name: { type: string, description: Deprecated in favor of label }
+        friendly_name:
+          { type: string, description: Deprecated in favor of label }
         label: { type: string }
         tags:
           type: array
@@ -3318,32 +3370,32 @@ components:
         notes: { type: string }
         description: { type: string }
         uptime_check_location: { type: string }
-        uptime_check_expected_final_redirect_url: { type: ['string', 'null'] }
+        uptime_check_expected_final_redirect_url: { type: ["string", "null"] }
         uptime_check_failed_notification_threshold: { type: integer }
         uptime_check_http_verb: { type: string }
         uptime_check_timeout: { type: integer }
         uptime_check_max_redirect_count: { type: integer }
         uptime_check_payload:
           type: array
-          items: { $ref: '#/components/schemas/NameValuePair' }
+          items: { $ref: "#/components/schemas/NameValuePair" }
         uptime_check_valid_status_codes:
           type: array
           items: { type: string }
         uptime_check_look_for_string:
-          type: ['string', 'null']
+          type: ["string", "null"]
         uptime_check_absent_string:
-          type: ['string', 'null']
+          type: ["string", "null"]
         uptime_check_expected_response_headers:
           type: array
-          items: { $ref: '#/components/schemas/ExpectedHeader' }
+          items: { $ref: "#/components/schemas/ExpectedHeader" }
         http_client_headers:
           type: array
-          items: { $ref: '#/components/schemas/NameValuePair' }
+          items: { $ref: "#/components/schemas/NameValuePair" }
         performance_threshold_in_ms: { type: integer }
         performance_change_percentage: { type: integer }
         crawler_headers:
           type: array
-          items: { $ref: '#/components/schemas/NameValuePair' }
+          items: { $ref: "#/components/schemas/NameValuePair" }
         broken_links_check_include_external_links: { type: boolean }
         broken_link_types:
           type: array
@@ -3357,8 +3409,9 @@ components:
         application_health_check_result_url: { type: string, format: uri }
         application_health_headers:
           type: array
-          items: { $ref: '#/components/schemas/NameValuePair' }
-        certificate_health_check_expires_soon_threshold_in_days: { type: integer }
+          items: { $ref: "#/components/schemas/NameValuePair" }
+        certificate_health_check_expires_soon_threshold_in_days:
+          { type: integer }
         dns_check_nameservers_in_sync: { type: boolean }
         dns_monitor_main_domain: { type: boolean }
         dns_extra_cnames:
@@ -3375,7 +3428,7 @@ components:
           items: { type: string, format: email }
         include_check_types_in_report:
           type: array
-          items: { $ref: '#/components/schemas/CheckType' }
+          items: { $ref: "#/components/schemas/CheckType" }
 
     UpdateMonitorRequest:
       type: object
@@ -3385,7 +3438,7 @@ components:
         type: { type: string, enum: [http, ping, tcp] }
         checks:
           type: array
-          items: { $ref: '#/components/schemas/CheckType' }
+          items: { $ref: "#/components/schemas/CheckType" }
         group_name: { type: string }
         label: { type: string }
         tags:
@@ -3394,7 +3447,7 @@ components:
         notes: { type: string }
         description: { type: string }
         uptime_check_settings:
-          $ref: '#/components/schemas/UptimeCheckSettings'
+          $ref: "#/components/schemas/UptimeCheckSettings"
         performance_check_settings:
           type: object
           properties:
@@ -3423,10 +3476,10 @@ components:
           properties:
             result_url: { type: string, format: uri }
             secret:
-              type: ['string', 'null']
+              type: ["string", "null"]
             headers:
               type: array
-              items: { $ref: '#/components/schemas/NameValuePair' }
+              items: { $ref: "#/components/schemas/NameValuePair" }
         certificate_health_check_settings:
           type: object
           properties:
@@ -3453,13 +3506,13 @@ components:
             cpu_slowdown_modifier: { type: number }
         crawler_headers:
           type: array
-          items: { $ref: '#/components/schemas/NameValuePair' }
+          items: { $ref: "#/components/schemas/NameValuePair" }
         send_report_to_emails:
           type: array
           items: { type: string, format: email }
         include_check_types_in_report:
           type: array
-          items: { $ref: '#/components/schemas/CheckType' }
+          items: { $ref: "#/components/schemas/CheckType" }
 
     UptimeCheckSettings:
       type: object
@@ -3467,27 +3520,27 @@ components:
       properties:
         location: { type: string }
         look_for_string:
-          type: ['string', 'null']
+          type: ["string", "null"]
         absent_string:
-          type: ['string', 'null']
+          type: ["string", "null"]
         expected_response_headers:
           type: array
-          items: { $ref: '#/components/schemas/ExpectedHeader' }
+          items: { $ref: "#/components/schemas/ExpectedHeader" }
         failed_notification_threshold: { type: integer }
         http_verb: { type: string }
         payload:
           type: array
-          items: { $ref: '#/components/schemas/NameValuePair' }
+          items: { $ref: "#/components/schemas/NameValuePair" }
         timeout: { type: integer }
         valid_status_codes:
           type: array
           items: { type: string }
         max_redirect_count: { type: integer }
         expected_final_redirect_url:
-          type: ['string', 'null']
+          type: ["string", "null"]
         http_client_headers:
           type: array
-          items: { $ref: '#/components/schemas/NameValuePair' }
+          items: { $ref: "#/components/schemas/NameValuePair" }
 
     ExpectedHeader:
       type: object
@@ -3510,42 +3563,55 @@ components:
       properties:
         id: { type: integer }
         type:
-          $ref: '#/components/schemas/CheckType'
+          $ref: "#/components/schemas/CheckType"
         label: { type: string }
         enabled: { type: boolean }
         latest_run_ended_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         latest_run_result:
           type: string
-          enum: [pending, succeeded, warning, failed, 'errored-or-timed-out']
+          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
         summary:
-          type: ['string', 'null']
+          type: ["string", "null"]
         settings:
           type: object
           description: Check-specific settings
         active_snooze:
-          type: ['object', 'null']
+          type: ["object", "null"]
           properties:
             id: { type: integer }
             starts_at: { type: string }
             ends_at: { type: string }
             snoozed_by: { type: string }
             unsnoozed_by:
-              type: ['string', 'null']
+              type: ["string", "null"]
             source: { type: string }
             created_at: { type: string }
 
     CheckType:
       type: string
       description: The type of check
-      enum: [uptime, performance, certificate_health, broken_links, mixed_content, lighthouse, cron, application_health, sitemap, dns, domain]
+      enum:
+        [
+          uptime,
+          performance,
+          certificate_health,
+          broken_links,
+          mixed_content,
+          lighthouse,
+          cron,
+          application_health,
+          sitemap,
+          dns,
+          domain,
+        ]
 
     CheckEnableToggle:
       type: object
       description: Request to enable or disable a check
       properties:
         id: { type: integer }
-        type: { $ref: '#/components/schemas/CheckType' }
+        type: { $ref: "#/components/schemas/CheckType" }
         enabled: { type: boolean }
 
     CheckRunRequest:
@@ -3563,7 +3629,7 @@ components:
       properties:
         result:
           type: string
-          enum: [pending, succeeded, warning, failed, 'errored-or-timed-out']
+          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
         summary: { type: string }
 
     UptimePoint:
@@ -3589,7 +3655,7 @@ components:
       properties:
         data:
           type: array
-          items: { $ref: '#/components/schemas/DowntimeRecord' }
+          items: { $ref: "#/components/schemas/DowntimeRecord" }
 
     UptimeMetricsHttpPoint:
       type: object
@@ -3622,7 +3688,7 @@ components:
       properties:
         data:
           type: array
-          items: { $ref: '#/components/schemas/UptimeMetricsHttpPoint' }
+          items: { $ref: "#/components/schemas/UptimeMetricsHttpPoint" }
 
     UptimeMetricsPingPoint:
       type: object
@@ -3644,7 +3710,7 @@ components:
       properties:
         data:
           type: array
-          items: { $ref: '#/components/schemas/UptimeMetricsPingPoint' }
+          items: { $ref: "#/components/schemas/UptimeMetricsPingPoint" }
 
     UptimeMetricsTcpPoint:
       type: object
@@ -3663,7 +3729,7 @@ components:
       properties:
         data:
           type: array
-          items: { $ref: '#/components/schemas/UptimeMetricsTcpPoint' }
+          items: { $ref: "#/components/schemas/UptimeMetricsTcpPoint" }
 
     BrokenLinksResponse:
       type: object
@@ -3686,7 +3752,8 @@ components:
       description: Update settings for the broken links check
       properties:
         broken_links_check_include_external_links: { type: boolean }
-        broken_links_whitelisted_urls_string: { type: string, description: 'Newline-separated list of URLs' }
+        broken_links_whitelisted_urls_string:
+          { type: string, description: "Newline-separated list of URLs" }
 
     MixedContentResponse:
       type: object
@@ -3753,11 +3820,11 @@ components:
       properties:
         data:
           type: array
-          items: { $ref: '#/components/schemas/DetectedCertificate' }
+          items: { $ref: "#/components/schemas/DetectedCertificate" }
         links:
           type: object
           additionalProperties:
-            type: ['object', 'string', 'null']
+            type: ["object", "string", "null"]
             description: The `links` object contains URLs for navigating through the paginated results. The `first` and `last` properties provide links to the first and last pages, respectively.
             example:
               first: https://ohdear.app/api/monitors/1/certificates?page=1
@@ -3784,7 +3851,7 @@ components:
             - type: integer
             - type: string
         name:
-          type: ['string', 'null']
+          type: ["string", "null"]
         starts_at: { type: string }
         ends_at: { type: string }
 
@@ -3794,7 +3861,7 @@ components:
       properties:
         data:
           type: array
-          items: { $ref: '#/components/schemas/MaintenancePeriod' }
+          items: { $ref: "#/components/schemas/MaintenancePeriod" }
 
     CreateMaintenancePeriodRequest:
       description: Request to create a new maintenance period
@@ -3805,10 +3872,15 @@ components:
           oneOf:
             - type: integer
             - type: string
-        starts_at: { type: string, description: 'Start date and time in Y-m-d H:i format' }
-        ends_at: { type: string, description: 'End date and time in Y-m-d H:i format' }
+        starts_at:
+          {
+            type: string,
+            description: "Start date and time in Y-m-d H:i format",
+          }
+        ends_at:
+          { type: string, description: "End date and time in Y-m-d H:i format" }
         name:
-          type: ['string', 'null']
+          type: ["string", "null"]
 
     StatusPage:
       description: A status page for a monitor
@@ -3839,13 +3911,13 @@ components:
     StatusPageWithUpdates:
       description: A status page with its updates
       allOf:
-        - $ref: '#/components/schemas/StatusPage'
+        - $ref: "#/components/schemas/StatusPage"
         - type: object
           properties:
             updates:
               type: array
               items:
-                $ref: '#/components/schemas/StatusPageUpdate'
+                $ref: "#/components/schemas/StatusPageUpdate"
 
     PaginatedStatusPages:
       description: A paginated list of status pages
@@ -3853,11 +3925,11 @@ components:
       properties:
         data:
           type: array
-          items: { $ref: '#/components/schemas/StatusPage' }
+          items: { $ref: "#/components/schemas/StatusPage" }
         links:
           type: object
           additionalProperties:
-            type: ['object', 'string', 'null']
+            type: ["object", "string", "null"]
         meta:
           type: object
           properties:
@@ -3907,7 +3979,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/StatusPageUpdate'
+            $ref: "#/components/schemas/StatusPageUpdate"
 
     StatusPageUpdate:
       type: object
@@ -3917,7 +3989,8 @@ components:
         title: { type: string }
         text: { type: string }
         pinned: { type: boolean }
-        severity: { type: string, enum: [info, warning, high, resolved, scheduled] }
+        severity:
+          { type: string, enum: [info, warning, high, resolved, scheduled] }
         time: { type: string }
         status_page_url: { type: string, format: uri }
 
@@ -3929,8 +4002,9 @@ components:
         status_page_id: { type: integer }
         title: { type: string }
         text: { type: string }
-        severity: { type: string, enum: [info, warning, high, resolved, scheduled] }
-        time: { type: string, description: 'UTC Y-m-d H:i' }
+        severity:
+          { type: string, enum: [info, warning, high, resolved, scheduled] }
+        time: { type: string, description: "UTC Y-m-d H:i" }
         pinned: { type: boolean }
 
     CronCheck:
@@ -3943,13 +4017,13 @@ components:
         type: { type: string, enum: [simple, cron] }
         description: { type: string }
         frequency_in_minutes:
-          type: ['integer', 'null']
+          type: ["integer", "null"]
         grace_time_in_minutes:
-          type: ['integer', 'null']
+          type: ["integer", "null"]
         cron_expression:
-          type: ['string', 'null']
+          type: ["string", "null"]
         server_timezone:
-          type: ['string', 'null']
+          type: ["string", "null"]
         ping_url: { type: string, format: uri }
         created_at: { type: string }
         latest_result: { type: string }
@@ -3964,7 +4038,7 @@ components:
         name: { type: string }
         latest_result: { type: string }
         latest_run_ended_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
 
     CronChecksResponse:
       type: object
@@ -3973,7 +4047,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/CronCheck'
+            $ref: "#/components/schemas/CronCheck"
 
     PaginatedMonitors:
       type: object
@@ -3982,9 +4056,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Monitor'
+            $ref: "#/components/schemas/Monitor"
         links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
         meta:
           type: object
           properties:
@@ -3999,7 +4073,20 @@ components:
     NotificationChannel:
       type: string
       description: The notification channel type
-      enum: [mail, discord, microsoftTeams, pushover, slack, slackApi, telegram, sms, webhooks, opsgenie, pagerDuty]
+      enum:
+        [
+          mail,
+          discord,
+          microsoftTeams,
+          pushover,
+          slack,
+          slackApi,
+          telegram,
+          sms,
+          webhooks,
+          opsgenie,
+          pagerDuty,
+        ]
 
     NotificationDestination:
       type: object
@@ -4008,7 +4095,7 @@ components:
         id: { type: integer }
         team_id: { type: integer }
         channel:
-          $ref: '#/components/schemas/NotificationChannel'
+          $ref: "#/components/schemas/NotificationChannel"
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4021,7 +4108,7 @@ components:
       type: object
       description: A team-level notification destination
       allOf:
-        - $ref: '#/components/schemas/NotificationDestination'
+        - $ref: "#/components/schemas/NotificationDestination"
 
     MonitorNotificationDestination:
       type: object
@@ -4029,7 +4116,7 @@ components:
       properties:
         id: { type: integer }
         channel:
-          $ref: '#/components/schemas/NotificationChannel'
+          $ref: "#/components/schemas/NotificationChannel"
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4051,7 +4138,7 @@ components:
             slug: { type: string }
         team_id: { type: integer }
         channel:
-          $ref: '#/components/schemas/NotificationChannel'
+          $ref: "#/components/schemas/NotificationChannel"
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4077,9 +4164,9 @@ components:
             tags:
               type: array
               items:
-                $ref: '#/components/schemas/Tag'
+                $ref: "#/components/schemas/Tag"
         channel:
-          $ref: '#/components/schemas/NotificationChannel'
+          $ref: "#/components/schemas/NotificationChannel"
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4093,15 +4180,15 @@ components:
       description: A tag for organizing monitors
       properties:
         id:
-          type: ['integer', 'null']
+          type: ["integer", "null"]
         team_id: { type: integer }
         team_name: { type: string }
         name: { type: string }
         slug: { type: string }
         created_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         updated_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         sites:
           type: array
           items: { type: integer }
@@ -4119,7 +4206,7 @@ components:
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/Tag'
+            $ref: "#/components/schemas/Tag"
 
     ManagedTeam:
       type: object
@@ -4140,7 +4227,7 @@ components:
         email: { type: string, format: email }
         current_team_id: { type: integer }
         profile_photo_path:
-          type: ['string', 'null']
+          type: ["string", "null"]
         profile_photo_url: { type: string, format: uri }
         created_at: { type: string, format: date-time }
         updated_at: { type: string, format: date-time }
@@ -4157,9 +4244,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/ManagedTeam'
+            $ref: "#/components/schemas/ManagedTeam"
         links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
         meta:
           type: object
           properties:
@@ -4175,14 +4262,14 @@ components:
       description: Response containing a single managed team
       properties:
         data:
-          $ref: '#/components/schemas/ManagedTeam'
+          $ref: "#/components/schemas/ManagedTeam"
 
     ManagedTeamUserResponse:
       type: object
       description: Response containing a single managed team user
       properties:
         data:
-          $ref: '#/components/schemas/ManagedTeamUser'
+          $ref: "#/components/schemas/ManagedTeamUser"
 
     CreateManagedTeamRequest:
       type: object
@@ -4212,7 +4299,7 @@ components:
           type: string
           description: Full name of the new user
         role:
-          $ref: '#/components/schemas/ManagedTeamRole'
+          $ref: "#/components/schemas/ManagedTeamRole"
 
     LoginLinkResponse:
       type: object
@@ -4269,7 +4356,7 @@ components:
           type: array
           description: List of cron checks to sync. Any existing cron checks not in this list will be deleted.
           items:
-            $ref: '#/components/schemas/CreateCronCheckRequest'
+            $ref: "#/components/schemas/CreateCronCheckRequest"
 
     DnsHistoryItem:
       type: object
@@ -4307,20 +4394,20 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/DnsHistoryItem'
+            $ref: "#/components/schemas/DnsHistoryItem"
 
     DomainInfo:
       type: object
       description: Domain registration information from RDAP
       properties:
         expires_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         registered_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         last_changed_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         last_updated_in_rdap_db_at:
-          type: ['string', 'null']
+          type: ["string", "null"]
         domain_statuses:
           type: object
           additionalProperties: { type: boolean }
@@ -4352,7 +4439,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/ApplicationHealthCheckHistoryItem'
+            $ref: "#/components/schemas/ApplicationHealthCheckHistoryItem"
 
     LighthouseReport:
       type: object
@@ -4391,9 +4478,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/LighthouseReport'
+            $ref: "#/components/schemas/LighthouseReport"
         links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
         meta:
           type: object
           properties:
@@ -4416,16 +4503,16 @@ components:
         prompt: { type: string }
         text: { type: string }
         notification_title:
-          type: ['string', 'null']
+          type: ["string", "null"]
         notification_body:
-          type: ['string', 'null']
+          type: ["string", "null"]
         used_tools:
           type: array
           items: { type: string }
         used_prompt_tokens: { type: integer }
         used_completion_tokens: { type: integer }
         raw_response:
-          type: ['string', 'null']
+          type: ["string", "null"]
         started_at: { type: string }
         ended_at: { type: string }
         created_at: { type: string }
@@ -4437,9 +4524,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/AiResponse'
+            $ref: "#/components/schemas/AiResponse"
         links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
         meta:
           type: object
           properties:
@@ -4457,7 +4544,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Tag'
+            $ref: "#/components/schemas/Tag"
 
     CreateTagRequest:
       type: object
@@ -4482,9 +4569,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/TagGroup'
+            $ref: "#/components/schemas/TagGroup"
         links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
         meta:
           type: object
           properties:
@@ -4530,7 +4617,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/TeamNotificationDestination'
+            $ref: "#/components/schemas/TeamNotificationDestination"
 
     MonitorNotificationDestinationsResponse:
       type: object
@@ -4539,7 +4626,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/MonitorNotificationDestination'
+            $ref: "#/components/schemas/MonitorNotificationDestination"
 
     TagNotificationDestinationsResponse:
       type: object
@@ -4548,7 +4635,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/TagNotificationDestination'
+            $ref: "#/components/schemas/TagNotificationDestination"
 
     TagGroupNotificationDestinationsResponse:
       type: object
@@ -4557,7 +4644,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/TagGroupNotificationDestination'
+            $ref: "#/components/schemas/TagGroupNotificationDestination"
 
     CreateNotificationDestinationRequest:
       type: object
@@ -4565,7 +4652,7 @@ components:
       required: [channel, destination]
       properties:
         channel:
-          $ref: '#/components/schemas/NotificationChannel'
+          $ref: "#/components/schemas/NotificationChannel"
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4584,7 +4671,7 @@ components:
       description: Request to update a notification destination
       properties:
         channel:
-          $ref: '#/components/schemas/NotificationChannel'
+          $ref: "#/components/schemas/NotificationChannel"
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4599,7 +4686,7 @@ components:
           default: false
 
     NoContent:
-      type: 'null'
+      type: "null"
       description: No content returned
       properties: {}
 
@@ -4626,14 +4713,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/NoContent'
+            $ref: "#/components/schemas/NoContent"
 
     Unauthorized:
       description: Unauthenticated
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorMessage'
+            $ref: "#/components/schemas/ErrorMessage"
           examples:
             default:
               value:
@@ -4643,7 +4730,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           examples:
             default:
               value:
@@ -4653,7 +4740,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           examples:
             default:
               value:
@@ -4663,7 +4750,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           examples:
             missing_url:
               value:

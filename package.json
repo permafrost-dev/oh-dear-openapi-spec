@@ -32,6 +32,7 @@
     "lint": "npm run lint:open-api && npm run lint:arazzo"
   },
   "dependencies": {
+    "@quobix/vacuum": "^0.23.8",
     "@redocly/cli": "^2.5.0",
     "@stoplight/spectral-cli": "^6.15.0"
   }
