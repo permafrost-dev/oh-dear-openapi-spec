@@ -1,5 +1,7 @@
 openapi: 3.1.2
 jsonSchemaDialect: https://spec.openapis.org/oas/3.1/dialect/base
+schema:
+  $ref: ./oh-dear-schema.json
 info:
   title: Oh Dear API
   version: '1.0.0'
@@ -152,17 +154,17 @@ paths:
                         updated_at: '2019-09-16 07:25:00'
                     links:
                       first: https://ohdear.app/api/monitors?page%5Bnumber%5D=1
-                      last: https://ohdear.app/api/monitors?page%5Bnumber%5D=1
+                      last: https://ohdear.app/api/monitors?page%5Bnumber%5D=5
                       prev: null
-                      next: null
+                      next: https://ohdear.app/api/monitors?page%5Bnumber%5D=2
                     meta:
                       current_page: 1
                       from: 1
-                      last_page: 1
+                      last_page: 5
                       path: https://ohdear.app/api/monitors
-                      per_page: 200
-                      to: 1
-                      total: 1
+                      per_page: 100
+                      to: 100
+                      total: 500
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
     post:
