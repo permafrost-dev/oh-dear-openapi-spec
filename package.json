@@ -11,17 +11,13 @@
     "openapi",
     "oas"
   ],
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/permafrost-dev"
-  },
-  "homepage": "https://github.com/permafrost-dev/oh-dear-openapi-spec#readme",
+  "homepage": "https://github.com/ohdearapp/oh-dear-openapi-spec#readme",
   "bugs": {
-    "url": "https://github.com/permafrost-dev/oh-dear-openapi-spec/issues"
+    "url": "https://github.com/ohdearapp/oh-dear-openapi-spec/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/permafrost-dev/oh-dear-openapi-spec.git"
+    "url": "git+https://github.com/ohdearapp/oh-dear-openapi-spec.git"
   },
   "type": "module",
   "scripts": {
