@@ -8,561 +8,1259 @@ sourceDescriptions:
     url: oh-dear.openapi.yaml
 workflows:
   - workflowId: get-me-workflow
-    inputs:
-      $ref: '#/components/inputs/bearerAuth'
-    parameters:
-      - name: Authorization
-        value: Bearer {$inputs.bearerAuth}
-        in: header
     steps:
-      - stepId: fetch-current-user-step
+      - stepId: get-me-step
         operationId: $sourceDescriptions.openapi.getMe
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-monitors-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
-    steps:
-      - stepId: post-monitors-step
-        operationId: $sourceDescriptions.openapi.createMonitor
-        successCriteria:
-          - condition: $statusCode == 201
   - workflowId: get-monitors-workflow
-    inputs:
-      $ref: '#/components/inputs/bearerAuth'
-    parameters:
-      - name: Authorization
-        value: Bearer {$inputs.bearerAuth}
-        in: header
     steps:
       - stepId: get-monitors-step
         operationId: $sourceDescriptions.openapi.listMonitors
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: put-monitors-{monitorId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-monitors-workflow
     steps:
-      - stepId: put-monitors-{monitorId}-step
-        operationId: $sourceDescriptions.openapi.updateMonitor
+      - stepId: post-monitors-step
+        operationId: $sourceDescriptions.openapi.createMonitor
         successCriteria:
-          - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-workflow
+          - condition: $statusCode == 201
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-workflow
     steps:
       - stepId: get-monitors-{monitorId}-step
         operationId: $sourceDescriptions.openapi.getMonitor
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: delete-monitors-{monitorId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: put-monitors-{monitorId}-workflow
+    steps:
+      - stepId: put-monitors-{monitorId}-step
+        operationId: $sourceDescriptions.openapi.updateMonitor
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-monitors-{monitorId}-workflow
     steps:
       - stepId: delete-monitors-{monitorId}-step
         operationId: $sourceDescriptions.openapi.deleteMonitor
         successCriteria:
           - condition: $statusCode == 204
-  - workflowId: get-monitors-{monitorId}-check-summary-{checkType}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-check-summary-{checkType}-workflow
     steps:
       - stepId: get-monitors-{monitorId}-check-summary-{checkType}-step
         operationId: $sourceDescriptions.openapi.getCheckSummary
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-checks-{checkId}-enable-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-checks-{checkId}-enable-workflow
     steps:
       - stepId: post-checks-{checkId}-enable-step
         operationId: $sourceDescriptions.openapi.enableCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-checks-{checkId}-disable-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-checks-{checkId}-disable-workflow
     steps:
       - stepId: post-checks-{checkId}-disable-step
         operationId: $sourceDescriptions.openapi.disableCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-checks-{checkId}-request-run-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-checks-{checkId}-request-run-workflow
     steps:
       - stepId: post-checks-{checkId}-request-run-step
         operationId: $sourceDescriptions.openapi.requestCheckRun
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-checks-{checkId}-snooze-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-checks-{checkId}-snooze-workflow
     steps:
       - stepId: post-checks-{checkId}-snooze-step
         operationId: $sourceDescriptions.openapi.snoozeCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-checks-{checkId}-unsnooze-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-checks-{checkId}-unsnooze-workflow
     steps:
       - stepId: post-checks-{checkId}-unsnooze-step
         operationId: $sourceDescriptions.openapi.unsnoozeCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-cron-checks-{cronCheckId}-snooze-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-cron-checks-{cronCheckId}-snooze-workflow
     steps:
       - stepId: post-cron-checks-{cronCheckId}-snooze-step
         operationId: $sourceDescriptions.openapi.snoozeCronCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-cron-checks-{cronCheckId}-unsnooze-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-cron-checks-{cronCheckId}-unsnooze-workflow
     steps:
       - stepId: post-cron-checks-{cronCheckId}-unsnooze-step
         operationId: $sourceDescriptions.openapi.unsnoozeCronCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-application-health-checks-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-application-health-checks-workflow
     steps:
       - stepId: get-monitors-{monitorId}-application-health-checks-step
         operationId: $sourceDescriptions.openapi.listApplicationHealthChecks
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: >-
-      post-monitors-{monitorId}-application-health-checks-{healthCheckId}-snooze-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-monitors-{monitorId}-application-health-checks-{applicationHealthCheckId}-snooze-workflow
     steps:
-      - stepId: >-
-          post-monitors-{monitorId}-application-health-checks-{healthCheckId}-snooze-step
+      - stepId: post-monitors-{monitorId}-application-health-checks-{applicationHealthCheckId}-snooze-step
         operationId: $sourceDescriptions.openapi.snoozeApplicationHealthCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: >-
-      post-monitors-{monitorId}-application-health-checks-{healthCheckId}-unsnooze-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-monitors-{monitorId}-application-health-checks-{applicationHealthCheckId}-unsnooze-workflow
     steps:
-      - stepId: >-
-          post-monitors-{monitorId}-application-health-checks-{healthCheckId}-unsnooze-step
+      - stepId: post-monitors-{monitorId}-application-health-checks-{applicationHealthCheckId}-unsnooze-step
         operationId: $sourceDescriptions.openapi.unsnoozeApplicationHealthCheck
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-uptime-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-uptime-workflow
     steps:
       - stepId: get-monitors-{monitorId}-uptime-step
         operationId: $sourceDescriptions.openapi.getUptime
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-downtime-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-downtime-workflow
     steps:
       - stepId: get-monitors-{monitorId}-downtime-step
         operationId: $sourceDescriptions.openapi.getDowntime
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: delete-downtime-{downtimeId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: delete-downtime-{downtimeId}-workflow
     steps:
       - stepId: delete-downtime-{downtimeId}-step
         operationId: $sourceDescriptions.openapi.deleteDowntime
         successCriteria:
           - condition: $statusCode == 204
-  - workflowId: get-monitors-{monitorId}-http-uptime-metrics-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-http-uptime-metrics-workflow
     steps:
       - stepId: get-monitors-{monitorId}-http-uptime-metrics-step
         operationId: $sourceDescriptions.openapi.httpUptimeMetrics
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-ping-uptime-metrics-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-ping-uptime-metrics-workflow
     steps:
       - stepId: get-monitors-{monitorId}-ping-uptime-metrics-step
         operationId: $sourceDescriptions.openapi.pingUptimeMetrics
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-tcp-uptime-metrics-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-tcp-uptime-metrics-workflow
     steps:
       - stepId: get-monitors-{monitorId}-tcp-uptime-metrics-step
         operationId: $sourceDescriptions.openapi.tcpUptimeMetrics
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-broken-links-{monitorId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-broken-links-{monitorId}-workflow
     steps:
       - stepId: get-broken-links-{monitorId}-step
         operationId: $sourceDescriptions.openapi.listBrokenLinks
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-monitors-{monitorId}-add-to-broken-links-whitelist-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-monitors-{monitorId}-add-to-broken-links-whitelist-workflow
     steps:
       - stepId: post-monitors-{monitorId}-add-to-broken-links-whitelist-step
         operationId: $sourceDescriptions.openapi.addBrokenLinksWhitelistUrl
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: put-monitors-{monitorId}-update-broken-links-settings-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
-    steps:
-      - stepId: put-monitors-{monitorId}-update-broken-links-settings-step
-        operationId: $sourceDescriptions.openapi.updateBrokenLinksSettings
-        successCriteria:
-          - condition: $statusCode == 200
-  - workflowId: put-monitors-{monitorId}-update-uptime-check-payload-workflow
-    inputs:
-      $ref: '#/components/inputs/bearerAuth'
-    parameters:
-      - name: Authorization
-        value: Bearer {$inputs.bearerAuth}
-        in: header
-    steps:
-      - stepId: put-monitors-{monitorId}-update-uptime-check-payload-step
-        operationId: $sourceDescriptions.openapi.updateUptimeCheckPayload
-        successCriteria:
-          - condition: $statusCode == 200
   - workflowId: get-mixed-content-{monitorId}-workflow
-    inputs:
-      $ref: '#/components/inputs/bearerAuth'
-    parameters:
-      - name: Authorization
-        value: Bearer {$inputs.bearerAuth}
-        in: header
     steps:
       - stepId: get-mixed-content-{monitorId}-step
         operationId: $sourceDescriptions.openapi.listMixedContent
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-certificate-health-{monitorId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-certificate-health-{monitorId}-workflow
     steps:
       - stepId: get-certificate-health-{monitorId}-step
         operationId: $sourceDescriptions.openapi.getCertificateHealth
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-detected-certificates-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-detected-certificates-workflow
     steps:
       - stepId: get-monitors-{monitorId}-detected-certificates-step
         operationId: $sourceDescriptions.openapi.listDetectedCertificates
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-detected-certificates-{certificateId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-detected-certificates-{certificateId}-workflow
     steps:
       - stepId: get-monitors-{monitorId}-detected-certificates-{certificateId}-step
         operationId: $sourceDescriptions.openapi.getDetectedCertificate
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-monitors-{monitorId}-maintenance-periods-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-maintenance-periods-workflow
     steps:
       - stepId: get-monitors-{monitorId}-maintenance-periods-step
         operationId: $sourceDescriptions.openapi.listMaintenancePeriods
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-monitors-{monitorId}-start-maintenance-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-monitors-{monitorId}-start-maintenance-workflow
     steps:
       - stepId: post-monitors-{monitorId}-start-maintenance-step
         operationId: $sourceDescriptions.openapi.startMaintenance
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-monitors-{monitorId}-stop-maintenance-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-monitors-{monitorId}-stop-maintenance-workflow
     steps:
       - stepId: post-monitors-{monitorId}-stop-maintenance-step
         operationId: $sourceDescriptions.openapi.stopMaintenance
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-maintenance-periods-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-maintenance-periods-workflow
     steps:
       - stepId: post-maintenance-periods-step
         operationId: $sourceDescriptions.openapi.createMaintenancePeriod
         successCriteria:
           - condition: $statusCode == 201
-  - workflowId: delete-maintenance-periods-{maintenancePeriodId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: put-maintenance-periods-{maintenancePeriodId}-workflow
+    steps:
+      - stepId: put-maintenance-periods-{maintenancePeriodId}-step
+        operationId: $sourceDescriptions.openapi.updateMaintenancePeriod
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-maintenance-periods-{maintenancePeriodId}-workflow
     steps:
       - stepId: delete-maintenance-periods-{maintenancePeriodId}-step
         operationId: $sourceDescriptions.openapi.deleteMaintenancePeriod
         successCriteria:
           - condition: $statusCode == 204
-  - workflowId: post-status-pages-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
-    steps:
-      - stepId: post-status-pages-step
-        operationId: $sourceDescriptions.openapi.createStatusPage
-        successCriteria:
-          - condition: $statusCode == 201
   - workflowId: get-status-pages-workflow
-    inputs:
-      $ref: '#/components/inputs/bearerAuth'
-    parameters:
-      - name: Authorization
-        value: Bearer {$inputs.bearerAuth}
-        in: header
     steps:
       - stepId: get-status-pages-step
         operationId: $sourceDescriptions.openapi.listStatusPages
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: get-status-pages-{statusPageId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-status-pages-workflow
+    steps:
+      - stepId: post-status-pages-step
+        operationId: $sourceDescriptions.openapi.createStatusPage
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-status-pages-{statusPageId}-workflow
     steps:
       - stepId: get-status-pages-{statusPageId}-step
         operationId: $sourceDescriptions.openapi.getStatusPage
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: delete-status-pages-{statusPageId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: delete-status-pages-{statusPageId}-workflow
     steps:
       - stepId: delete-status-pages-{statusPageId}-step
         operationId: $sourceDescriptions.openapi.deleteStatusPage
         successCriteria:
           - condition: $statusCode == 204
-  - workflowId: post-status-pages-{statusPageId}-monitors-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-status-pages-{statusPageId}-monitors-workflow
     steps:
       - stepId: post-status-pages-{statusPageId}-monitors-step
         operationId: $sourceDescriptions.openapi.addStatusPageMonitors
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: delete-status-pages-{statusPageId}-monitors-{monitorId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: delete-status-pages-{statusPageId}-monitors-{monitorId}-workflow
     steps:
       - stepId: delete-status-pages-{statusPageId}-monitors-{monitorId}-step
         operationId: $sourceDescriptions.openapi.removeStatusPageMonitor
         successCriteria:
           - condition: $statusCode == 204
-  - workflowId: get-status-pages-{statusPageId}-updates-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-status-pages-{statusPageId}-updates-workflow
     steps:
       - stepId: get-status-pages-{statusPageId}-updates-step
         operationId: $sourceDescriptions.openapi.listStatusPageUpdates
         successCriteria:
           - condition: $statusCode == 200
-  - workflowId: post-status-page-updates-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-status-page-updates-workflow
     steps:
       - stepId: post-status-page-updates-step
         operationId: $sourceDescriptions.openapi.createStatusPageUpdate
         successCriteria:
           - condition: $statusCode == 201
-  - workflowId: delete-status-page-updates-{updateId}-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: put-status-page-updates-{statusPageUpdateId}-workflow
     steps:
-      - stepId: delete-status-page-updates-{updateId}-step
+      - stepId: put-status-page-updates-{statusPageUpdateId}-step
+        operationId: $sourceDescriptions.openapi.updateStatusPageUpdate
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-status-page-updates-{statusPageUpdateId}-workflow
+    steps:
+      - stepId: delete-status-page-updates-{statusPageUpdateId}-step
         operationId: $sourceDescriptions.openapi.deleteStatusPageUpdate
         successCriteria:
           - condition: $statusCode == 204
-  - workflowId: get-monitors-{monitorId}-cron-checks-workflow
     inputs:
-      $ref: '#/components/inputs/bearerAuth'
+      $ref: "#/components/inputs/bearerAuth"
     parameters:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: get-monitors-{monitorId}-cron-checks-workflow
     steps:
       - stepId: get-monitors-{monitorId}-cron-checks-step
         operationId: $sourceDescriptions.openapi.listCronChecks
         successCriteria:
           - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-monitors-{monitorId}-cron-checks-workflow
+    steps:
+      - stepId: post-monitors-{monitorId}-cron-checks-step
+        operationId: $sourceDescriptions.openapi.createCronCheck
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-monitors-{monitorId}-cron-checks-sync-workflow
+    steps:
+      - stepId: post-monitors-{monitorId}-cron-checks-sync-step
+        operationId: $sourceDescriptions.openapi.syncCronChecks
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-cron-checks-{cronCheckDefinitionId}-workflow
+    steps:
+      - stepId: put-cron-checks-{cronCheckDefinitionId}-step
+        operationId: $sourceDescriptions.openapi.updateCronCheck
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-cron-checks-{cronCheckDefinitionId}-workflow
+    steps:
+      - stepId: delete-cron-checks-{cronCheckDefinitionId}-step
+        operationId: $sourceDescriptions.openapi.deleteCronCheck
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-dns-history-items-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-dns-history-items-step
+        operationId: $sourceDescriptions.openapi.getDnsHistory
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-domain-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-domain-step
+        operationId: $sourceDescriptions.openapi.getDomainInfo
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-application-health-checks-{applicationHealthCheckId}-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-application-health-checks-{applicationHealthCheckId}-step
+        operationId: $sourceDescriptions.openapi.getApplicationHealthCheckHistory
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-lighthouse-reports-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-lighthouse-reports-step
+        operationId: $sourceDescriptions.openapi.listLighthouseReports
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-lighthouse-reports-latest-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-lighthouse-reports-latest-step
+        operationId: $sourceDescriptions.openapi.getLatestLighthouseReport
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-lighthouse-reports-{lighthouseReportId}-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-lighthouse-reports-{lighthouseReportId}-step
+        operationId: $sourceDescriptions.openapi.getLighthouseReport
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-ai-responses-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-ai-responses-step
+        operationId: $sourceDescriptions.openapi.listAiResponses
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-ai-responses-latest-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-ai-responses-latest-step
+        operationId: $sourceDescriptions.openapi.getLatestAiResponse
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-ai-responses-{aiResponseId}-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-ai-responses-{aiResponseId}-step
+        operationId: $sourceDescriptions.openapi.getAiResponse
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-tags-workflow
+    steps:
+      - stepId: get-tags-step
+        operationId: $sourceDescriptions.openapi.listTags
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-tags-workflow
+    steps:
+      - stepId: post-tags-step
+        operationId: $sourceDescriptions.openapi.createTag
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-tag-groups-workflow
+    steps:
+      - stepId: get-tag-groups-step
+        operationId: $sourceDescriptions.openapi.listTagGroups
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-tag-groups-workflow
+    steps:
+      - stepId: post-tag-groups-step
+        operationId: $sourceDescriptions.openapi.createTagGroup
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-tag-groups-{tagGroupId}-workflow
+    steps:
+      - stepId: put-tag-groups-{tagGroupId}-step
+        operationId: $sourceDescriptions.openapi.updateTagGroup
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-tag-groups-{tagGroupId}-workflow
+    steps:
+      - stepId: delete-tag-groups-{tagGroupId}-step
+        operationId: $sourceDescriptions.openapi.deleteTagGroup
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-team-notification-destinations-workflow
+    steps:
+      - stepId: get-team-notification-destinations-step
+        operationId: $sourceDescriptions.openapi.listTeamNotificationDestinations
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-team-notification-destinations-{teamId}-workflow
+    steps:
+      - stepId: post-team-notification-destinations-{teamId}-step
+        operationId: $sourceDescriptions.openapi.createTeamNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-team-notification-destinations-{teamId}-destination-{destinationId}-workflow
+    steps:
+      - stepId: put-team-notification-destinations-{teamId}-destination-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.updateTeamNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-team-notification-destinations-{teamId}-destination-{destinationId}-workflow
+    steps:
+      - stepId: delete-team-notification-destinations-{teamId}-destination-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.deleteTeamNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-notification-destinations-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-notification-destinations-step
+        operationId: $sourceDescriptions.openapi.listMonitorNotificationDestinations
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-monitors-{monitorId}-notification-destinations-workflow
+    steps:
+      - stepId: post-monitors-{monitorId}-notification-destinations-step
+        operationId: $sourceDescriptions.openapi.createMonitorNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-monitors-{monitorId}-notification-destinations-{destinationId}-workflow
+    steps:
+      - stepId: put-monitors-{monitorId}-notification-destinations-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.updateMonitorNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-monitors-{monitorId}-notification-destinations-{destinationId}-workflow
+    steps:
+      - stepId: delete-monitors-{monitorId}-notification-destinations-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.deleteMonitorNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-tags-notification-destinations-workflow
+    steps:
+      - stepId: get-tags-notification-destinations-step
+        operationId: $sourceDescriptions.openapi.listTagNotificationDestinations
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-tags-{tagId}-notification-destinations-workflow
+    steps:
+      - stepId: post-tags-{tagId}-notification-destinations-step
+        operationId: $sourceDescriptions.openapi.createTagNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-tags-{tagId}-notification-destinations-{destinationId}-workflow
+    steps:
+      - stepId: put-tags-{tagId}-notification-destinations-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.updateTagNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-tags-{tagId}-notification-destinations-destination-{destinationId}-workflow
+    steps:
+      - stepId: delete-tags-{tagId}-notification-destinations-destination-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.deleteTagNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-tag-groups-{tagGroupId}-notification-destinations-workflow
+    steps:
+      - stepId: get-tag-groups-{tagGroupId}-notification-destinations-step
+        operationId: $sourceDescriptions.openapi.listTagGroupNotificationDestinations
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-tag-groups-{tagGroupId}-notification-destinations-workflow
+    steps:
+      - stepId: post-tag-groups-{tagGroupId}-notification-destinations-step
+        operationId: $sourceDescriptions.openapi.createTagGroupNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-workflow
+    steps:
+      - stepId: put-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.updateTagGroupNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-workflow
+    steps:
+      - stepId: delete-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-step
+        operationId: $sourceDescriptions.openapi.deleteTagGroupNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-reseller-{resellerTeamId}-managed-teams-workflow
+    steps:
+      - stepId: get-reseller-{resellerTeamId}-managed-teams-step
+        operationId: $sourceDescriptions.openapi.listManagedTeams
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-reseller-{resellerTeamId}-managed-teams-workflow
+    steps:
+      - stepId: post-reseller-{resellerTeamId}-managed-teams-step
+        operationId: $sourceDescriptions.openapi.createManagedTeam
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-workflow
+    steps:
+      - stepId: get-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-step
+        operationId: $sourceDescriptions.openapi.getManagedTeam
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-workflow
+    steps:
+      - stepId: delete-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-step
+        operationId: $sourceDescriptions.openapi.deleteManagedTeam
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-decouple-workflow
+    steps:
+      - stepId: post-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-decouple-step
+        operationId: $sourceDescriptions.openapi.decoupleManagedTeam
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-users-workflow
+    steps:
+      - stepId: post-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-users-step
+        operationId: $sourceDescriptions.openapi.addUserToManagedTeam
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-users-{userId}-generate-login-link-workflow
+    steps:
+      - stepId: post-reseller-{resellerTeamId}-managed-teams-{managedTeamId}-users-{userId}-generate-login-link-step
+        operationId: $sourceDescriptions.openapi.generateLoginLinkForManagedTeamUser
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-ports-history-items-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-ports-history-items-step
+        operationId: $sourceDescriptions.openapi.listPortsHistoryItems
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-ports-history-items-{itemId}-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-ports-history-items-{itemId}-step
+        operationId: $sourceDescriptions.openapi.getPortsHistoryItem
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-dns-blocklist-history-items-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-dns-blocklist-history-items-step
+        operationId: $sourceDescriptions.openapi.listDnsBlocklistHistoryItems
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-dns-blocklist-history-items-{itemId}-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-dns-blocklist-history-items-{itemId}-step
+        operationId: $sourceDescriptions.openapi.getDnsBlocklistHistoryItem
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-sitemap-{monitorId}-workflow
+    steps:
+      - stepId: get-sitemap-{monitorId}-step
+        operationId: $sourceDescriptions.openapi.getSitemapResults
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-public-metrics-workflow
+    steps:
+      - stepId: get-public-metrics-step
+        operationId: $sourceDescriptions.openapi.getPublicMetrics
+        successCriteria:
+          - condition: $statusCode == 200
+  - workflowId: get-monitors-{monitorId}-recurring-maintenance-periods-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-recurring-maintenance-periods-step
+        operationId: $sourceDescriptions.openapi.listRecurringMaintenancePeriods
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-recurring-maintenance-periods-{recurringMaintenancePeriodId}-workflow
+    steps:
+      - stepId: get-recurring-maintenance-periods-{recurringMaintenancePeriodId}-step
+        operationId: $sourceDescriptions.openapi.getRecurringMaintenancePeriod
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-recurring-maintenance-periods-{recurringMaintenancePeriodId}-workflow
+    steps:
+      - stepId: put-recurring-maintenance-periods-{recurringMaintenancePeriodId}-step
+        operationId: $sourceDescriptions.openapi.updateRecurringMaintenancePeriod
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-recurring-maintenance-periods-{recurringMaintenancePeriodId}-workflow
+    steps:
+      - stepId: delete-recurring-maintenance-periods-{recurringMaintenancePeriodId}-step
+        operationId: $sourceDescriptions.openapi.deleteRecurringMaintenancePeriod
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-recurring-maintenance-periods-workflow
+    steps:
+      - stepId: post-recurring-maintenance-periods-step
+        operationId: $sourceDescriptions.openapi.createRecurringMaintenancePeriod
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-url-{monitorUrl}-workflow
+    steps:
+      - stepId: get-monitors-url-{monitorUrl}-step
+        operationId: $sourceDescriptions.openapi.getMonitorByUrl
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-monitors-{monitorId}-dns-history-items-{dnsHistoryItemId}-workflow
+    steps:
+      - stepId: get-monitors-{monitorId}-dns-history-items-{dnsHistoryItemId}-step
+        operationId: $sourceDescriptions.openapi.getDnsHistoryItem
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: get-status-page-update-templates-workflow
+    steps:
+      - stepId: get-status-page-update-templates-step
+        operationId: $sourceDescriptions.openapi.listStatusPageUpdateTemplates
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-status-page-update-templates-workflow
+    steps:
+      - stepId: post-status-page-update-templates-step
+        operationId: $sourceDescriptions.openapi.createStatusPageUpdateTemplate
+        successCriteria:
+          - condition: $statusCode == 201
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: put-status-page-update-templates-{statusPageUpdateTemplateId}-workflow
+    steps:
+      - stepId: put-status-page-update-templates-{statusPageUpdateTemplateId}-step
+        operationId: $sourceDescriptions.openapi.updateStatusPageUpdateTemplate
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: delete-status-page-update-templates-{statusPageUpdateTemplateId}-workflow
+    steps:
+      - stepId: delete-status-page-update-templates-{statusPageUpdateTemplateId}-step
+        operationId: $sourceDescriptions.openapi.deleteStatusPageUpdateTemplate
+        successCriteria:
+          - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
 components:
   inputs:
     bearerAuth:
