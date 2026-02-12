@@ -1261,6 +1261,228 @@ workflows:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+
+  # ── Real-world usage scenarios ──────────────────────────────────────
+
+  - workflowId: monitor-lifecycle-scenario
+    description: >-
+      Real-world scenario: create a new HTTP monitor, verify it was created,
+      update its label, then tear it down by deleting it.
+    inputs:
+      type: object
+      properties:
+        bearerAuth:
+          type: string
+          format: password
+        teamId:
+          type: integer
+          description: The team to create the monitor in.
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+    steps:
+      - stepId: create-monitor
+        operationId: $sourceDescriptions.openapi.createMonitor
+        requestBody:
+          contentType: application/json
+          payload:
+            url: https://example.com
+            team_id: $inputs.teamId
+            type: http
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          monitorId: $response.body#/id
+      - stepId: verify-monitor-created
+        operationId: $sourceDescriptions.openapi.getMonitor
+        parameters:
+          - name: monitorId
+            in: path
+            value: $steps.create-monitor.outputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: update-monitor-label
+        operationId: $sourceDescriptions.openapi.updateMonitor
+        parameters:
+          - name: monitorId
+            in: path
+            value: $steps.create-monitor.outputs.monitorId
+        requestBody:
+          contentType: application/json
+          payload:
+            label: Updated Example Monitor
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: delete-monitor
+        operationId: $sourceDescriptions.openapi.deleteMonitor
+        parameters:
+          - name: monitorId
+            in: path
+            value: $steps.create-monitor.outputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 204
+
+  - workflowId: maintenance-with-status-update-scenario
+    description: >-
+      Real-world scenario: put a monitor into maintenance mode, post a status
+      page update to inform users, stop maintenance, then clean up the update.
+    inputs:
+      type: object
+      properties:
+        bearerAuth:
+          type: string
+          format: password
+        monitorId:
+          type: integer
+          description: The monitor to put into maintenance mode.
+        statusPageId:
+          type: integer
+          description: The status page to post the update on.
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+    steps:
+      - stepId: start-maintenance
+        operationId: $sourceDescriptions.openapi.startMaintenance
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        requestBody:
+          contentType: application/json
+          payload:
+            stop_maintenance_after_seconds: "3600"
+            name: Scheduled maintenance
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: post-status-update
+        operationId: $sourceDescriptions.openapi.createStatusPageUpdate
+        requestBody:
+          contentType: application/json
+          payload:
+            status_page_id: $inputs.statusPageId
+            title: Scheduled maintenance in progress
+            text: We are performing scheduled maintenance. Service will be restored shortly.
+            severity: info
+            time: "2024-01-15 10:00"
+            pinned: true
+        successCriteria:
+          - condition: $statusCode == 201
+        outputs:
+          updateId: $response.body#/id
+      - stepId: stop-maintenance
+        operationId: $sourceDescriptions.openapi.stopMaintenance
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: delete-status-update
+        operationId: $sourceDescriptions.openapi.deleteStatusPageUpdate
+        parameters:
+          - name: updateId
+            in: path
+            value: $steps.post-status-update.outputs.updateId
+        successCriteria:
+          - condition: $statusCode == 204
+
+  - workflowId: lighthouse-seo-review-scenario
+    description: >-
+      Real-world scenario: review Lighthouse SEO performance by listing all
+      reports for a monitor, then fetching the latest report for detailed analysis.
+    inputs:
+      type: object
+      properties:
+        bearerAuth:
+          type: string
+          format: password
+        monitorId:
+          type: integer
+          description: The monitor to review Lighthouse reports for.
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+    steps:
+      - stepId: list-lighthouse-reports
+        operationId: $sourceDescriptions.openapi.listLighthouseReports
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: get-latest-report
+        operationId: $sourceDescriptions.openapi.getLatestLighthouseReport
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200 || $statusCode == 404
+
+  - workflowId: site-health-audit-scenario
+    description: >-
+      Real-world scenario: perform a comprehensive health audit of a monitored
+      site by checking uptime, broken links, certificate health, and mixed content.
+    inputs:
+      type: object
+      properties:
+        bearerAuth:
+          type: string
+          format: password
+        monitorId:
+          type: integer
+          description: The monitor to audit.
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+    steps:
+      - stepId: get-monitor-details
+        operationId: $sourceDescriptions.openapi.getMonitor
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200
+      - stepId: check-uptime
+        operationId: $sourceDescriptions.openapi.getUptime
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200 || $statusCode == 404
+      - stepId: check-broken-links
+        operationId: $sourceDescriptions.openapi.listBrokenLinks
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200 || $statusCode == 404
+      - stepId: check-certificate-health
+        operationId: $sourceDescriptions.openapi.getCertificateHealth
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200 || $statusCode == 404
+      - stepId: check-mixed-content
+        operationId: $sourceDescriptions.openapi.listMixedContent
+        parameters:
+          - name: monitorId
+            in: path
+            value: $inputs.monitorId
+        successCriteria:
+          - condition: $statusCode == 200 || $statusCode == 404
+
 components:
   inputs:
     bearerAuth:
