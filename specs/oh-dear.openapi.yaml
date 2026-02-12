@@ -635,9 +635,9 @@ paths:
             examples:
               withHeaders:
                 value:
-                  http_client_headers:
-                    User-Agent: Custom User Agent
-                    Authorization: Bearer token123
+                  httpClientHeaders:
+                    - name: X-Custom-Header
+                      value: custom-value
       responses:
         "200":
           description: Check details after run request accepted
@@ -1066,11 +1066,12 @@ paths:
                 success:
                   value:
                     data:
-                      - crawled_url: https://example.com/broken
+                      - status_code: 404
+                        crawled_url: https://example.com/broken
                         relative_crawled_url: /broken
-                        status_code: 404
                         found_on_url: https://example.com
-                        relative_found_on_url: https://example.com
+                        relative_found_on_url: /
+                        link_text: Click here
                         internal: true
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
@@ -1379,17 +1380,7 @@ paths:
                   minimum: 1
                   description: Number of seconds to delay the stop
       responses:
-        "200":
-          description: Maintenance stopped
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message: { type: string }
-              examples:
-                success:
-                  value: { message: "Maintenance stopped." }
+        "204": { $ref: "#/components/responses/NoContent" }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
@@ -3261,6 +3252,35 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  checkUrl: { type: string, format: uri }
+                  totalIssuesCount: { type: integer }
+                  totalUrlCount: { type: integer }
+                  hasIssues: { type: boolean }
+                  issues:
+                    type: array
+                    items: { type: object, additionalProperties: true }
+                  sitemapIndexes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url: { type: string, format: uri }
+                        issues:
+                          type: array
+                          items: { type: object, additionalProperties: true }
+                  sitemaps:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url: { type: string, format: uri }
+                        urlCount: { type: integer }
+                        checkedReachabilityOfAllUrls: { type: boolean }
+                        issuesCount: { type: integer }
+                        issues:
+                          type: array
+                          items: { type: object, additionalProperties: true }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
@@ -3797,24 +3817,97 @@ components:
               type: ["integer", "null"]
         broken_links_check_settings:
           type: ["object", "null"]
+          properties:
+            whitelisted_urls:
+              type: array
+              items: { type: string }
+            check_include_external_links: { type: boolean }
+            types:
+              type: array
+              items: { type: string }
+            do_not_crawl_urls:
+              type: array
+              items: { type: string }
+            force_crawl_urls:
+              type: array
+              items: { type: string }
+            new_links_only: { type: boolean }
         dns_check_settings:
           type: ["object", "null"]
+          properties:
+            extra_cnames:
+              type: array
+              items: { type: string }
+            monitor_main_domain: { type: boolean }
+            ignored_record_types:
+              type: array
+              items: { type: string }
+            check_nameservers_in_sync: { type: boolean }
         lighthouse_check_settings:
           type: ["object", "null"]
+          properties:
+            continent: { type: string }
+            device_emulation: { type: string }
+            notification_settings:
+              type: ["object", "null"]
+            http_client_headers:
+              type: array
+              items: { $ref: "#/components/schemas/NameValuePair" }
         application_health_check_settings:
           type: ["object", "null"]
+          properties:
+            result_url:
+              type: ["string", "null"]
+            secret: { type: string }
+            headers:
+              type: array
+              items: { $ref: "#/components/schemas/NameValuePair" }
         domain_check_settings:
           type: ["object", "null"]
+          properties:
+            not_supported_reason:
+              type: ["string", "null"]
+            expires_soon_threshold_in_days:
+              type: ["integer", "null"]
         performance_check_settings:
           type: ["object", "null"]
+          properties:
+            threshold_in_ms: { type: integer }
+            change_percentage: { type: integer }
         sitemap_check_settings:
           type: ["object", "null"]
+          properties:
+            path: { type: string }
+            speed: { type: string }
         ports_check_settings:
           type: ["object", "null"]
+          properties:
+            expected_open_ports:
+              type: array
+              items: { type: integer }
+            expected_closed_ports:
+              type: array
+              items: { type: integer }
+            timeout_per_port_ms: { type: integer }
+            failure_threshold: { type: integer }
         dns_blocklist_check_settings:
           type: ["object", "null"]
+          properties:
+            use_all_blocklists: { type: boolean }
+            enabled_blocklists:
+              type: array
+              items: { type: string }
         ai_check_settings:
           type: ["object", "null"]
+          properties:
+            prompt: { type: string }
+            frequency_unit: { type: string }
+            frequency_value: { type: integer }
+            suppress_repeated_success_notifications: { type: boolean }
+            throttle_failed_interval_unit: { type: string }
+            throttle_failed_interval_value: { type: integer }
+            html_stripping_level: { type: string }
+            location: { type: string }
         crawler_headers:
           type: ["array", "null"]
           items: { $ref: "#/components/schemas/NameValuePair" }
@@ -3850,60 +3943,81 @@ components:
           items: { type: string }
         notes: { type: string }
         description: { type: string }
-        uptime_check_location: { type: string }
-        uptime_check_expected_final_redirect_url: { type: ["string", "null"] }
-        uptime_check_failed_notification_threshold: { type: integer }
-        uptime_check_http_verb: { type: string }
-        uptime_check_timeout: { type: integer }
-        uptime_check_max_redirect_count: { type: integer }
-        uptime_check_payload:
-          type: array
-          items: { $ref: "#/components/schemas/NameValuePair" }
-        uptime_check_valid_status_codes:
-          type: array
-          items: { type: string }
-        uptime_check_look_for_string:
-          type: ["string", "null"]
-        uptime_check_absent_string:
-          type: ["string", "null"]
-        uptime_check_expected_response_headers:
-          type: array
-          items: { $ref: "#/components/schemas/ExpectedHeader" }
-        http_client_headers:
-          type: array
-          items: { $ref: "#/components/schemas/NameValuePair" }
-        performance_threshold_in_ms: { type: integer }
-        performance_change_percentage: { type: integer }
-        crawler_headers:
-          type: array
-          items: { $ref: "#/components/schemas/NameValuePair" }
-        broken_links_check_include_external_links: { type: boolean }
-        broken_link_types:
-          type: array
-          items: { type: string }
-        broken_links_whitelisted_urls:
-          type: array
-          items: { type: string, format: uri }
-        respect_robots: { type: boolean }
-        sitemap_path: { type: string }
-        sitemap_speed: { type: string, enum: [default, fast, slow, slowest, fastest] }
-        application_health_check_result_url: { type: string, format: uri }
-        application_health_headers:
-          type: array
-          items: { $ref: "#/components/schemas/NameValuePair" }
-        certificate_health_check_expires_soon_threshold_in_days:
-          { type: integer }
-        dns_check_nameservers_in_sync: { type: boolean }
-        dns_monitor_main_domain: { type: boolean }
-        dns_extra_cnames:
-          type: array
-          items: { type: string }
-        dns_ignored_record_types:
-          type: array
-          items: { type: string }
-        domain_check_expires_soon_threshold_in_days: { type: integer }
-        lighthouse_check_continent: { type: string }
-        lighthouse_cpu_slowdown_modifier: { type: number }
+        uptime_check_settings:
+          $ref: "#/components/schemas/UptimeCheckSettings"
+        performance_check_settings:
+          type: object
+          properties:
+            threshold_in_ms: { type: integer }
+            change_percentage: { type: integer }
+        crawler_settings:
+          type: object
+          properties:
+            headers:
+              type: array
+              items: { $ref: "#/components/schemas/NameValuePair" }
+        broken_links_check_settings:
+          type: object
+          properties:
+            whitelisted_urls:
+              type: array
+              items: { type: string }
+            check_include_external_links: { type: boolean }
+            types:
+              type: array
+              items: { type: string }
+            force_crawl_urls:
+              type: array
+              items: { type: string }
+            new_links_only: { type: boolean }
+        sitemap_check_settings:
+          type: object
+          properties:
+            path: { type: string }
+            speed:
+              type: string
+              enum: [default, fast, slow, slowest, fastest]
+        application_health_check_settings:
+          type: object
+          properties:
+            result_url: { type: string, format: uri }
+            headers:
+              type: array
+              items: { $ref: "#/components/schemas/NameValuePair" }
+        certificate_health_check_settings:
+          type: object
+          properties:
+            expires_soon_threshold_in_days: { type: integer }
+        dns_check_settings:
+          type: object
+          properties:
+            extra_cnames:
+              type: array
+              items: { type: string }
+            monitor_main_domain: { type: boolean }
+            ignored_record_types:
+              type: array
+              items: { type: string }
+            check_nameservers_in_sync: { type: boolean }
+        domain_check_settings:
+          type: object
+          properties:
+            expires_soon_threshold_in_days: { type: integer }
+        lighthouse_check_settings:
+          type: object
+          properties:
+            continent: { type: string }
+            device_emulation: { type: string }
+        ports_check_settings:
+          type: object
+          properties:
+            expected_open_ports:
+              type: array
+              items: { type: integer }
+            expected_closed_ports:
+              type: array
+              items: { type: integer }
+            timeout_per_port_ms: { type: integer }
         send_report_to_emails:
           type: array
           items: { type: string, format: email }
@@ -3916,7 +4030,6 @@ components:
       description: Request to update an existing monitor
       properties:
         url: { type: string, format: uri }
-        type: { type: string, enum: [http, ping, tcp, ai] }
         checks:
           type: array
           items: { $ref: "#/components/schemas/CheckType" }
@@ -4040,9 +4153,14 @@ components:
 
     UptimeCheckSettings:
       type: object
-      description: Settings for uptime checks
+      description: >
+        Settings for uptime checks. Properties vary by monitor type:
+        HTTP monitors use location, look_for_string, http_verb, etc.
+        Ping monitors use location, ttl, count, packet_size_in_bytes, etc.
+        TCP monitors use location, tcp_send_string, timeout_in_ms, etc.
       properties:
         location: { type: string }
+        # HTTP monitor settings
         look_for_string:
           type: ["string", "null"]
         absent_string:
@@ -4065,6 +4183,19 @@ components:
         http_client_headers:
           type: array
           items: { $ref: "#/components/schemas/NameValuePair" }
+        # Ping monitor settings
+        ttl: { type: integer }
+        count: { type: integer }
+        packet_size_in_bytes: { type: integer }
+        acceptable_packet_loss_percentage: { type: number }
+        acceptable_average_response_time_in_ms: { type: integer }
+        timeout_in_seconds: { type: integer }
+        interval_in_seconds: { type: integer }
+        # TCP monitor settings
+        tcp_send_string: { type: string }
+        timeout_in_ms: { type: integer }
+        look_for_string_in_welcome_message: { type: string }
+        look_for_string_in_send_string_response: { type: string }
 
     ExpectedHeader:
       type: object
@@ -4100,6 +4231,9 @@ components:
         settings:
           type: object
           description: Check-specific settings
+        average_response_time_in_ms:
+          type: ["number", "null"]
+          description: Only present on performance checks -- average response time over the past 15 minutes in milliseconds
         active_snooze:
           type: ["object", "null"]
           properties:
@@ -4145,18 +4279,18 @@ components:
       type: object
       description: Request to run a specific check immediately
       properties:
-        http_client_headers:
-          type: object
-          additionalProperties:
-            type: string
+        httpClientHeaders:
+          type: array
+          description: Custom HTTP headers for this specific run (uptime checks only, max 5 headers)
+          items: { $ref: "#/components/schemas/NameValuePair" }
 
     CheckSummary:
       type: object
       description: Summary of a check's latest run
       properties:
         result:
-          type: string
-          enum: [pending, succeeded, warning, failed, "errored-or-timed-out"]
+          type: ["string", "null"]
+          enum: [pending, succeeded, warning, failed, null]
         summary: { type: string }
 
     UptimePoint:
@@ -4388,10 +4522,7 @@ components:
       type: object
       required: [monitor_id, starts_at, ends_at]
       properties:
-        monitor_id:
-          oneOf:
-            - type: integer
-            - type: string
+        monitor_id: { type: integer }
         starts_at:
           {
             type: string,
@@ -4591,6 +4722,8 @@ components:
           type: ["string", "null"]
         detected_at:
           type: ["string", "null"]
+        updated_at:
+          type: ["string", "null"]
         active_snooze:
           type: ["object", "null"]
           properties:
@@ -4640,15 +4773,17 @@ components:
         [
           mail,
           discord,
+          googleChat,
           microsoftTeams,
+          microsoftTeamsWorkflow,
+          opsgenie,
+          pagerDuty,
           pushover,
           slack,
           slackApi,
-          telegram,
           sms,
-          webhooks,
-          opsgenie,
-          pagerDuty,
+          telegram,
+          webhook,
         ]
 
     NotificationDestination:
@@ -4656,6 +4791,8 @@ components:
       description: A notification destination configuration
       properties:
         id: { type: integer }
+        label:
+          type: ["string", "null"]
         team_id: { type: integer }
         channel:
           $ref: "#/components/schemas/NotificationChannel"
@@ -5013,7 +5150,7 @@ components:
         accessibility_score: { type: number }
         best_practices_score: { type: number }
         seo_score: { type: number }
-        progressive_web_app_score: { type: number }
+        progressive_web_app_score: { type: ["number", "null"] }
         first_contentful_paint_in_ms: { type: number }
         speed_index_in_ms: { type: number }
         largest_contentful_paint_in_ms: { type: number }
@@ -5061,8 +5198,10 @@ components:
         id: { type: integer }
         result:
           type: string
-          enum: [ok, issue]
-        finish_reason: { type: string }
+          enum: [ok, failed, error]
+        finish_reason:
+          type: string
+          enum: [stop, length, contentFilter, toolCalls, error, other, unknown]
         prompt: { type: string }
         text: { type: string }
         notification_title:
@@ -5071,7 +5210,15 @@ components:
           type: ["string", "null"]
         used_tools:
           type: array
-          items: { type: string }
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              arguments: { type: object, additionalProperties: true }
+              displayName: { type: string }
+              displayArguments:
+                type: array
+                items: { type: string }
         used_prompt_tokens: { type: integer }
         used_completion_tokens: { type: integer }
         raw_response:
@@ -5345,7 +5492,8 @@ components:
       properties:
         id: { type: integer }
         monitor_id: { type: integer }
-        name: { type: string }
+        name:
+          type: ["string", "null"]
         recurrence_type:
           type: string
           enum: [daily, weekly, monthly]
@@ -5356,10 +5504,14 @@ components:
           type: ["integer", "null"]
           minimum: 1
           maximum: 31
-        start_time: { type: string, description: "Time of day in H:i format" }
+        start_time: { type: string, description: "Time of day in HH:MM format" }
         end_time:
           type: string
-          description: "Time of day in H:i format. Must differ from start_time."
+          description: "Time of day in HH:MM format. Must differ from start_time."
+        human_readable_schedule: { type: string }
+        last_generated_until:
+          type: ["string", "null"]
+          description: "Date (Y-m-d) up to which periods have been generated"
         created_at: { type: string }
         updated_at: { type: string }
 

@@ -384,7 +384,7 @@ workflows:
       - stepId: post-monitors-{monitorId}-stop-maintenance-step
         operationId: $sourceDescriptions.openapi.stopMaintenance
         successCriteria:
-          - condition: $statusCode == 200
+          - condition: $statusCode == 204
     inputs:
       $ref: "#/components/inputs/bearerAuth"
     parameters:
@@ -1379,7 +1379,7 @@ workflows:
             in: path
             value: $inputs.monitorId
         successCriteria:
-          - condition: $statusCode == 200
+          - condition: $statusCode == 204
       - stepId: delete-status-update
         operationId: $sourceDescriptions.openapi.deleteStatusPageUpdate
         parameters:
