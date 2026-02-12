@@ -40,6 +40,8 @@ tags:
     description: Endpoints related to detected certificates.
   - name: DNS
     description: Endpoints related to DNS records and history.
+  - name: DNS Blocklist
+    description: Endpoints related to DNS blocklist monitoring.
   - name: Domain
     description: Endpoints related to domain registration information.
   - name: Downtime
@@ -56,8 +58,18 @@ tags:
     description: Endpoints for managing monitors.
   - name: Notification Destinations
     description: Endpoints for managing notification destinations for teams, monitors, tags, and tag groups.
+  - name: Ports
+    description: Endpoints related to port scanning monitoring.
+  - name: Public Metrics
+    description: Endpoints for public API metrics (no auth required).
+  - name: Recurring Maintenance Periods
+    description: Endpoints for managing recurring maintenance periods.
   - name: Reseller
     description: Endpoints for resellers to manage teams and users for their clients.
+  - name: Sitemap
+    description: Endpoints related to sitemap monitoring.
+  - name: Status Page Update Templates
+    description: Endpoints for managing status page update templates.
   - name: Status Page Updates
     description: Endpoints related to status page updates.
   - name: Status Pages
@@ -786,7 +798,7 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
-  /monitors/{monitorId}/application-health-checks/{healthCheckId}/snooze:
+  /monitors/{monitorId}/application-health-checks/{applicationHealthCheckId}/snooze:
     post:
       tags: [Application Health Checks]
       summary: Snooze an application health check
@@ -794,7 +806,7 @@ paths:
       operationId: snoozeApplicationHealthCheck
       parameters:
         - $ref: "#/components/parameters/MonitorId"
-        - $ref: "#/components/parameters/HealthCheckId"
+        - $ref: "#/components/parameters/ApplicationHealthCheckId"
       requestBody:
         description: The payload to include with the request.
         required: true
@@ -820,7 +832,7 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
-  /monitors/{monitorId}/application-health-checks/{healthCheckId}/unsnooze:
+  /monitors/{monitorId}/application-health-checks/{applicationHealthCheckId}/unsnooze:
     post:
       tags: [Application Health Checks]
       summary: Unsnooze an application health check
@@ -828,7 +840,7 @@ paths:
       operationId: unsnoozeApplicationHealthCheck
       parameters:
         - $ref: "#/components/parameters/MonitorId"
-        - $ref: "#/components/parameters/HealthCheckId"
+        - $ref: "#/components/parameters/ApplicationHealthCheckId"
       responses:
         "200":
           description: Unsnoozed
@@ -1103,82 +1115,6 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
-  /monitors/{monitorId}/update-broken-links-settings:
-    put:
-      tags: [Broken Links]
-      summary: Update broken links settings
-      description: Update the broken links check settings for a specific monitor.
-      operationId: updateBrokenLinksSettings
-      parameters:
-        - $ref: "#/components/parameters/MonitorId"
-      requestBody:
-        description: The payload to include with the request.
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BrokenLinksSettingsUpdate"
-            examples:
-              example:
-                value:
-                  broken_links_check_include_external_links: true
-                  broken_links_whitelisted_urls_string: |
-                    https://externalsite.tld/page1
-                    https://externalsite.tld/page2
-      responses:
-        "200":
-          description: Settings updated
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message: { type: string }
-              examples:
-                success:
-                  value: { message: "Broken links settings updated." }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "403": { $ref: "#/components/responses/Forbidden" }
-        "404": { $ref: "#/components/responses/NotFound" }
-
-  /monitors/{monitorId}/update-uptime-check-payload:
-    put:
-      tags: [Uptime]
-      summary: Update non-GET uptime check payload
-      description: Update the payload used for non-GET uptime checks for a specific monitor.
-      operationId: updateUptimeCheckPayload
-      parameters:
-        - $ref: "#/components/parameters/MonitorId"
-      requestBody:
-        description: The payload to include with the request.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/NameValuePair"
-            examples:
-              example:
-                value:
-                  - name: my-name
-                    value: my-value
-      responses:
-        "200":
-          description: Payload updated
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message: { type: string }
-              examples:
-                success:
-                  value: { message: "Uptime check payload updated." }
-        "401": { $ref: "#/components/responses/Unauthorized" }
-        "403": { $ref: "#/components/responses/Forbidden" }
-        "404": { $ref: "#/components/responses/NotFound" }
-
   /mixed-content/{monitorId}:
     get:
       tags: [Mixed Content]
@@ -1353,6 +1289,8 @@ paths:
       operationId: listMaintenancePeriods
       parameters:
         - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterStartedAt"
+        - $ref: "#/components/parameters/FilterEndedAt"
       responses:
         "200":
           description: Maintenance periods
@@ -1390,15 +1328,17 @@ paths:
               type: object
               properties:
                 stop_maintenance_after_seconds:
-                  type: string
-                  description: Duration in seconds to auto-stop
+                  type: integer
+                  minimum: 5
+                  default: 3600
+                  description: Duration in seconds to auto-stop (minimum 5, default 3600)
                 name:
                   type: string
                   description: Optional name
             examples:
               withDuration:
                 value:
-                  stop_maintenance_after_seconds: "300"
+                  stop_maintenance_after_seconds: 300
       responses:
         "200":
           description: Maintenance started
@@ -1426,6 +1366,18 @@ paths:
       operationId: stopMaintenance
       parameters:
         - $ref: "#/components/parameters/MonitorId"
+      requestBody:
+        description: Optional payload to delay the stop
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                delay_seconds:
+                  type: integer
+                  minimum: 1
+                  description: Number of seconds to delay the stop
       responses:
         "200":
           description: Maintenance stopped
@@ -1480,17 +1432,37 @@ paths:
         "422": { $ref: "#/components/responses/Validation" }
 
   /maintenance-periods/{maintenancePeriodId}:
+    put:
+      tags: [Maintenance Periods]
+      summary: Update a scheduled maintenance period
+      description: Update an existing scheduled maintenance period by its ID.
+      operationId: updateMaintenancePeriod
+      parameters:
+        - $ref: "#/components/parameters/MaintenancePeriodId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMaintenancePeriodRequest"
+      responses:
+        "200":
+          description: Maintenance period updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaintenancePeriod"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Maintenance Periods]
       summary: Delete a maintenance period
       description: Delete a specific maintenance period by its ID. This action is irreversible.
       operationId: deleteMaintenancePeriod
       parameters:
-        - name: maintenancePeriodId
-          description: The ID of the maintenance period to delete.
-          in: path
-          required: true
-          schema: { type: integer }
+        - $ref: "#/components/parameters/MaintenancePeriodId"
       responses:
         "204": { $ref: "#/components/responses/NoContent" }
         "401": { $ref: "#/components/responses/Unauthorized" }
@@ -1739,14 +1711,42 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "422": { $ref: "#/components/responses/Validation" }
 
-  /status-page-updates/{updateId}:
+  /status-page-updates/{statusPageUpdateId}:
+    put:
+      tags: [Status Page Updates]
+      summary: Update a status page update
+      description: Update an existing status page update by its ID.
+      operationId: updateStatusPageUpdate
+      parameters:
+        - name: statusPageUpdateId
+          description: ID of the status page update
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStatusPageUpdateRequest"
+      responses:
+        "200":
+          description: Status page update updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusPageUpdate"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Status Page Updates]
       summary: Delete a status page update
       description: Delete a specific status page update by its ID. This action is irreversible.
       operationId: deleteStatusPageUpdate
       parameters:
-        - name: updateId
+        - name: statusPageUpdateId
           description: ID of the status page update
           in: path
           required: true
@@ -1930,14 +1930,38 @@ paths:
         "404": { $ref: "#/components/responses/NotFound" }
         "422": { $ref: "#/components/responses/Validation" }
 
-  /cron-checks/{cronCheckId}:
+  /cron-checks/{cronCheckDefinitionId}:
+    put:
+      tags: [Cron Checks]
+      summary: Update a cron check
+      description: Update an existing cron check definition.
+      operationId: updateCronCheck
+      parameters:
+        - $ref: "#/components/parameters/CronCheckDefinitionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCronCheckRequest"
+      responses:
+        "200":
+          description: Cron check updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CronCheck"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
     delete:
       tags: [Cron Checks]
       summary: Delete a cron check
       description: Delete a specific cron check by its ID. This action cannot be undone.
       operationId: deleteCronCheck
       parameters:
-        - $ref: "#/components/parameters/CronCheckId"
+        - $ref: "#/components/parameters/CronCheckDefinitionId"
       responses:
         "204": { $ref: "#/components/responses/NoContent" }
         "401": { $ref: "#/components/responses/Unauthorized" }
@@ -1952,6 +1976,7 @@ paths:
       operationId: getDnsHistory
       parameters:
         - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterCreatedAt"
       responses:
         "200":
           description: DNS history items
@@ -2015,7 +2040,7 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
-  /monitors/{monitorId}/application-health-checks/{healthCheckId}:
+  /monitors/{monitorId}/application-health-checks/{applicationHealthCheckId}:
     get:
       tags: [Application Health Checks]
       summary: Get application health check history
@@ -2023,7 +2048,7 @@ paths:
       operationId: getApplicationHealthCheckHistory
       parameters:
         - $ref: "#/components/parameters/MonitorId"
-        - $ref: "#/components/parameters/HealthCheckId"
+        - $ref: "#/components/parameters/ApplicationHealthCheckId"
       responses:
         "200":
           description: Application health check history
@@ -2065,6 +2090,7 @@ paths:
         - $ref: "#/components/parameters/MonitorId"
         - $ref: "#/components/parameters/PageNumber"
         - $ref: "#/components/parameters/PageSize"
+        - $ref: "#/components/parameters/FilterCreatedAt"
       responses:
         "200":
           description: Paginated Lighthouse reports
@@ -2148,7 +2174,7 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
-  /monitors/{monitorId}/lighthouse-reports/{reportId}:
+  /monitors/{monitorId}/lighthouse-reports/{lighthouseReportId}:
     get:
       tags: [Lighthouse]
       summary: Get a specific Lighthouse report
@@ -2156,11 +2182,7 @@ paths:
       operationId: getLighthouseReport
       parameters:
         - $ref: "#/components/parameters/MonitorId"
-        - name: reportId
-          description: ID of the Lighthouse report
-          in: path
-          required: true
-          schema: { type: integer }
+        - $ref: "#/components/parameters/LighthouseReportId"
       responses:
         "200":
           description: Lighthouse report
@@ -2182,6 +2204,7 @@ paths:
         - $ref: "#/components/parameters/MonitorId"
         - $ref: "#/components/parameters/PageNumber"
         - $ref: "#/components/parameters/PageSize"
+        - $ref: "#/components/parameters/FilterCreatedAt"
       responses:
         "200":
           description: Paginated AI responses
@@ -2261,7 +2284,7 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
-  /monitors/{monitorId}/ai-responses/{responseId}:
+  /monitors/{monitorId}/ai-responses/{aiResponseId}:
     get:
       tags: [AI]
       summary: Get a specific AI response
@@ -2269,11 +2292,7 @@ paths:
       operationId: getAiResponse
       parameters:
         - $ref: "#/components/parameters/MonitorId"
-        - name: responseId
-          description: ID of the AI response
-          in: path
-          required: true
-          schema: { type: integer }
+        - $ref: "#/components/parameters/AiResponseId"
       responses:
         "200":
           description: AI response
@@ -2729,7 +2748,7 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
 
-  /tags/notification-destinations/{tagId}:
+  /tags/{tagId}/notification-destinations:
     post:
       tags: [Notification Destinations]
       summary: Create tag notification destination
@@ -2755,7 +2774,7 @@ paths:
         "404": { $ref: "#/components/responses/NotFound" }
         "422": { $ref: "#/components/responses/Validation" }
 
-  /tags/{tagId}/notification-destinations/destination/{destinationId}:
+  /tags/{tagId}/notification-destinations/{destinationId}:
     put:
       tags: [Notification Destinations]
       summary: Update tag notification destination
@@ -2781,6 +2800,8 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
         "422": { $ref: "#/components/responses/Validation" }
+
+  /tags/{tagId}/notification-destinations/destination/{destinationId}:
     delete:
       tags: [Notification Destinations]
       summary: Delete tag notification destination
@@ -3132,6 +3153,374 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
+  # --- Port Scanning ---
+  /monitors/{monitorId}/ports-history-items:
+    get:
+      tags: [Ports]
+      summary: List port scan history
+      description: Retrieve port scan history items for a monitor. Results are sorted in reverse chronological order.
+      operationId: listPortsHistoryItems
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterCreatedAt"
+      responses:
+        "200":
+          description: Port scan history items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PortScanResult"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /monitors/{monitorId}/ports-history-items/{itemId}:
+    get:
+      tags: [Ports]
+      summary: Get a specific port scan result
+      description: Retrieve a specific port scan history item by its ID.
+      operationId: getPortsHistoryItem
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/PortsHistoryItemId"
+      responses:
+        "200":
+          description: Port scan result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortScanResult"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  # --- DNS Blocklist ---
+  /monitors/{monitorId}/dns-blocklist-history-items:
+    get:
+      tags: [DNS Blocklist]
+      summary: List DNS blocklist history
+      description: Retrieve DNS blocklist check history items for a monitor. Results are sorted in reverse chronological order.
+      operationId: listDnsBlocklistHistoryItems
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/FilterCreatedAt"
+      responses:
+        "200":
+          description: DNS blocklist history items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DnsBlocklistResult"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /monitors/{monitorId}/dns-blocklist-history-items/{itemId}:
+    get:
+      tags: [DNS Blocklist]
+      summary: Get a specific DNS blocklist result
+      description: Retrieve a specific DNS blocklist history item by its ID.
+      operationId: getDnsBlocklistHistoryItem
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/DnsBlocklistHistoryItemId"
+      responses:
+        "200":
+          description: DNS blocklist result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DnsBlocklistResult"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  # --- Sitemap ---
+  /sitemap/{monitorId}:
+    get:
+      tags: [Sitemap]
+      summary: Get sitemap check results
+      description: Retrieve the latest sitemap check results for a monitor.
+      operationId: getSitemapResults
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+      responses:
+        "200":
+          description: Sitemap check results
+          content:
+            application/json:
+              schema:
+                type: object
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
+
+  # --- Public Metrics ---
+  /public-metrics:
+    get:
+      tags: [Public Metrics]
+      summary: Get public metrics
+      description: Retrieve public API metrics (run count, notification count). This endpoint does not require authentication.
+      operationId: getPublicMetrics
+      security: []
+      responses:
+        "200":
+          description: Public metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicMetrics"
+              examples:
+                success:
+                  value:
+                    run_count: 123456789
+                    notification_count: 98765432
+        "429": { $ref: "#/components/responses/TooManyRequests" }
+
+  # --- Recurring Maintenance Periods ---
+  /monitors/{monitorId}/recurring-maintenance-periods:
+    get:
+      tags: [Recurring Maintenance Periods]
+      summary: List recurring maintenance periods for a monitor
+      description: Retrieve all recurring maintenance periods associated with a specific monitor.
+      operationId: listRecurringMaintenancePeriods
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+      responses:
+        "200":
+          description: Recurring maintenance periods
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/RecurringMaintenancePeriod"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /recurring-maintenance-periods/{recurringMaintenancePeriodId}:
+    get:
+      tags: [Recurring Maintenance Periods]
+      summary: Get a recurring maintenance period
+      description: Retrieve a specific recurring maintenance period by its ID.
+      operationId: getRecurringMaintenancePeriod
+      parameters:
+        - $ref: "#/components/parameters/RecurringMaintenancePeriodId"
+      responses:
+        "200":
+          description: Recurring maintenance period
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecurringMaintenancePeriod"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    put:
+      tags: [Recurring Maintenance Periods]
+      summary: Update a recurring maintenance period
+      description: Update an existing recurring maintenance period.
+      operationId: updateRecurringMaintenancePeriod
+      parameters:
+        - $ref: "#/components/parameters/RecurringMaintenancePeriodId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateRecurringMaintenancePeriodRequest"
+      responses:
+        "200":
+          description: Recurring maintenance period updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecurringMaintenancePeriod"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
+    delete:
+      tags: [Recurring Maintenance Periods]
+      summary: Delete a recurring maintenance period
+      description: Delete a recurring maintenance period. Optionally delete all future periods generated from this recurrence.
+      operationId: deleteRecurringMaintenancePeriod
+      parameters:
+        - $ref: "#/components/parameters/RecurringMaintenancePeriodId"
+        - name: delete_future_periods
+          in: query
+          description: Whether to also delete all future maintenance periods generated from this recurrence
+          schema: { type: boolean, default: false }
+      responses:
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /recurring-maintenance-periods:
+    post:
+      tags: [Recurring Maintenance Periods]
+      summary: Create a recurring maintenance period
+      description: Create a new recurring maintenance period for a monitor.
+      operationId: createRecurringMaintenancePeriod
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRecurringMaintenancePeriodRequest"
+      responses:
+        "201":
+          description: Recurring maintenance period created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecurringMaintenancePeriod"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
+
+  # --- Get Monitor by URL ---
+  /monitors/url/{monitorUrl}:
+    get:
+      tags: [Monitors]
+      summary: Get a monitor by URL
+      description: Retrieve a monitor by its URL-encoded URL.
+      operationId: getMonitorByUrl
+      parameters:
+        - name: monitorUrl
+          description: The URL-encoded URL of the monitor
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Monitor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Monitor"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  # --- DNS History Single Item ---
+  /monitors/{monitorId}/dns-history-items/{dnsHistoryItemId}:
+    get:
+      tags: [DNS]
+      summary: Get a specific DNS history item
+      description: Retrieve a specific DNS history item by its ID.
+      operationId: getDnsHistoryItem
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/DnsHistoryItemId"
+      responses:
+        "200":
+          description: DNS history item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DnsHistoryItem"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  # --- Status Page Update Templates ---
+  /status-page-update-templates:
+    get:
+      tags: [Status Page Update Templates]
+      summary: List status page update templates
+      description: Retrieve all status page update templates for your teams.
+      operationId: listStatusPageUpdateTemplates
+      responses:
+        "200":
+          description: List of status page update templates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/StatusPageUpdateTemplate"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      tags: [Status Page Update Templates]
+      summary: Create a status page update template
+      description: Create a new reusable template for status page updates.
+      operationId: createStatusPageUpdateTemplate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStatusPageUpdateTemplateRequest"
+      responses:
+        "201":
+          description: Template created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusPageUpdateTemplate"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "422": { $ref: "#/components/responses/Validation" }
+
+  /status-page-update-templates/{statusPageUpdateTemplateId}:
+    put:
+      tags: [Status Page Update Templates]
+      summary: Update a status page update template
+      description: Update an existing status page update template.
+      operationId: updateStatusPageUpdateTemplate
+      parameters:
+        - $ref: "#/components/parameters/StatusPageUpdateTemplateId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStatusPageUpdateTemplateRequest"
+      responses:
+        "200":
+          description: Template updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusPageUpdateTemplate"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/Validation" }
+    delete:
+      tags: [Status Page Update Templates]
+      summary: Delete a status page update template
+      description: Delete a status page update template. This action is irreversible.
+      operationId: deleteStatusPageUpdateTemplate
+      parameters:
+        - $ref: "#/components/parameters/StatusPageUpdateTemplateId"
+      responses:
+        "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
 components:
   securitySchemes:
     bearerAuth:
@@ -3165,9 +3554,27 @@ components:
       in: path
       required: true
       schema: { type: integer, format: int64, minimum: 1 }
-    HealthCheckId:
-      name: healthCheckId
-      description: ID of the health check
+    CronCheckDefinitionId:
+      name: cronCheckDefinitionId
+      description: ID of the cron check definition
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    ApplicationHealthCheckId:
+      name: applicationHealthCheckId
+      description: ID of the application health check
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    LighthouseReportId:
+      name: lighthouseReportId
+      description: ID of the Lighthouse report
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    AiResponseId:
+      name: aiResponseId
+      description: ID of the AI response
       in: path
       required: true
       schema: { type: integer, format: int64, minimum: 1 }
@@ -3207,7 +3614,7 @@ components:
       description: Grouping granularity
       schema:
         type: string
-        enum: [minute, hour, day]
+        enum: [minute, hour, day, week, month]
     TeamId:
       name: teamId
       description: ID of the team
@@ -3273,6 +3680,47 @@ components:
       description: Page number for pagination
       in: query
       schema: { type: integer, minimum: 1, default: 1 }
+    FilterCreatedAt:
+      name: filter[created_at]
+      in: query
+      description: Filter by creation timestamp (format YmdHis, e.g. 20240101120000)
+      schema: { type: string, pattern: "^[0-9]{14}$" }
+    RecurringMaintenancePeriodId:
+      name: recurringMaintenancePeriodId
+      description: ID of the recurring maintenance period
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    StatusPageUpdateTemplateId:
+      name: statusPageUpdateTemplateId
+      description: ID of the status page update template
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    PortsHistoryItemId:
+      name: itemId
+      description: ID of the port scan history item
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    DnsBlocklistHistoryItemId:
+      name: itemId
+      description: ID of the DNS blocklist history item
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    DnsHistoryItemId:
+      name: dnsHistoryItemId
+      description: ID of the DNS history item
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+    MaintenancePeriodId:
+      name: maintenancePeriodId
+      description: ID of the maintenance period
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
 
   schemas:
     Links:
@@ -3301,16 +3749,15 @@ components:
               timezone: { type: string }
               created_at: { type: string, format: date-time }
       examples:
-        - example:
-            id: 1
-            name: John Doe
-            email: john.doe@example.com
-            photo_url: https://example.com/photos/john.jpg
-            teams:
-              - id: 12345
-                name: Awesome Team
-                timezone: Europe/Brussels
-                created_at: "2019-09-13 13:06:51"
+        - id: 1
+          name: John Doe
+          email: john.doe@example.com
+          photo_url: https://example.com/photos/john.jpg
+          teams:
+            - id: 12345
+              name: Awesome Team
+              timezone: Europe/Brussels
+              created_at: "2019-09-13T13:06:51Z"
     Monitor:
       type: object
       description: A monitor
@@ -3319,7 +3766,7 @@ components:
         team_id: { type: integer }
         type:
           type: string
-          enum: [http, ping, tcp]
+          enum: [http, ping, tcp, ai]
         url: { type: string }
         uses_https: { type: boolean }
         sort_url: { type: string }
@@ -3343,6 +3790,40 @@ components:
             $ref: "#/components/schemas/Check"
         uptime_check_settings:
           $ref: "#/components/schemas/UptimeCheckSettings"
+        certificate_health_check_settings:
+          type: ["object", "null"]
+          properties:
+            expires_soon_threshold_in_days:
+              type: ["integer", "null"]
+        broken_links_check_settings:
+          type: ["object", "null"]
+        dns_check_settings:
+          type: ["object", "null"]
+        lighthouse_check_settings:
+          type: ["object", "null"]
+        application_health_check_settings:
+          type: ["object", "null"]
+        domain_check_settings:
+          type: ["object", "null"]
+        performance_check_settings:
+          type: ["object", "null"]
+        sitemap_check_settings:
+          type: ["object", "null"]
+        ports_check_settings:
+          type: ["object", "null"]
+        dns_blocklist_check_settings:
+          type: ["object", "null"]
+        ai_check_settings:
+          type: ["object", "null"]
+        crawler_headers:
+          type: ["array", "null"]
+          items: { $ref: "#/components/schemas/NameValuePair" }
+        send_report_to_emails:
+          type: ["array", "null"]
+          items: { type: string, format: email }
+        include_check_types_in_report:
+          type: ["array", "null"]
+          items: { $ref: "#/components/schemas/CheckType" }
         badge_id: { type: string }
         marked_for_deletion_at:
           type: ["string", "null"]
@@ -3356,7 +3837,7 @@ components:
       properties:
         url: { type: string, format: uri }
         team_id: { type: integer }
-        type: { type: string, enum: [http, ping, tcp] }
+        type: { type: string, enum: [http, ping, tcp, ai] }
         checks:
           type: array
           items: { $ref: "#/components/schemas/CheckType" }
@@ -3405,7 +3886,7 @@ components:
           items: { type: string, format: uri }
         respect_robots: { type: boolean }
         sitemap_path: { type: string }
-        sitemap_speed: { type: string, enum: [default, fast, slow] }
+        sitemap_speed: { type: string, enum: [default, fast, slow, slowest, fastest] }
         application_health_check_result_url: { type: string, format: uri }
         application_health_headers:
           type: array
@@ -3435,7 +3916,7 @@ components:
       description: Request to update an existing monitor
       properties:
         url: { type: string, format: uri }
-        type: { type: string, enum: [http, ping, tcp] }
+        type: { type: string, enum: [http, ping, tcp, ai] }
         checks:
           type: array
           items: { $ref: "#/components/schemas/CheckType" }
@@ -3464,13 +3945,20 @@ components:
               type: array
               items: { type: string, format: uri }
             respect_robots: { type: boolean }
+            do_not_crawl_urls:
+              type: array
+              items: { type: string }
+            force_crawl_urls:
+              type: array
+              items: { type: string }
+            new_links_only: { type: boolean }
         sitemap_check_settings:
           type: object
           properties:
             path: { type: string }
             speed:
               type: string
-              enum: [default, fast, slow]
+              enum: [default, fast, slow, slowest, fastest]
         application_health_check_settings:
           type: object
           properties:
@@ -3504,6 +3992,42 @@ components:
           properties:
             continent: { type: string }
             cpu_slowdown_modifier: { type: number }
+            device_emulation: { type: string }
+            notification_settings:
+              type: object
+              additionalProperties: true
+            http_client_headers:
+              type: array
+              items: { $ref: "#/components/schemas/NameValuePair" }
+        ports_check_settings:
+          type: object
+          properties:
+            expected_open_ports:
+              type: array
+              items: { type: integer }
+            expected_closed_ports:
+              type: array
+              items: { type: integer }
+            timeout_per_port_ms: { type: integer }
+        dns_blocklist_check_settings:
+          type: object
+          properties:
+            use_all_blocklists: { type: boolean }
+            enabled_blocklists:
+              type: array
+              items: { type: string }
+        ai_check_settings:
+          type: object
+          properties:
+            location: { type: string }
+            prompt: { type: string }
+            html_stripping_level: { type: string }
+        crawler_settings:
+          type: object
+          properties:
+            headers:
+              type: array
+              items: { $ref: "#/components/schemas/NameValuePair" }
         crawler_headers:
           type: array
           items: { $ref: "#/components/schemas/NameValuePair" }
@@ -3604,6 +4128,9 @@ components:
           sitemap,
           dns,
           domain,
+          ai,
+          ports,
+          dns_blocklist,
         ]
 
     CheckEnableToggle:
@@ -3746,14 +4273,7 @@ components:
               found_on_url: { type: string, format: uri }
               relative_found_on_url: { type: string }
               internal: { type: boolean }
-
-    BrokenLinksSettingsUpdate:
-      type: object
-      description: Update settings for the broken links check
-      properties:
-        broken_links_check_include_external_links: { type: boolean }
-        broken_links_whitelisted_urls_string:
-          { type: string, description: "Newline-separated list of URLs" }
+              link_text: { type: string }
 
     MixedContentResponse:
       type: object
@@ -3897,7 +4417,13 @@ components:
         slug: { type: string }
         full_url: { type: string, format: uri }
         timezone: { type: string }
-        summarized_status: { type: string, enum: [up, down, unknown] }
+        summarized_status: { type: string, enum: [up, down, warning, unknown] }
+        secret:
+          type: ["string", "null"]
+        badge_id:
+          type: ["string", "null"]
+        prevent_indexing: { type: boolean }
+        add_hsts_header: { type: boolean }
         monitors:
           type: array
           items:
@@ -3997,7 +4523,7 @@ components:
     CreateStatusPageUpdateRequest:
       type: object
       description: Request to create a new status page update
-      required: [status_page_id, title, text, severity, time, pinned]
+      required: [status_page_id, title, severity, time]
       properties:
         status_page_id: { type: integer }
         title: { type: string }
@@ -4027,8 +4553,23 @@ components:
         ping_url: { type: string, format: uri }
         created_at: { type: string }
         latest_result: { type: string }
+        latest_result_label: { type: string }
+        latest_result_label_color: { type: string }
         latest_ping_at: { type: string }
         human_readable_latest_ping_at: { type: string }
+        human_readable_cron_expression:
+          type: ["string", "null"]
+        active_snooze:
+          type: ["object", "null"]
+          properties:
+            id: { type: integer }
+            starts_at: { type: string }
+            ends_at: { type: string }
+            snoozed_by: { type: string }
+            unsnoozed_by:
+              type: ["string", "null"]
+            source: { type: string }
+            created_at: { type: string }
 
     ApplicationHealthCheck:
       type: object
@@ -4036,9 +4577,31 @@ components:
       properties:
         id: { type: integer }
         name: { type: string }
+        label: { type: string }
+        status:
+          type: string
+          enum: [ok, warning, failed, crashed, skipped]
+        message: { type: string }
+        short_summary: { type: string }
+        meta:
+          type: object
+          additionalProperties: true
         latest_result: { type: string }
         latest_run_ended_at:
           type: ["string", "null"]
+        detected_at:
+          type: ["string", "null"]
+        active_snooze:
+          type: ["object", "null"]
+          properties:
+            id: { type: integer }
+            starts_at: { type: string }
+            ends_at: { type: string }
+            snoozed_by: { type: string }
+            unsnoozed_by:
+              type: ["string", "null"]
+            source: { type: string }
+            created_at: { type: string }
 
     CronChecksResponse:
       type: object
@@ -4557,10 +5120,15 @@ components:
         name:
           type: string
           description: The name of the tag
+        monitors:
+          type: array
+          description: Array of monitor IDs to associate with the tag
+          items: { type: integer }
         sites:
           type: array
-          description: Array of site/monitor IDs to associate with the tag
+          description: Array of site/monitor IDs to associate with the tag (deprecated, use monitors)
           items: { type: integer }
+          deprecated: true
 
     PaginatedTagGroups:
       type: object
@@ -4653,6 +5221,9 @@ components:
       properties:
         channel:
           $ref: "#/components/schemas/NotificationChannel"
+        label:
+          type: string
+          description: Optional label for the notification destination
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4672,6 +5243,9 @@ components:
       properties:
         channel:
           $ref: "#/components/schemas/NotificationChannel"
+        label:
+          type: string
+          description: Optional label for the notification destination
         destination:
           type: object
           description: Channel-specific destination configuration
@@ -4684,6 +5258,236 @@ components:
           type: boolean
           description: Whether to send a test notification after update
           default: false
+
+    PortScanResult:
+      type: object
+      description: A port scan history result
+      properties:
+        id: { type: integer }
+        scanned_host: { type: string }
+        expected_open_results:
+          type: array
+          items:
+            $ref: "#/components/schemas/PortScanResultItem"
+        expected_closed_results:
+          type: array
+          items:
+            $ref: "#/components/schemas/PortScanResultItem"
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/PortScanIssue"
+        scan_time_ms: { type: integer }
+        created_at: { type: string }
+
+    PortScanResultItem:
+      type: object
+      description: A single port result within a port scan
+      properties:
+        port: { type: integer }
+        status: { type: string }
+        response_time_ms:
+          type: ["integer", "null"]
+        error_message:
+          type: ["string", "null"]
+
+    PortScanIssue:
+      type: object
+      description: An issue found during port scanning
+      properties:
+        name: { type: string }
+        ports:
+          type: array
+          items: { type: integer }
+
+    DnsBlocklistResult:
+      type: object
+      description: A DNS blocklist check result
+      properties:
+        id: { type: integer }
+        checked_domain: { type: string }
+        resolved_ips:
+          type: array
+          items: { type: string }
+        blocklist_results:
+          type: array
+          items:
+            $ref: "#/components/schemas/BlocklistResultItem"
+        issues:
+          type: ["array", "null"]
+          items: { type: object }
+        created_at: { type: string }
+
+    BlocklistResultItem:
+      type: object
+      description: A single blocklist check result
+      properties:
+        provider: { type: string }
+        listed: { type: boolean }
+        query_target:
+          type: ["string", "null"]
+        return_code:
+          type: ["string", "null"]
+        reason:
+          type: ["string", "null"]
+        timed_out: { type: boolean }
+
+    PublicMetrics:
+      type: object
+      description: Public API metrics counters
+      properties:
+        run_count: { type: integer }
+        notification_count: { type: integer }
+
+    RecurringMaintenancePeriod:
+      type: object
+      description: A recurring maintenance period for a monitor
+      properties:
+        id: { type: integer }
+        monitor_id: { type: integer }
+        name: { type: string }
+        recurrence_type:
+          type: string
+          enum: [daily, weekly, monthly]
+        days_of_week:
+          type: ["array", "null"]
+          items: { type: integer, minimum: 0, maximum: 6 }
+        day_of_month:
+          type: ["integer", "null"]
+          minimum: 1
+          maximum: 31
+        start_time: { type: string, description: "Time of day in H:i format" }
+        end_time:
+          type: string
+          description: "Time of day in H:i format. Must differ from start_time."
+        created_at: { type: string }
+        updated_at: { type: string }
+
+    CreateRecurringMaintenancePeriodRequest:
+      type: object
+      description: Request to create a recurring maintenance period
+      required: [monitor_id, name, recurrence_type, start_time, end_time]
+      properties:
+        monitor_id: { type: integer }
+        name: { type: string }
+        recurrence_type:
+          type: string
+          enum: [daily, weekly, monthly]
+        days_of_week:
+          type: array
+          description: Required when recurrence_type is weekly. Values 0..6.
+          items: { type: integer, minimum: 0, maximum: 6 }
+        day_of_month:
+          type: integer
+          description: Required when recurrence_type is monthly. Values 1..31.
+          minimum: 1
+          maximum: 31
+        generate_now:
+          type: boolean
+          default: true
+        start_time: { type: string, description: "Time of day in H:i format" }
+        end_time:
+          type: string
+          description: "Time of day in H:i format. Must differ from start_time."
+
+    UpdateRecurringMaintenancePeriodRequest:
+      type: object
+      description: Request to update a recurring maintenance period
+      properties:
+        name: { type: string }
+        recurrence_type:
+          type: string
+          enum: [daily, weekly, monthly]
+        days_of_week:
+          type: array
+          items: { type: integer, minimum: 0, maximum: 6 }
+        day_of_month:
+          type: integer
+          minimum: 1
+          maximum: 31
+        start_time: { type: string, description: "Time of day in H:i format" }
+        end_time:
+          type: string
+          description: "Time of day in H:i format. Must differ from start_time."
+        regenerate_future_periods:
+          type: boolean
+          default: true
+
+    StatusPageUpdateTemplate:
+      type: object
+      description: A reusable template for status page updates
+      properties:
+        id: { type: integer }
+        team_id: { type: integer }
+        name:
+          type: ["string", "null"]
+        title:
+          type: ["string", "null"]
+        text:
+          type: ["string", "null"]
+        severity:
+          type: ["string", "null"]
+          enum: [info, warning, high, resolved, scheduled, null]
+        created_at: { type: string }
+        updated_at: { type: string }
+
+    CreateStatusPageUpdateTemplateRequest:
+      type: object
+      description: Request to create a status page update template
+      required: [team_id]
+      properties:
+        team_id: { type: integer }
+        name: { type: string }
+        title: { type: string }
+        text: { type: string }
+        severity:
+          { type: string, enum: [info, warning, high, resolved, scheduled] }
+
+    UpdateStatusPageUpdateTemplateRequest:
+      type: object
+      description: Request to update a status page update template
+      properties:
+        name: { type: string }
+        title: { type: string }
+        text: { type: string }
+        severity:
+          { type: string, enum: [info, warning, high, resolved, scheduled] }
+
+    UpdateCronCheckRequest:
+      type: object
+      description: Request to update a cron check
+      properties:
+        name: { type: string }
+        type: { type: string, enum: [simple, cron] }
+        frequency_in_minutes: { type: integer }
+        grace_time_in_minutes: { type: integer }
+        cron_expression: { type: string }
+        server_timezone: { type: string }
+        description: { type: string }
+
+    UpdateMaintenancePeriodRequest:
+      type: object
+      description: Request to update a scheduled maintenance period
+      required: [starts_at, ends_at]
+      properties:
+        starts_at:
+          { type: string, description: "Start date and time in Y-m-d H:i format" }
+        ends_at:
+          { type: string, description: "End date and time in Y-m-d H:i format" }
+        name:
+          type: ["string", "null"]
+
+    UpdateStatusPageUpdateRequest:
+      type: object
+      description: Request to update a status page update
+      required: [title, severity]
+      properties:
+        title: { type: string }
+        text: { type: string }
+        severity:
+          { type: string, enum: [info, warning, high, resolved, scheduled] }
+        time: { type: string, description: "UTC Y-m-d H:i" }
+        pinned: { type: boolean }
 
     NoContent:
       type: "null"
@@ -4758,3 +5562,13 @@ components:
                 errors:
                   url:
                     - The url field is required.
+    TooManyRequests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessage"
+          examples:
+            default:
+              value:
+                error: Too Many Attempts.
