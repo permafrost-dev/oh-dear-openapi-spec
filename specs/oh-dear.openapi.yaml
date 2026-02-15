@@ -2215,7 +2215,12 @@ paths:
                         notification_title: null
                         notification_body: null
                         used_tools:
-                          - http_check
+                          - name: fetch_url
+                            arguments:
+                              url: https://example.com
+                            displayName: Fetch URL
+                            displayArguments:
+                              - https://example.com
                         used_prompt_tokens: 120
                         used_completion_tokens: 45
                         started_at: "2024-01-15 11:15:25"
@@ -2256,15 +2261,25 @@ paths:
                 success:
                   value:
                     id: 1
-                    result: issue
+                    result: failed
                     finish_reason: stop
                     prompt: Check the status of this website and provide insights on any issues.
                     text: Your site appears to be down. HTTP 500 error detected.
                     notification_title: Site Issue Detected
                     notification_body: Your website is returning a 500 error. Please check your server logs.
                     used_tools:
-                      - http_check
-                      - ssl_check
+                      - name: fetch_url
+                        arguments:
+                          url: https://example.com
+                        displayName: Fetch URL
+                        displayArguments:
+                          - https://example.com
+                      - name: check_ssl
+                        arguments:
+                          url: https://example.com
+                        displayName: Check SSL
+                        displayArguments:
+                          - https://example.com
                     used_prompt_tokens: 150
                     used_completion_tokens: 75
                     raw_response: '{"response": {"message": "Site down"}}'
