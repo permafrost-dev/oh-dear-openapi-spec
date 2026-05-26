@@ -4199,6 +4199,7 @@ components:
               items: { type: integer }
             timeout_per_port_ms: { type: integer }
             failure_threshold: { type: integer }
+            continent: { type: string }
         dns_blocklist_check_settings:
           type: ["object", "null"]
           properties:
@@ -4327,6 +4328,7 @@ components:
               type: array
               items: { type: integer }
             timeout_per_port_ms: { type: integer }
+            continent: { type: string }
         send_report_to_emails:
           type: array
           items: { type: string, format: email }
@@ -4431,6 +4433,7 @@ components:
               type: array
               items: { type: integer }
             timeout_per_port_ms: { type: integer }
+            continent: { type: string }
         dns_blocklist_check_settings:
           type: object
           properties:
