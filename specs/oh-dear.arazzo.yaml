@@ -871,6 +871,30 @@ workflows:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-team-notification-destinations-{teamId}-destination-{destinationId}-enable-workflow
+    steps:
+      - stepId: post-team-notification-destinations-{teamId}-destination-{destinationId}-enable-step
+        operationId: $sourceDescriptions.openapi.enableTeamNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-team-notification-destinations-{teamId}-destination-{destinationId}-disable-workflow
+    steps:
+      - stepId: post-team-notification-destinations-{teamId}-destination-{destinationId}-disable-step
+        operationId: $sourceDescriptions.openapi.disableTeamNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
   - workflowId: get-monitors-{monitorId}-notification-destinations-workflow
     steps:
       - stepId: get-monitors-{monitorId}-notification-destinations-step
@@ -913,6 +937,30 @@ workflows:
         operationId: $sourceDescriptions.openapi.deleteMonitorNotificationDestination
         successCriteria:
           - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-monitors-{monitorId}-notification-destinations-{destinationId}-enable-workflow
+    steps:
+      - stepId: post-monitors-{monitorId}-notification-destinations-{destinationId}-enable-step
+        operationId: $sourceDescriptions.openapi.enableMonitorNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-monitors-{monitorId}-notification-destinations-{destinationId}-disable-workflow
+    steps:
+      - stepId: post-monitors-{monitorId}-notification-destinations-{destinationId}-disable-step
+        operationId: $sourceDescriptions.openapi.disableMonitorNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
     inputs:
       $ref: "#/components/inputs/bearerAuth"
     parameters:
@@ -967,6 +1015,30 @@ workflows:
       - name: Authorization
         value: Bearer {$inputs.bearerAuth}
         in: header
+  - workflowId: post-tags-{tagId}-notification-destinations-{destinationId}-enable-workflow
+    steps:
+      - stepId: post-tags-{tagId}-notification-destinations-{destinationId}-enable-step
+        operationId: $sourceDescriptions.openapi.enableTagNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-tags-{tagId}-notification-destinations-{destinationId}-disable-workflow
+    steps:
+      - stepId: post-tags-{tagId}-notification-destinations-{destinationId}-disable-step
+        operationId: $sourceDescriptions.openapi.disableTagNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
   - workflowId: get-tag-groups-{tagGroupId}-notification-destinations-workflow
     steps:
       - stepId: get-tag-groups-{tagGroupId}-notification-destinations-step
@@ -1009,6 +1081,30 @@ workflows:
         operationId: $sourceDescriptions.openapi.deleteTagGroupNotificationDestination
         successCriteria:
           - condition: $statusCode == 204
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-enable-workflow
+    steps:
+      - stepId: post-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-enable-step
+        operationId: $sourceDescriptions.openapi.enableTagGroupNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
+    inputs:
+      $ref: "#/components/inputs/bearerAuth"
+    parameters:
+      - name: Authorization
+        value: Bearer {$inputs.bearerAuth}
+        in: header
+  - workflowId: post-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-disable-workflow
+    steps:
+      - stepId: post-tag-groups-{tagGroupId}-notification-destinations-{destinationId}-disable-step
+        operationId: $sourceDescriptions.openapi.disableTagGroupNotificationDestination
+        successCriteria:
+          - condition: $statusCode == 200
     inputs:
       $ref: "#/components/inputs/bearerAuth"
     parameters:

@@ -2823,6 +2823,46 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
+  /team-notification-destinations/{teamId}/destination/{destinationId}/enable:
+    post:
+      tags: [Notification Destinations]
+      summary: Enable team notification destination
+      description: Re-enable a previously disabled notification destination for a team. Keeps all settings and selected notification types, clears any automatic disable reason, and resumes sending notifications. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: enableTeamNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/TeamId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination enabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /team-notification-destinations/{teamId}/destination/{destinationId}/disable:
+    post:
+      tags: [Notification Destinations]
+      summary: Disable team notification destination
+      description: Disable a notification destination for a team without deleting it. Keeps all settings and selected notification types but pauses sending notifications until it is enabled again. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: disableTeamNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/TeamId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination disabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
   /monitors/{monitorId}/notification-destinations:
     get:
       tags: [Notification Destinations]
@@ -2922,6 +2962,46 @@ paths:
         - $ref: "#/components/parameters/DestinationId"
       responses:
         "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /monitors/{monitorId}/notification-destinations/{destinationId}/enable:
+    post:
+      tags: [Notification Destinations]
+      summary: Enable monitor notification destination
+      description: Re-enable a previously disabled notification destination for a monitor. Keeps all settings and selected notification types, clears any automatic disable reason, and resumes sending notifications. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: enableMonitorNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination enabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MonitorNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /monitors/{monitorId}/notification-destinations/{destinationId}/disable:
+    post:
+      tags: [Notification Destinations]
+      summary: Disable monitor notification destination
+      description: Disable a notification destination for a monitor without deleting it. Keeps all settings and selected notification types but pauses sending notifications until it is enabled again. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: disableMonitorNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/MonitorId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination disabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MonitorNotificationDestination"
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
@@ -3026,6 +3106,46 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
+  /tags/{tagId}/notification-destinations/{destinationId}/enable:
+    post:
+      tags: [Notification Destinations]
+      summary: Enable tag notification destination
+      description: Re-enable a previously disabled notification destination for a tag. Keeps all settings and selected notification types, clears any automatic disable reason, and resumes sending notifications. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: enableTagNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/TagId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination enabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /tags/{tagId}/notification-destinations/{destinationId}/disable:
+    post:
+      tags: [Notification Destinations]
+      summary: Disable tag notification destination
+      description: Disable a notification destination for a tag without deleting it. Keeps all settings and selected notification types but pauses sending notifications until it is enabled again. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: disableTagNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/TagId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination disabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
   /tag-groups/{tagGroupId}/notification-destinations:
     get:
       tags: [Notification Destinations]
@@ -3125,6 +3245,46 @@ paths:
         - $ref: "#/components/parameters/DestinationId"
       responses:
         "204": { $ref: "#/components/responses/NoContent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /tag-groups/{tagGroupId}/notification-destinations/{destinationId}/enable:
+    post:
+      tags: [Notification Destinations]
+      summary: Enable tag group notification destination
+      description: Re-enable a previously disabled notification destination for a tag group. Keeps all settings and selected notification types, clears any automatic disable reason, and resumes sending notifications. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: enableTagGroupNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/TagGroupId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination enabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagGroupNotificationDestination"
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /tag-groups/{tagGroupId}/notification-destinations/{destinationId}/disable:
+    post:
+      tags: [Notification Destinations]
+      summary: Disable tag group notification destination
+      description: Disable a notification destination for a tag group without deleting it. Keeps all settings and selected notification types but pauses sending notifications until it is enabled again. Takes no request body and never sends an email. Only admins and team owners can access this endpoint.
+      operationId: disableTagGroupNotificationDestination
+      parameters:
+        - $ref: "#/components/parameters/TagGroupId"
+        - $ref: "#/components/parameters/DestinationId"
+      responses:
+        "200":
+          description: Notification destination disabled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagGroupNotificationDestination"
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
@@ -5292,6 +5452,12 @@ components:
         notification_types:
           type: array
           items: { type: string }
+        enabled:
+          type: boolean
+          description: Whether the destination is currently active. A disabled destination keeps all its settings but sends no notifications until it is enabled again.
+        disabled_reason:
+          type: ["string", "null"]
+          description: When Oh Dear disabled a destination automatically after repeated delivery failures, this explains why. It is null for active destinations and for destinations you disabled yourself.
 
     TeamNotificationDestination:
       type: object
@@ -5313,6 +5479,12 @@ components:
         notification_types:
           type: array
           items: { type: string }
+        enabled:
+          type: boolean
+          description: Whether the destination is currently active. A disabled destination keeps all its settings but sends no notifications until it is enabled again.
+        disabled_reason:
+          type: ["string", "null"]
+          description: When Oh Dear disabled a destination automatically after repeated delivery failures, this explains why. It is null for active destinations and for destinations you disabled yourself.
 
     TagNotificationDestination:
       type: object
@@ -5335,6 +5507,12 @@ components:
         notification_types:
           type: array
           items: { type: string }
+        enabled:
+          type: boolean
+          description: Whether the destination is currently active. A disabled destination keeps all its settings but sends no notifications until it is enabled again.
+        disabled_reason:
+          type: ["string", "null"]
+          description: When Oh Dear disabled a destination automatically after repeated delivery failures, this explains why. It is null for active destinations and for destinations you disabled yourself.
 
     TagGroupNotificationDestination:
       type: object
@@ -5363,6 +5541,12 @@ components:
         notification_types:
           type: array
           items: { type: string }
+        enabled:
+          type: boolean
+          description: Whether the destination is currently active. A disabled destination keeps all its settings but sends no notifications until it is enabled again.
+        disabled_reason:
+          type: ["string", "null"]
+          description: When Oh Dear disabled a destination automatically after repeated delivery failures, this explains why. It is null for active destinations and for destinations you disabled yourself.
 
     Tag:
       type: object
