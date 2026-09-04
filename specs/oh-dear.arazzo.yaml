@@ -1411,7 +1411,8 @@ workflows:
   - workflowId: monitor-lifecycle-scenario
     description: >-
       Real-world scenario: create a new HTTP monitor, verify it was created,
-      update its label, then tear it down by deleting it.
+      update its friendly name and its response body assertions, then tear it
+      down by deleting it.
     inputs:
       type: object
       properties:
@@ -1446,7 +1447,7 @@ workflows:
             value: $steps.create-monitor.outputs.monitorId
         successCriteria:
           - condition: $statusCode == 200
-      - stepId: update-monitor-label
+      - stepId: update-monitor-settings
         operationId: $sourceDescriptions.openapi.updateMonitor
         parameters:
           - name: monitorId
@@ -1455,7 +1456,12 @@ workflows:
         requestBody:
           contentType: application/json
           payload:
-            label: Updated Example Monitor
+            friendly_name: Updated Example Monitor
+            uptime_check_settings:
+              response_body_assertions:
+                - path: data.status
+                  operator: equals
+                  value: ok
         successCriteria:
           - condition: $statusCode == 200
       - stepId: delete-monitor
