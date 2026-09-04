@@ -156,9 +156,11 @@ paths:
                           look_for_string: ""
                           absent_string: null
                           expected_response_headers: []
+                          response_body_assertions: []
                           failed_notification_threshold: 2
                           http_verb: get
                           payload: []
+                          raw_payload: null
                           timeout: 5
                           valid_status_codes: ["2*"]
                           max_redirect_count: 5
@@ -225,49 +227,62 @@ paths:
                   tags: [internal, production, docs]
                   notes: Internal notes for our team members
                   description: Oh Dear documentation
-                  uptime_check_location: paris
-                  uptime_check_expected_final_redirect_url: https://redirect-to-this-url.com
-                  uptime_check_failed_notification_threshold: 2
-                  uptime_check_http_verb: get
-                  uptime_check_timeout: 5
-                  uptime_check_max_redirect_count: 5
-                  uptime_check_payload:
-                    - name: payload-name-1
-                      value: payload-value-1
-                  uptime_check_valid_status_codes: ["2*"]
-                  uptime_check_look_for_string: null
-                  uptime_check_absent_string: null
-                  uptime_check_expected_response_headers:
-                    - name: my-response-header
-                      condition: equals
-                      value: my-response-value
-                  http_client_headers:
-                    - name: my-header
-                      value: my-value
-                  performance_threshold_in_ms: 3500
-                  performance_change_percentage: 50
-                  crawler_headers:
-                    - name: my-broken-links-header
-                      value: my-broken-links-value
-                  broken_links_check_include_external_links: false
-                  broken_link_types:
-                    [link, image, script, stylesheet, "og:image"]
-                  broken_links_whitelisted_urls: []
-                  respect_robots: true
-                  sitemap_path: /sitemap.xml
-                  sitemap_speed: slow
-                  application_health_check_result_url: https://mybrandnewsite.tld/health
-                  application_health_headers:
-                    - name: my-header
-                      value: my-value
-                  certificate_health_check_expires_soon_threshold_in_days: 14
-                  dns_check_nameservers_in_sync: true
-                  dns_monitor_main_domain: false
-                  dns_extra_cnames: [cname1, cname2]
-                  dns_ignored_record_types: [A, CNAME]
-                  domain_check_expires_soon_threshold_in_days: 30
-                  lighthouse_check_continent: europe
-                  lighthouse_cpu_slowdown_modifier: 0
+                  uptime_check_settings:
+                    location: paris
+                    expected_final_redirect_url: https://redirect-to-this-url.com
+                    failed_notification_threshold: 2
+                    http_verb: get
+                    timeout: 5
+                    max_redirect_count: 5
+                    payload:
+                      - name: payload-name-1
+                        value: payload-value-1
+                    raw_payload: null
+                    valid_status_codes: ["2*"]
+                    look_for_string: null
+                    absent_string: null
+                    expected_response_headers:
+                      - name: my-response-header
+                        condition: equals
+                        value: my-response-value
+                    response_body_assertions:
+                      - path: data.status
+                        operator: equals
+                        value: ok
+                    http_client_headers:
+                      - name: my-header
+                        value: my-value
+                  performance_check_settings:
+                    threshold_in_ms: 3500
+                    change_percentage: 50
+                  crawler_settings:
+                    headers:
+                      - name: my-broken-links-header
+                        value: my-broken-links-value
+                    respect_robots: true
+                  broken_links_check_settings:
+                    check_include_external_links: false
+                    types: [link, image, script, stylesheet, "og:image"]
+                    whitelisted_urls: []
+                  sitemap_check_settings:
+                    path: /sitemap.xml
+                    speed: slow
+                  application_health_check_settings:
+                    result_url: https://mybrandnewsite.tld/health
+                    headers:
+                      - name: my-header
+                        value: my-value
+                  certificate_health_check_settings:
+                    expires_soon_threshold_in_days: 14
+                  dns_check_settings:
+                    check_nameservers_in_sync: true
+                    monitor_main_domain: false
+                    extra_cnames: [cname1, cname2]
+                    ignored_record_types: [A, CNAME]
+                  domain_check_settings:
+                    expires_soon_threshold_in_days: 30
+                  lighthouse_check_settings:
+                    continent: europe
                   send_report_to_emails: ["a@example.com", "b@example.com"]
                   include_check_types_in_report:
                     [
@@ -334,9 +349,11 @@ paths:
                       look_for_string: ""
                       absent_string: null
                       expected_response_headers: []
+                      response_body_assertions: []
                       failed_notification_threshold: 2
                       http_verb: get
                       payload: []
+                      raw_payload: null
                       timeout: 5
                       valid_status_codes: ["2*"]
                       max_redirect_count: 5
@@ -398,9 +415,11 @@ paths:
                       look_for_string: ""
                       absent_string: null
                       expected_response_headers: []
+                      response_body_assertions: []
                       failed_notification_threshold: 2
                       http_verb: get
                       payload: []
+                      raw_payload: null
                       timeout: 5
                       valid_status_codes: ["2*"]
                       max_redirect_count: 5
@@ -431,7 +450,6 @@ paths:
               example:
                 value:
                   url: https://example.com/docs
-                  type: http
                   checks:
                     [
                       uptime,
@@ -447,7 +465,7 @@ paths:
                       certificate_health,
                     ]
                   group_name: Internal
-                  label: Documentation
+                  friendly_name: Documentation
                   tags: [internal, production, docs]
                   notes: Internal notes for our team members
                   description: Documentation site monitoring
@@ -468,6 +486,10 @@ paths:
                       - name: my-response-header
                         condition: equals
                         value: my-response-value
+                    response_body_assertions:
+                      - path: data.status
+                        operator: equals
+                        value: ok
                     http_client_headers:
                       - name: my-header
                         value: my-value
@@ -478,13 +500,14 @@ paths:
                     check_include_external_links: false
                     types: [link, image, script, stylesheet, "og:image"]
                     whitelisted_urls: []
+                  crawler_settings:
                     respect_robots: true
                   sitemap_check_settings:
                     path: /sitemap.xml
                     speed: slow
                   application_health_check_settings:
                     result_url: https://example.com/health
-                    secret: null
+                    secret: my-health-check-secret
                     headers:
                       - name: my-header
                         value: my-value
@@ -4406,8 +4429,10 @@ components:
           items: { $ref: "#/components/schemas/CheckType" }
         group_name: { type: string }
         friendly_name:
-          { type: string, description: Deprecated in favor of label }
-        label: { type: string }
+          type: string
+          description: >-
+            A custom display name for the monitor. Returned as `label` on the monitor
+            (which falls back to `sort_url` when no friendly name is set).
         tags:
           type: array
           items: { type: string }
@@ -4505,7 +4530,11 @@ components:
           type: array
           items: { $ref: "#/components/schemas/CheckType" }
         group_name: { type: string }
-        label: { type: string }
+        friendly_name:
+          type: string
+          description: >-
+            A custom display name for the monitor. Returned as `label` on the monitor
+            (which falls back to `sort_url` when no friendly name is set).
         tags:
           type: array
           items: { type: string }
@@ -4640,12 +4669,32 @@ components:
         expected_response_headers:
           type: array
           items: { $ref: "#/components/schemas/ExpectedHeader" }
+        response_body_assertions:
+          type: ["array", "null"]
+          maxItems: 10
+          description: >-
+            Assertions run against the JSON response body. If any assertion fails, the monitor is
+            considered down. Only evaluated when the response is valid JSON and smaller than 2 MB.
+          items: { $ref: "#/components/schemas/ResponseBodyAssertion" }
         failed_notification_threshold: { type: integer }
         http_verb: { type: string }
         payload:
           type: array
           items: { $ref: "#/components/schemas/NameValuePair" }
+        raw_payload:
+          type: ["string", "null"]
+          description: >-
+            A raw JSON body, sent verbatim, so nested objects and non-string types survive.
+            Must be valid JSON. Takes precedence over payload when both are set.
         timeout: { type: integer }
+        frequency_value:
+          type: ["integer", "null"]
+          minimum: 1
+          maximum: 60
+          description: How often the check runs, expressed in frequency_unit. A failing uptime check is always retried every minute.
+        frequency_unit:
+          type: ["string", "null"]
+          enum: [minute, null]
         valid_status_codes:
           type: array
           items: { type: string }
@@ -4668,6 +4717,20 @@ components:
         timeout_in_ms: { type: integer }
         look_for_string_in_welcome_message: { type: string }
         look_for_string_in_send_string_response: { type: string }
+
+    ResponseBodyAssertion:
+      type: object
+      description: An assertion on a value in the JSON response body
+      properties:
+        path:
+          type: string
+          description: The field to read, in dot notation. Array items are addressed by index, and `*` spreads across every item in a list (e.g. `data.items.*.id`).
+        operator:
+          type: string
+          enum: ["equals", "not equals", "contains", "greater than", "less than", "exists", "does not exist"]
+        value:
+          type: ["string", "null"]
+          description: The expected value. Not needed for the exists and does not exist operators.
 
     ExpectedHeader:
       type: object
